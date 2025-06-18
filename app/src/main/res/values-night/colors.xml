@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Colors -->
+    <color name="colorPrimary">#2196F3</color> <!-- Keeping consistent -->
+    <color name="colorPrimaryVariant">#374D5B</color> <!-- Darker shade for components -->
+    <color name="colorSecondary">#2196F3</color> <!-- Keeping consistent -->
+    <color name="colorSecondaryVariant">#374D5B</color> <!-- Keeping consistent -->
+    <color name="colorOnPrimary">#000000</color>
+    <color name="colorOnSecondary">#000000</color>
+
+
+    <!-- Background & Surface -->
+    <color name="colorBackground">#121212</color>
+    <color name="colorSurface">#212121</color> <!-- Dark gray for cards and dialogs -->
+    <color name="colorSurfaceVariant">#303030</color>
+    <color name="colorOnSurfaceVariant">#BDBDBD</color>
+
+    <!-- Text Colors -->
+    <color name="textPrimary">#FFFFFF</color>
+    <color name="textSecondary">#BDBDBD</color> <!-- Lighter gray for secondary text -->
+    <color name="textOnPrimary">#FFFFFF</color>
+    <color name="textOnSecondary">#000000</color>
+    <color name="textError">#EF5350</color> <!-- Brighter red for errors in dark mode -->
+
+    <!-- Error & Grays -->
+    <color name="colorError">#EF5350</color>
+    <color name="gray100">#303030</color>
+    <color name="gray200">#424242</color>
+    <color name="gray300">#545454</color>
+    <color name="gray400">#666666</color>
+    <color name="gray500">#787878</color>
+    <color name="gray600">#909090</color>
+    <color name="gray700">#A2A2A2</color>
+    <color name="gray800">#B4B4B4</color>
+
+    <color name="white">#000</color>
+    <color name="black">#fff</color>
+
+    <color name="joinButtonColor">#2196F3</color> <!-- Lighter Purple -->
+    <color name="unjoinButtonColor">#66BB6A</color> <!-- Brighter Green -->
+    <color name="fullButtonColor">#888888</color> <!-- Dim Gray -->
+
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Base color -->
+    <item>
+        <color android:color="#FF2D2D2D" /> <!-- Dark gray base -->
+    </item>
+
+    <!-- Gradient overlay for blur-like feel -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="500"
+                android:centerX="50%"
+                android:centerY="50%"
+                android:startColor="#CC1C1C1C"
+                android:endColor="#001C1C1C" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "490910079201",
+    "project_id": "vibein-95243",
+    "storage_bucket": "vibein-95243.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490910079201:android:1fca588427d6ed5f0a7fa0",
+        "android_client_info": {
+          "package_name": "com.tie.vibein"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdWL7GlhnhEGyOInuaqJD1_CaaImMtK-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

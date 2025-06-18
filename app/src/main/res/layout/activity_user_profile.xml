@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBackground">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/mToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorBackground"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="@dimen/_2sdp" >
+
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User name"
+            android:textColor="@color/textPrimary"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_gravity="start"
+            android:textSize="@dimen/_14ssp"/>
+
+        <ImageView
+            android:id="@+id/iv_setting"
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
+            android:src="@drawable/ic_setting"
+            android:layout_gravity="end"
+            app:tint="@color/textPrimary"
+            android:layout_marginEnd="@dimen/_8sdp"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/mToolBar"
+        android:layout_gravity="center_horizontal"
+       >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            >
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="@dimen/_90sdp"
+                android:layout_height="@dimen/_90sdp"
+                android:src="@drawable/ic_profile_placeholder"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:civ_border_width="2dp"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:civ_border_color="#D1B3FF"
+                />
+
+
+            <ImageView
+                android:id="@+id/iv_edit"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_margin="4dp"
+                android:background="@drawable/bg_circle_white"
+                android:src="@drawable/ic_camera"
+                android:padding="@dimen/dp_6_dsa"
+                android:visibility="gone"
+                android:elevation="@dimen/dp_2"
+                app:layout_constraintTop_toTopOf="@+id/ivProfile"
+                app:layout_constraintEnd_toEndOf="@id/ivProfile"
+                app:layout_constraintBottom_toBottomOf="@id/ivProfile"
+                app:layout_constraintStart_toStartOf="@id/ivProfile"
+                app:layout_constraintVertical_bias="1.1"
+                app:layout_constraintHorizontal_bias="1"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEditProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_42_dsa"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:background="@drawable/bg_edit_profile"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                android:text="Edit Profile"
+                android:textAllCaps="false"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_12ssp"
+                android:visibility="gone"
+                app:backgroundTint="@null"
+                app:icon="@drawable/ic_edit"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/dp_5_dsa"
+                app:iconTint="@color/textPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/single_button_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp">
+
+                <!-- This is the main action button: Connect, Cancel Request, Connected -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnConnect"
+                    android:layout_width="@dimen/_110sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:text="Connect"
+                    app:backgroundTint="@null"
+                    android:textAllCaps="false"
+                    android:background="@drawable/bg_edit_profile"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/_12ssp" />
+
+                <!-- NEW: Message button, appears only when connected -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnMessage"
+                    android:layout_width="@dimen/_110sdp"
+                    android:layout_height="@dimen/_32sdp"
+                   android:layout_marginTop="@dimen/dp_8_dsa"
+                    app:backgroundTint="@null"
+                    android:textAllCaps="false"
+                    android:background="@drawable/bg_edit_profile"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/_12ssp"
+                    android:text="Message"
+                    />
+
+            </LinearLayout>
+
+            <!-- NEW: Container for the Accept/Decline buttons -->
+            <LinearLayout
+                android:id="@+id/response_buttons_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:visibility="gone"> <!-- Start with this one hidden -->
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDecline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_42_dsa"
+                    android:text="Decline"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:strokeColor="@color/textSecondary"
+                    android:textColor="@color/textSecondary"
+                    android:layout_marginEnd="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAccept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_42_dsa"
+                    android:text="Accept"
+                    app:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/textOnPrimary"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvFullName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:paddingStart="@dimen/_15sdp"
+                android:paddingEnd="@dimen/_15sdp"
+                android:text="Manish"
+                android:textColor="@color/textPrimary"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="@dimen/_14ssp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:layout_constraintTop_toBottomOf="@id/ivProfile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+            <TextView
+                android:id="@+id/tvAboutYou"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="I'm passionate about connecting people through memorable experiences."
+                android:textColor="@color/textPrimary"
+                android:fontFamily="@font/poppins"
+                android:textSize="@dimen/_10ssp"
+                android:lineSpacingExtra="2dp"
+                android:paddingEnd="@dimen/_15sdp"
+                android:paddingStart="@dimen/_15sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvFullName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/dp_5_dsa"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvInterested"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvAboutYou"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingEnd="@dimen/_15sdp"
+                android:paddingStart="@dimen/_15sdp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="@dimen/dp_5_dsa"/>
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1_dsa"
+                app:layout_constraintTop_toBottomOf="@id/rvInterested"
+                android:layout_marginTop="@dimen/dp_10_dsa"
+                android:background="@color/gray300"/>
+
+            <LinearLayout
+                android:id="@+id/llStatsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                app:layout_constraintTop_toBottomOf="@id/view1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="@dimen/dp_10_dsa">
+
+                <LinearLayout
+                    android:id="@+id/llEventCount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvEventCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_14ssp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="5"
+                        android:layout_gravity="center"
+                        android:textColor="@color/textPrimary"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Events"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/textPrimary"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llConnectionsCount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvConnectionsCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_14ssp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="43"
+                        android:layout_gravity="center"
+                        android:textColor="@color/textPrimary"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Connections"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/textPrimary"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llTicketCount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTicketCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_14ssp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="2"
+                        android:layout_gravity="center"
+                        android:textColor="@color/textPrimary"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tickets"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/textPrimary"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1_dsa"
+                app:layout_constraintTop_toBottomOf="@id/llStatsContainer"
+                android:layout_marginTop="@dimen/dp_5_dsa"
+                android:background="@color/gray300"/>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:tabIndicatorColor="@color/colorPrimary"
+                app:tabIndicatorHeight="2dp"
+                app:tabTextAppearance="@style/TabTextStyle"
+                app:layout_constraintTop_toBottomOf="@id/view2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@color/colorBackground" />
+
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tabLayout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

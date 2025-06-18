@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.tie.vibein.discover.presentation.screens.DiscoverFragment"
+        >
+
+        <action
+            android:id="@+id/action_homeFragment_to_ticketFragment"
+            app:destination="@id/ticketFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ticketFragment"
+        android:name="com.tie.vibein.tickets.persentation.screens.TicketFragment"
+       >
+
+        <action
+            android:id="@+id/action_ticketFragment_to_createFragment"
+            app:destination="@id/createEventFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createEventFragment"
+        android:name="com.tie.vibein.createEvent.persentation.screens.CreateEventFragment"
+        tools:layout="@layout/fragment_create_event" >
+
+        <action
+            android:id="@+id/action_createFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.tie.vibein.chat.persentation.screens.ChatFragment"
+        tools:layout="@layout/fragment_chat" >
+
+        <action
+            android:id="@+id/action_chatFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+
+
+
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.tie.vibein.profile.persentation.screen.ProfileFragment"
+        tools:layout="@layout/fragment_profile" >
+
+
+
+    </fragment>
+
+
+
+
+</navigation>

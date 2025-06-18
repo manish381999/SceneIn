@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<com.google.android.material.card.MaterialCardView
+    android:id="@+id/cvEvent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/dp_8_dsa"
+    android:layout_marginHorizontal="@dimen/dp_8_dsa"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:cardCornerRadius="@dimen/dp_15_dsa"
+    app:cardElevation="@dimen/dp_3_dsa"
+
+   >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_event"
+        >
+
+        <!-- Background Image -->
+        <ImageView
+            android:id="@+id/imageBanner"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:src="@drawable/ic_placeholder"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Tag: Outdoor -->
+        <TextView
+            android:id="@+id/tvCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Outdoor"
+            android:paddingHorizontal="@dimen/dp_10_dsa"
+            android:paddingVertical="@dimen/dp_4_dsa"
+            android:background="@drawable/bg_transparent_button"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_12_dsa"
+            android:fontFamily="@font/poppins"
+            app:layout_constraintTop_toTopOf="@id/imageBanner"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="@dimen/dp_8_dsa" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvEventName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Weekend Hiking Trip"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="@dimen/sp_16_dsa"
+            android:textColor="@color/textPrimary"
+            app:layout_constraintTop_toBottomOf="@id/imageBanner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="@dimen/dp_12_dsa"
+            android:layout_marginTop="@dimen/dp_12_dsa"/>
+
+        <!-- Date and Time -->
+        <LinearLayout
+            android:id="@+id/dateTimeRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/tvEventName"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginHorizontal="@dimen/dp_12_dsa"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/dp_4_dsa">
+
+            <ImageView
+                android:layout_width="@dimen/dp_16_dsa"
+                android:layout_height="@dimen/dp_16_dsa"
+                android:src="@drawable/ic_calendar" />
+
+            <TextView
+                android:id="@+id/tvEventDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sat, May 10 • 6:00 AM"
+                android:textSize="@dimen/sp_14_dsa"
+                android:layout_marginStart="@dimen/dp_6_dsa"
+                android:textColor="@color/gray700"/>
+        </LinearLayout>
+
+        <!-- Location -->
+        <LinearLayout
+            android:id="@+id/locationRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/dateTimeRow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="@dimen/dp_12_dsa"
+            android:layout_marginTop="2dp">
+
+            <ImageView
+                android:layout_width="@dimen/dp_16_dsa"
+                android:layout_height="@dimen/dp_16_dsa"
+                android:src="@drawable/ic_location" />
+
+            <TextView
+                android:id="@+id/tvEventVenue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kodaikanal Hills, Tamil Nadu"
+                android:textSize="@dimen/sp_14_dsa"
+                android:layout_marginStart="@dimen/dp_6_dsa"
+                android:textColor="@color/gray700"/>
+        </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvEventJoined"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:text="12 Joined"
+                android:textSize="@dimen/sp_14_dsa"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/locationRow"
+                android:textColor="@color/gray700"
+                android:drawablePadding="@dimen/dp_5_dsa"
+                android:layout_marginTop="@dimen/dp_8_dsa"
+                android:layout_marginBottom="@dimen/dp_4_dsa"
+                android:layout_marginStart="@dimen/dp_12_dsa"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:drawableStartCompat="@drawable/ic_group" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnJoin"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_40_dsa"
+                android:text="Join"
+                android:textSize="@dimen/sp_14_dsa"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/textOnPrimary"
+                android:textAllCaps="false"
+                app:backgroundTint="@null"
+                android:background="@drawable/bg_button_join"
+                app:layout_constraintTop_toBottomOf="@id/locationRow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="@dimen/dp_8_dsa"
+                android:layout_marginEnd="@dimen/dp_12_dsa"
+                android:layout_marginTop="@dimen/dp_8_dsa"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

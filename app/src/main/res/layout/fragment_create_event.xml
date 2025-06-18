@@ -1,0 +1,749 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_create_event"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <!-- Top App Bar / Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/mToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorBackground"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="@dimen/_2sdp" >
+
+<!--        <androidx.appcompat.widget.AppCompatImageView-->
+<!--            android:id="@+id/toolbar_icon"-->
+<!--            android:layout_width="@dimen/_22sdp"-->
+<!--            android:layout_height="@dimen/_22sdp"-->
+<!--            android:layout_marginEnd="@dimen/_8sdp"-->
+<!--            android:src="@drawable/ic_arrow_back"-->
+<!--            android:tint="@color/black"-->
+<!--            android:layout_gravity="start"-->
+<!--           />-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create an Event"
+            android:textColor="@color/textPrimary"
+            android:fontFamily="@font/poppins_bold"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/_14ssp"/>
+
+        <ImageView
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
+            android:src="@drawable/ic_question_mark_circled"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/_8sdp"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <!-- Scrollable Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
+        android:fillViewport="true"
+        android:layout_gravity="center_horizontal"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+           >
+
+            <TextView
+                android:id="@+id/tv_eventInformation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Event Information"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_eventName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/poppins"
+                android:text="Event Name"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_eventInformation" />
+
+
+            <!-- Event Name -->
+            <EditText
+                android:id="@+id/etEventName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/bg_input"
+                android:hint="Enter event name"
+                android:fontFamily="@font/poppins"
+                android:inputType="text"
+                android:padding="@dimen/_10sdp"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_eventName" />
+
+            <TextView
+                android:id="@+id/tv_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/poppins"
+                android:text="Category"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etEventName" />
+
+
+            <!-- Category Spinner -->
+            <com.tie.vibein.utils.CustomSpinner
+                android:id="@+id/spinnerCategory"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/bg_spinner_down"
+                android:popupBackground="@drawable/bg_spinner_pop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_category" />
+
+
+            <TextView
+                android:id="@+id/tvEventDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/poppins"
+                android:text="Event Description"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerCategory" />
+
+            <!-- Description -->
+            <EditText
+                android:id="@+id/etEventDescription"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/bg_input"
+                android:fontFamily="@font/poppins"
+                android:gravity="top"
+                android:textSize="@dimen/_12ssp"
+                android:hint="Tell people what your event is about..."
+                android:inputType="textMultiLine"
+                android:padding="@dimen/_10sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvEventDescription" />
+
+
+            <TextView
+                android:id="@+id/tvWhenIsThisHappening"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="When is this happening?"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etEventDescription" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/poppins"
+                android:text="Date"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvWhenIsThisHappening" />
+
+
+            <!-- Date Picker -->
+            <EditText
+                android:id="@+id/etDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/bg_input"
+                android:drawableEnd="@drawable/ic_calendar"
+                android:focusable="false"
+                android:hint="Pick a date"
+                android:textSize="@dimen/_12ssp"
+                android:fontFamily="@font/poppins"
+                android:padding="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
+            <!-- Start & End Time -->
+            <LinearLayout
+                android:id="@+id/timeContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etDate">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvStartTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins"
+                        android:text="Start Time"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_12sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etDate" />
+
+
+                    <EditText
+                        android:id="@+id/etStartTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_input"
+                        android:fontFamily="@font/poppins"
+                        android:textSize="@dimen/_12ssp"
+                        android:focusable="false"
+                        android:hint="Start Time"
+                        android:padding="12dp" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="12dp"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvEndTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins"
+                        android:text="End Time"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_12sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etDate" />
+
+                    <EditText
+                        android:id="@+id/etEndTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:background="@drawable/bg_input"
+                        android:focusable="false"
+                        android:textSize="@dimen/_12ssp"
+                        android:hint="End Time"
+                        android:padding="12dp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvWhereIsThisHappening"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Where is this happening?"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/timeContainer" />
+
+
+            <LinearLayout
+                android:id="@+id/llWhereIsThisHappening"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/dp_10_dsa"
+                app:layout_constraintTop_toBottomOf="@id/tvWhereIsThisHappening"
+               >
+
+                <!-- Toggle Buttons -->
+                <RadioGroup
+                    android:id="@+id/rg_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rb_in_person"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="In-Person"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/poppins"
+                        android:layout_marginEnd="@dimen/dp_5_dsa"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/toggle_selector"
+                        android:padding="12dp"
+                        android:textColor="@color/textPrimary" />
+
+                    <RadioButton
+                        android:id="@+id/rb_online"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/dp_5_dsa"
+                        android:text="Online"
+                        android:button="@null"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="center"
+                        android:background="@drawable/toggle_selector"
+                        android:padding="12dp"
+                        android:textColor="@color/textPrimary" />
+                </RadioGroup>
+
+                <!-- In-Person Venue Field -->
+                <LinearLayout
+                    android:id="@+id/venue_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:layout_marginTop="16dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp">
+
+                    <TextView
+                        android:id="@+id/tvPincode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins"
+                        android:text="Pincode"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_12sdp"
+                        app:layout_constraintTop_toBottomOf="@id/etDate" />
+
+                    <!-- Pincode -->
+                    <EditText
+                        android:id="@+id/et_pincode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter 6-digit pincode"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:drawableStart="@drawable/ic_location"
+                        android:drawablePadding="8dp"
+                         android:background="@drawable/bg_input"
+                         android:padding="12dp"
+                    android:textSize="@dimen/_12ssp"
+                    android:fontFamily="@font/poppins"
+                    android:layout_marginBottom="12dp"/>
+
+
+                    <TextView
+                        android:id="@+id/tvCity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins"
+                        android:text="City"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_12sdp"
+                        app:layout_constraintTop_toBottomOf="@id/etDate" />
+                    <!-- City (Auto-detected, non-editable) -->
+                    <EditText
+                        android:id="@+id/et_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="City will be auto-detected from pincode"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:background="@drawable/bg_input"
+                       android:padding="12dp"
+                       android:textSize="@dimen/_12ssp"
+                       android:fontFamily="@font/poppins"
+                       android:layout_marginBottom="12dp"/>
+
+                    <TextView
+                        android:id="@+id/tvFullAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins"
+                        android:text="Full Address"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_12sdp"
+                        app:layout_constraintTop_toBottomOf="@id/etDate" />
+
+                    <!-- Full Address -->
+                    <EditText
+                        android:id="@+id/et_full_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter complete venue address"
+                        android:inputType="textMultiLine"
+                        android:minLines="3"
+                        android:gravity="top"
+                        android:drawablePadding="8dp"
+                        android:background="@drawable/bg_input"
+                        android:padding="12dp"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/poppins" />
+                </LinearLayout>
+
+
+                <!-- Online Meeting Field -->
+                <LinearLayout
+                    android:id="@+id/online_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Meeting Link"
+                        android:fontFamily="@font/poppins"
+                        android:textSize="@dimen/_12ssp"
+                        android:layout_marginBottom="4dp" />
+
+                    <EditText
+                        android:id="@+id/et_link"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Zoom, Google Meet, etc."
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/poppins"
+                        android:drawablePadding="@dimen/dp_8_dsa"
+                        android:drawableStart="@drawable/ic_web"
+                        android:background="@drawable/bg_input"
+                        android:padding="12dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+            <TextView
+                android:id="@+id/tvWhoCanJoin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Who can join?"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llWhereIsThisHappening" />
+
+            <TextView
+                android:id="@+id/tvMaxParticipants"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/poppins"
+                android:text="Maximum Participants"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvWhoCanJoin" />
+
+
+            <ImageView
+                android:id="@+id/iv_group"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_group"
+                app:layout_constraintBottom_toBottomOf="@id/etMaxParticipants"
+                app:layout_constraintEnd_toStartOf="@id/etMaxParticipants"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/etMaxParticipants" />
+
+            <!-- Max Participants -->
+            <EditText
+                android:id="@+id/etMaxParticipants"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/poppins"
+                android:background="@drawable/bg_input"
+                android:hint="Maximum Participants"
+                android:inputType="number"
+                android:textSize="@dimen/_12ssp"
+                android:padding="@dimen/_10sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_group"
+                app:layout_constraintTop_toBottomOf="@id/tvMaxParticipants" />
+
+
+
+
+            <TextView
+                android:id="@+id/tvAgeRestriction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:fontFamily="@font/poppins"
+                android:text="Age Restrictions"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etMaxParticipants" />
+
+
+            <!-- Age Restriction -->
+            <com.tie.vibein.utils.CustomSpinner
+                android:id="@+id/spinnerAge"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/bg_spinner_down"
+                android:popupBackground="@drawable/bg_spinner_pop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAgeRestriction" />
+
+
+
+
+            <TextView
+                android:id="@+id/tvTicketsPricing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Tickets &amp; Pricing"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerAge" />
+
+
+
+            <LinearLayout
+                android:id="@+id/llPaidEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/dp_10_dsa"
+                app:layout_constraintTop_toBottomOf="@id/tvTicketsPricing"
+                >
+
+                <!-- Toggle Buttons -->
+                <RadioGroup
+                    android:id="@+id/rgEventType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <RadioButton
+                        android:id="@+id/rbFree"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="Free Event"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/poppins"
+                        android:layout_marginEnd="@dimen/dp_5_dsa"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/toggle_selector"
+                        android:padding="12dp"
+                        android:textColor="@color/textPrimary" />
+
+                    <RadioButton
+                        android:id="@+id/rbPaid"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/dp_5_dsa"
+                        android:text="Paid Event"
+                        android:button="@null"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="center"
+                        android:background="@drawable/toggle_selector"
+                        android:padding="12dp"
+                        android:textColor="@color/textPrimary" />
+
+
+                </RadioGroup>
+
+                <!-- Ticket Price Input -->
+                <TextView
+                    android:id="@+id/tvTicketPriceLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Ticket Price (₹)"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
+
+                <EditText
+                    android:id="@+id/etTicketPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="₹ Enter price per ticket"
+                    android:inputType="numberDecimal"
+                    android:paddingHorizontal="16dp"
+                    android:background="@drawable/bg_input"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvEventCoverImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Event Media"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llPaidEvent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvCoverImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                app:cardCornerRadius="@dimen/_15sdp"
+                app:cardElevation="@dimen/dp_2_dsa"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvEventCoverImage">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_150sdp"
+                    android:background="@drawable/bg_cv_cover_image">
+
+                    <ImageView
+                        android:id="@+id/imCoverImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/dp_20_dsa"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:background="@drawable/bg_cv_cover_image"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_placeholder"
+                        android:layout_width="@dimen/dp_50_dsa"
+                        android:layout_height="@dimen/dp_50_dsa"
+                        android:layout_marginBottom="@dimen/dp_50_dsa"
+                        android:src="@drawable/ic_placeholder"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnChangeImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Change Image"
+                        android:background="@drawable/bg_transparent_button"
+                        app:backgroundTint="@null"
+                        android:textAllCaps="false"
+                        android:drawableLeft="@drawable/ic_upload"
+                        android:textColor="@color/textOnPrimary"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvUploadCoverImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_8_dsa"
+                        android:fontFamily="@font/poppins"
+                        android:text="Click to upload"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintEnd_toEndOf="@id/iv_placeholder"
+                        app:layout_constraintStart_toStartOf="@id/iv_placeholder"
+                        app:layout_constraintTop_toBottomOf="@id/iv_placeholder" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPublishEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/bg_button"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Publish Event"
+                android:textAllCaps="false"
+                android:textColor="@color/textOnPrimary"
+                android:textSize="@dimen/_14ssp"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cvCoverImage" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

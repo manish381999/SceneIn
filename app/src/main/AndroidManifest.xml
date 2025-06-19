@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- Permissions must be direct children of the <manifest> tag -->
+
+    <!-- All your existing permissions are correct -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -11,6 +12,11 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- You might not need CAMERA permission here if you only use the system's camera app -->
+    <!-- but it's good practice to add it if you interact with the camera -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
 
     <application
         android:allowBackup="true"
@@ -22,10 +28,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VibeIn"
         tools:targetApi="31">
+
+        <!-- All your activity declarations are correct -->
         <activity
             android:name=".chat.persentation.screens.ChatActivity"
             android:exported="false" />
-        <!-- Your Activities -->
         <activity
             android:name=".profile.persentation.screen.UserProfileActivity"
             android:exported="false" />
@@ -50,20 +57,20 @@
             android:theme="@style/Theme.VibeIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- =============================================================== -->
-        <!-- == THIS IS THE CRITICAL SERVICE DECLARATION THAT MUST BE CORRECT == -->
-        <!-- =============================================================== -->
+        </activity>
+
+        <!-- Your FCM Service declaration is correct -->
         <service
             android:name=".services.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service> <!-- =============================================================== -->
-        <!-- Meta-data for default notification appearance -->
+        </service>
+
+        <!-- Your notification meta-data is correct -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification_icon" />
@@ -73,6 +80,22 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
+
+
+        <!-- =================================================================== -->
+        <!-- == NEW & CRITICAL: Add the FileProvider for the Camera feature == -->
+        <!-- =================================================================== -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <!-- =============================================================== -->
+
     </application>
 
 </manifest>

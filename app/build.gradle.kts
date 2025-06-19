@@ -91,8 +91,19 @@ dependencies {
     implementation ("com.google.android.gms:play-services-location:21.0.1")
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
 
+    // == NEW DEPENDENCIES REQUIRED FOR THE CHAT SYSTEM ==
+    // ================================================================
 
+    // 1. LocalBroadcastManager (for real-time in-app communication)
+    implementation ("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
 
+    // 2. Image Compression Library
+    implementation ("id.zelory:compressor:3.0.1")
+
+    // 3. Video Compression Library
+    val media3Version = "1.3.1" // Define the version within the dependencies block for clarity if needed
+    implementation("androidx.media3:media3-transformer:$media3Version")
+    implementation("androidx.media3:media3-exoplayer:$media3Version")
 
 
 

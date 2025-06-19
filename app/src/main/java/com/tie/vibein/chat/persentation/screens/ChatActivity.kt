@@ -40,16 +40,11 @@ class ChatActivity : AppCompatActivity() {
 
     private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
-            val optimisticMessage = Message(
-                messageId = "-1", senderId = currentUserId, receiverId = receiverId!!, messageType = "image",
-                messageContent = it.toString(), timestamp = ""
-            ).apply {
-                this.status = MessageStatus.SENDING
-                this.tempId = UUID.randomUUID().toString()
-            }
+            val tempId = UUID.randomUUID().toString()
+            val optimisticMessage = Message("-1", currentUserId, receiverId!!, "image", it.toString(), "", MessageStatus.SENDING, tempId)
             chatAdapter.addMessage(optimisticMessage)
             binding.rvChatMessages.scrollToPosition(chatAdapter.itemCount - 1)
-            viewModel.uploadMediaAndSendMessage(this, currentUserId, receiverId!!, it, "image", optimisticMessage.tempId)
+            viewModel.uploadMediaAndSendMessage(this, currentUserId, receiverId!!, it, "image", tempId)
         }
     }
 
@@ -57,12 +52,12 @@ class ChatActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val data = intent?.getSerializableExtra("message_data") as? HashMap<*, *> ?: return
             val message = Message(
-                messageId = (data["message_id"] as? String) ?: "",
-                senderId = (data["sender_id"] as? String) ?: "",
-                receiverId = (data["receiver_id"] as? String) ?: "",
-                messageType = (data["chat_message_type"] as? String) ?: "text",
-                messageContent = (data["body"] as? String) ?: "",
-                timestamp = (data["timestamp"] as? String) ?: ""
+                messageId = data["message_id"] as? String ?: "",
+                senderId = data["sender_id"] as? String ?: "",
+                receiverId = data["receiver_id"] as? String ?: "",
+                messageType = data["chat_message_type"] as? String ?: "text",
+                messageContent = data["message_content"] as? String ?: "",
+                timestamp = data["timestamp"] as? String ?: ""
             )
             chatAdapter.addMessage(message)
             binding.rvChatMessages.scrollToPosition(chatAdapter.itemCount - 1)
@@ -113,8 +108,7 @@ class ChatActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         chatAdapter = ChatAdapter(currentUserId)
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.stackFromEnd = true
+        val layoutManager = LinearLayoutManager(this).apply { stackFromEnd = true }
         binding.rvChatMessages.adapter = chatAdapter
         binding.rvChatMessages.layoutManager = layoutManager
     }
@@ -128,50 +122,41 @@ class ChatActivity : AppCompatActivity() {
         binding.btnSendMessage.setOnClickListener {
             val messageText = binding.etMessageInput.text.toString().trim()
             if (messageText.isNotEmpty() && receiverId != null) {
-                val optimisticMessage = Message(
-                    messageId = "-1",
-                    senderId = currentUserId,
-                    receiverId = receiverId!!,
-                    messageType = "text",
-                    messageContent = messageText,
-                    timestamp = ""
-                ).apply {
-                    this.status = MessageStatus.SENDING
-                    this.tempId = UUID.randomUUID().toString()
-                }
+                val tempId = UUID.randomUUID().toString()
+                val optimisticMessage = Message("-1", currentUserId, receiverId!!, "text", messageText, "", MessageStatus.SENDING, tempId)
 
                 chatAdapter.addMessage(optimisticMessage)
                 binding.rvChatMessages.scrollToPosition(chatAdapter.itemCount - 1)
-                viewModel.sendMessage(currentUserId, receiverId!!, "text", messageText, optimisticMessage.tempId)
+
+                viewModel.sendMessage(currentUserId, receiverId!!, "text", messageText, tempId)
                 binding.etMessageInput.text.clear()
             }
         }
         binding.btnAddAttachment.setOnClickListener { imagePickerLauncher.launch("image/*") }
     }
 
-    // --- THIS FUNCTION IS NOW CORRECTED ---
     private fun observeViewModel() {
         viewModel.chatHistoryState.observe(this) { state ->
             if (state is NetworkState.Success) {
                 chatAdapter.submitList(state.data)
-                binding.rvChatMessages.post { binding.rvChatMessages.scrollToPosition(chatAdapter.itemCount - 1) }
+                binding.rvChatMessages.post {
+                    binding.rvChatMessages.scrollToPosition(chatAdapter.itemCount - 1)
+                }
             }
         }
 
         viewModel.sendMessageState.observe(this) { state ->
             if (state is NetworkState.Success) {
                 state.data?.sentMessage?.let { serverMessage ->
-                    // THE FIX: Call the correct adapter function 'updateMessage'
-                    chatAdapter.updateMessage(serverMessage)
+                    chatAdapter.updateSentMessage(serverMessage)
                 }
             }
         }
 
         viewModel.failedMessageTempId.observe(this) { tempId ->
             if (tempId != null) {
-                // THE FIX: Call the correct adapter function 'markAsFailed'
                 chatAdapter.markAsFailed(tempId)
-                Toast.makeText(this, "Failed to send message", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to send message.", Toast.LENGTH_SHORT).show()
                 viewModel.onFailedMessageHandled()
             }
         }

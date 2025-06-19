@@ -18,21 +18,20 @@ import com.tie.vibein.databinding.ItemChatMessageSentBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class ChatAdapter(private val currentUserId: String) : ListAdapter<Message, RecyclerView.ViewHolder>(MessageDiffCallback) {
+
 
     private val VIEW_TYPE_SENT = 1
     private val VIEW_TYPE_RECEIVED = 2
 
-    // --- ViewHolder for messages sent by the current user ---
+    // --- Sent Message ViewHolder ---
     inner class SentViewHolder(private val binding: ItemChatMessageSentBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(message: Message) {
-            handleMediaDisplay(itemView.context, message, binding.ivMedia, binding.tvMessageBody)
-            binding.tvTimestamp.text = formatTimestamp(message.timestamp, message.status)
+            // Updated to use the correct views from the new layout
+            handleDisplay(message, binding.mediaCard, binding.textBubbleLayout, binding.ivMedia, binding.tvMessageBody)
+            binding.tvTimestamp.text = formatTimestamp(message)
 
-            binding.ivMessageStatus.visibility = View.VISIBLE
-
-            // THE DEFINITIVE FIX: The 'when' statement is now null-safe.
-            // It defaults to SENT if message.status is null (which it is for messages from history).
             when (message.status ?: MessageStatus.SENT) {
                 MessageStatus.SENDING -> binding.ivMessageStatus.setImageResource(R.drawable.ic_clock)
                 MessageStatus.SENT -> binding.ivMessageStatus.setImageResource(R.drawable.ic_check_single)
@@ -41,26 +40,51 @@ class ChatAdapter(private val currentUserId: String) : ListAdapter<Message, Recy
         }
     }
 
-    // --- ViewHolder for messages received from the other user ---
+    // --- Received Message ViewHolder ---
     inner class ReceivedViewHolder(private val binding: ItemChatMessageReceivedBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(message: Message) {
-            handleMediaDisplay(itemView.context, message, binding.ivMedia, binding.tvMessageBody)
-            // A received message never shows a 'sending' status, so we don't pass the status to the formatter.
-            binding.tvTimestamp.text = formatTimestamp(message.timestamp)
+            // Updated to use the correct views from the new layout
+            handleDisplay(message, binding.mediaCard, binding.textBubbleLayout, binding.ivMedia, binding.tvMessageBody)
+            binding.tvTimestamp.text = formatTimestamp(message)
         }
     }
 
-    // Helper function to show either an image or text in the chat bubble.
-    private fun handleMediaDisplay(context: Context, message: Message, imageView: ImageView, textView: TextView) {
-        if (message.messageType == "image" || message.messageType == "video") {
-            imageView.visibility = View.VISIBLE
-            textView.visibility = View.GONE
-            Glide.with(context).load(message.messageContent).placeholder(R.color.gray200).into(imageView)
+    // --- THIS IS THE UPDATED HELPER FUNCTION ---
+    private fun handleDisplay(
+        message: Message,
+        mediaCard: View, // This is now a generic View (CardView)
+        textBubble: View, // This is now a generic View (ConstraintLayout)
+        imageView: ImageView,
+        textView: TextView
+    ) {
+        if (message.messageType == "image") {
+            // Show the media card, hide the text bubble
+            mediaCard.visibility = View.VISIBLE
+            textBubble.visibility = View.GONE
+            Glide.with(imageView.context)
+                .load(message.messageContent)
+                .placeholder(R.drawable.ic_placeholder)
+                .into(imageView)
         } else {
-            imageView.visibility = View.GONE
-            textView.visibility = View.VISIBLE
+            // Show the text bubble, hide the media card
+            mediaCard.visibility = View.GONE
+            textBubble.visibility = View.VISIBLE
             textView.text = message.messageContent
         }
+    }
+
+    // This helper now safely handles the message status
+    private fun formatTimestamp(message: Message): String {
+        if (message.status == MessageStatus.SENDING) return "Sending..."
+        if (message.timestamp.isNullOrEmpty()) return ""
+        try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC") // Assume server time is UTC for consistency
+            val date = inputFormat.parse(message.timestamp)
+            val outputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
+            outputFormat.timeZone = TimeZone.getDefault() // Format to the user's local timezone
+            return outputFormat.format(date ?: Date())
+        } catch (e: Exception) { return "" }
     }
 
     // Determines whether to use the 'sent' layout or the 'received' layout for a given item.
@@ -86,62 +110,25 @@ class ChatAdapter(private val currentUserId: String) : ListAdapter<Message, Recy
     // --- Public functions for the Activity to interact with the adapter ---
 
     fun addMessage(message: Message) {
-        val currentList = currentList.toMutableList()
-        currentList.add(message)
-        submitList(currentList)
+        submitList(currentList + message)
     }
 
-    fun updateMessage(sentMessageFromServer: Message) {
-        val currentList = currentList.toMutableList()
-        val index = currentList.indexOfFirst { it.tempId == sentMessageFromServer.tempId }
-        if (index != -1) {
-            currentList[index] = sentMessageFromServer
-            submitList(currentList)
+    fun updateSentMessage(serverMessage: Message) {
+        val newList = currentList.map {
+            if (it.tempId == serverMessage.tempId) serverMessage else it
         }
+        submitList(newList)
     }
 
     fun markAsFailed(tempId: String) {
-        val currentList = currentList.toMutableList()
-        val index = currentList.indexOfFirst { it.tempId == tempId }
-        if (index != -1) {
-            currentList[index].status = MessageStatus.FAILED
-            notifyItemChanged(index)
+        val newList = currentList.map {
+            if (it.tempId == tempId) it.copy(status = MessageStatus.FAILED) else it
         }
+        submitList(newList)
     }
 
-    // A robust function to format the timestamp.
-    private fun formatTimestamp(timestamp: String?, status: MessageStatus? = null): String {
-        // First priority: If the message is currently sending, always show 'Sending...'
-        if (status == MessageStatus.SENDING) return "Sending..."
-
-        // If not sending, format the timestamp if it exists.
-        if (timestamp.isNullOrEmpty()) return ""
-
-        try {
-            // This format matches PHP's `date('c')` (ISO 8601)
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.getDefault())
-            val date = inputFormat.parse(timestamp)
-            val outputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
-            return outputFormat.format(date ?: Date())
-        } catch (e: Exception) {
-            try { // Fallback for standard database 'YYYY-MM-DD HH:MM:SS' format
-                val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                val date = inputFormat.parse(timestamp)
-                val outputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
-                return outputFormat.format(date ?: Date())
-            } catch (e2: Exception) { return "" }
-        }
-    }
-
-    // --- DiffUtil for efficient list updates ---
     object MessageDiffCallback : DiffUtil.ItemCallback<Message>() {
-        override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean {
-            // Temp ID is the unique source of truth during the sending lifecycle
-            return oldItem.tempId == newItem.tempId
-        }
-        override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean {
-            // Also check status, so the UI updates when SENDING -> SENT or FAILED
-            return oldItem.messageContent == newItem.messageContent && oldItem.status == newItem.status
-        }
+        override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean = oldItem.tempId == newItem.tempId
+        override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean = oldItem.messageId == newItem.messageId && oldItem.status == newItem.status
     }
 }

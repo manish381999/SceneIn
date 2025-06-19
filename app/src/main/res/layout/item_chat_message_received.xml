@@ -4,65 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingEnd="8dp"
     android:paddingStart="8dp"
+    android:paddingEnd="8dp"
     android:paddingTop="4dp"
     android:paddingBottom="4dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/message_card"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/text_bubble_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="?attr/colorPrimary"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="0dp"
+        android:background="@drawable/bg_chat_bubble_received"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="@dimen/dp_10_dsa"
-        app:layout_constraintWidth_max="300dp"
-       >
+        app:layout_constraintWidth_max="300dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_message_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="This is a received message that might wrap." />
 
-            <ImageView
-                android:id="@+id/iv_media"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:visibility="gone"
-                android:scaleType="centerCrop"
-                tools:src="@drawable/ic_profile_placeholder"
-                tools:layout_height="180dp"/>
+        <TextView
+            android:id="@+id/tv_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_message_body"
+            app:layout_constraintTop_toBottomOf="@+id/tv_message_body"
+            app:layout_constraintHorizontal_bias="1.0"
+            tools:text="11:46 AM" />
 
-            <TextView
-                android:id="@+id/tv_message_body"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="12dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="8dp"
-                android:textColor="?attr/colorOnPrimary"
-                android:textSize="15sp"
-                tools:text="This is a sent message." />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-
-
-    <TextView
-        android:id="@+id/tv_timestamp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/media_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/message_card"
-        app:layout_constraintTop_toBottomOf="@id/message_card"
-        tools:text="11:45 AM" />
+        android:visibility="gone"
+        app:cardBackgroundColor="?attr/colorSurfaceVariant"
+        app:cardCornerRadius="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="300dp">
+        <ImageView
+            android:id="@+id/iv_media"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:minHeight="150dp"
+            android:scaleType="centerCrop"/>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

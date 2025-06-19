@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+    This tells the FileProvider that it is allowed to share files
+    from any subdirectory within the app's cache directory.
+    The `path="."` means the root of the cache directory.
+    -->
+    <cache-path
+        name="shared_images"
+        path="." />
+</paths>

@@ -101,42 +101,23 @@ class ChatViewModel : ViewModel() {
         }
     }
 
-    // This function now safely handles both success and failure cases without changing NetworkState.
+    // Handles sending for both text and media URLs
     fun sendMessage(senderId: String, receiverId: String, messageType: String, content: String, tempId: String) {
         viewModelScope.launch {
             try {
                 val response = repository.sendMessage(senderId, receiverId, messageType, content)
                 if (response.isSuccessful && response.body()?.status == "success") {
-                    // Success: Get the message from the server's response.
                     val serverMessage = response.body()!!.sentMessage
-
                     if (serverMessage != null) {
-                        // Manually create a new message object for the UI update,
-                        // ensuring the tempId is preserved.
-                        val uiUpdateMessage = Message(
-                            messageId = serverMessage.messageId,
-                            senderId = serverMessage.senderId,
-                            receiverId = serverMessage.receiverId,
-                            messageType = serverMessage.messageType,
-                            messageContent = serverMessage.messageContent,
-                            timestamp = serverMessage.timestamp
-                        ).apply {
-                            this.tempId = tempId // IMPORTANT: Carry over the original tempId
-                            this.status = MessageStatus.SENT
-                        }
-
-                        // Create a new response object with our manually updated message.
+                        // Attach the tempId to the server response for the UI to match it
+                        val uiUpdateMessage = serverMessage.copy(tempId = tempId, status = MessageStatus.SENT)
                         val updatedResponse = response.body()!!.copy(sentMessage = uiUpdateMessage)
                         _sendMessageState.value = NetworkState.Success(updatedResponse)
-
                     } else {
-                        // Handle case where server sent success but no message object
-                        _sendMessageState.value = NetworkState.Error("Server response was empty.")
-                        _failedMessageTempId.value = tempId
+                        throw Exception("Server sent 'success' but no message object was returned.")
                     }
                 } else {
-                    _sendMessageState.value = NetworkState.Error(response.body()?.message ?: "Failed to send")
-                    _failedMessageTempId.value = tempId
+                    throw Exception(response.body()?.message ?: "Failed to send message")
                 }
             } catch (e: Exception) {
                 _sendMessageState.value = NetworkState.Error(e.message ?: "An error occurred")
@@ -145,45 +126,43 @@ class ChatViewModel : ViewModel() {
         }
     }
 
-    // --- THIS IS THE CORRECTED uploadMediaAndSendMessage FUNCTION ---
-    fun uploadMediaAndSendMessage(context: Context, senderId: String, receiverId: String, mediaUri: Uri, messageType: String, tempId: String) {
-        _uploadState.value = NetworkState.Loading
+    fun uploadMediaAndSendMessage(
+        context: Context,
+        senderId: String,
+        receiverId: String,
+        mediaUri: Uri,
+        messageType: String, // "image" or "video"
+        tempId: String
+    ) {
         viewModelScope.launch {
             val mediaFile = FileUtils.getFileFromUri(context.applicationContext, mediaUri)
             if (mediaFile == null) {
-                // Failure Case: Update the error states correctly.
-                _uploadState.value = NetworkState.Error("Failed to access selected file")
-                _sendMessageState.value = NetworkState.Error("File access error")
+                _sendMessageState.value = NetworkState.Error("Failed to access selected file")
                 _failedMessageTempId.value = tempId
                 return@launch
             }
-
             try {
-                val requestFile = mediaFile.asRequestBody("image/*".toMediaTypeOrNull())
+                val mimeType = context.contentResolver.getType(mediaUri) ?: "image/*"
+                val requestFile = mediaFile.asRequestBody(mimeType.toMediaTypeOrNull())
                 val body = MultipartBody.Part.createFormData("uploaded_file", mediaFile.name, requestFile)
-                val uploadResponse = repository.uploadMedia(body)
 
+                val uploadResponse = repository.uploadMedia(body)
                 if (uploadResponse.isSuccessful && uploadResponse.body()?.status == "success") {
                     val fileUrl = uploadResponse.body()!!.fileUrl
                     if (fileUrl.isNullOrEmpty()) throw Exception("Server returned an empty URL.")
-
-                    _uploadState.value = NetworkState.Success("Upload complete.")
                     sendMessage(senderId, receiverId, messageType, fileUrl, tempId)
-
                 } else {
-                    throw Exception(uploadResponse.body()?.message ?: "Media upload failed on server.")
+                    throw Exception(uploadResponse.body()?.message ?: "Media upload failed.")
                 }
             } catch (e: Exception) {
-                _uploadState.value = NetworkState.Error(e.message ?: "An error occurred during upload")
-                _sendMessageState.value = NetworkState.Error(e.message ?: "Upload failed")
-                _failedMessageTempId.value = tempId // Report failure using tempId
+                _sendMessageState.value = NetworkState.Error(e.message ?: "Upload failed.")
+                _failedMessageTempId.value = tempId
             } finally {
-                mediaFile.delete()
+                mediaFile.delete() // Clean up temp file
             }
         }
     }
 
-    // Public function for the UI to call after it has handled the failure state.
     fun onFailedMessageHandled() {
         _failedMessageTempId.value = null
     }

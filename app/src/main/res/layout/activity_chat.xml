@@ -20,11 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <!-- ============================================= -->
-            <!-- == FIX: Added width, height, and contentDescription to all ImageButtons == -->
-            <!-- ============================================= -->
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_12_dsa">
 
             <ImageButton
                 android:id="@+id/iv_back"
@@ -52,6 +49,7 @@
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
+                android:textSize="@dimen/_12sdp"
                 tools:text="Gunjan Jain"/>
 
             <ImageButton

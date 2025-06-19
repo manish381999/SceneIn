@@ -4,27 +4,23 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.UUID
 
-
-// FINAL, STABLE VERSION of the Message data class
 data class Message(
-    // These properties are created directly by Gson from your server's JSON response
     @SerializedName("message_id") val messageId: String,
     @SerializedName("sender_id") val senderId: String,
     @SerializedName("receiver_id") val receiverId: String,
-    @SerializedName("message_type") val messageType: String,
-    @SerializedName("message_content") val messageContent: String,
-    @SerializedName("timestamp") val timestamp: String
-) : Serializable {
-    // UI-only properties are declared inside the class body with default values.
-    // This ensures they are NEVER null, fixing the crash in your adapter.
+    @SerializedName("message_type") var messageType: String,
+    @SerializedName("message_content") var messageContent: String,
+    @SerializedName("timestamp") var timestamp: String,
+
+    // UI-only properties with default values.
+    // They MUST be `var` to be updatable.
+    var status: MessageStatus = MessageStatus.SENT,
     var tempId: String = UUID.randomUUID().toString()
-    var status: MessageStatus = MessageStatus.SENT
-}
+
+) : Serializable
 
 enum class MessageStatus {
-    SENDING,
-    SENT,
-    FAILED
+    SENDING, SENT, FAILED
 }
 // Data class for the main conversation list in ChatFragment.
 data class Conversation(

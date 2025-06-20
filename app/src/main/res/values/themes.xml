@@ -8,6 +8,8 @@
         <item name="colorOnPrimary">@color/textOnPrimary</item>
         <item name="android:statusBarColor">@android:color/black</item>
 
+
+
         <!-- Secondary brand color -->
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
@@ -73,6 +75,8 @@
         <item name="checkedIconVisible">false</item>
 
     </style>
+
+
 
 
 </resources>

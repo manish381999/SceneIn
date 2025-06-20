@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="8dp"
-    android:paddingEnd="8dp"
     android:paddingTop="4dp"
+    android:paddingEnd="8dp"
     android:paddingBottom="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,34 +16,36 @@
         android:background="@drawable/bg_chat_bubble_received"
         android:paddingStart="12dp"
         android:paddingTop="8dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="6dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="300dp">
+        app:layout_constraintWidth_max="310dp"
+        app:layout_constraintHorizontal_bias="0.0">
 
         <TextView
             android:id="@+id/tv_message_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@color/textPrimary"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="This is a received message that might wrap." />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0.0"
+            tools:text="This is a received message that might wrap to a few lines." />
 
         <TextView
             android:id="@+id/tv_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textColor="@color/chat_timestamp"
             android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_message_body"
             app:layout_constraintTop_toBottomOf="@+id/tv_message_body"
-            app:layout_constraintHorizontal_bias="1.0"
             tools:text="11:46 AM" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -53,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant"
+        app:cardBackgroundColor="@color/chat_bubble_received"
         app:cardCornerRadius="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -66,5 +68,4 @@
             android:minHeight="150dp"
             android:scaleType="centerCrop"/>
     </com.google.android.material.card.MaterialCardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

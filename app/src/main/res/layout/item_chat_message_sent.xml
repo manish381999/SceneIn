@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="8dp"
-    android:paddingEnd="8dp"
     android:paddingTop="4dp"
+    android:paddingEnd="8dp"
     android:paddingBottom="4dp">
 
     <!-- This ConstraintLayout IS the chat bubble -->
@@ -17,46 +17,48 @@
         android:background="@drawable/bg_chat_bubble_sent"
         android:paddingStart="12dp"
         android:paddingTop="8dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="300dp">
+        app:layout_constraintWidth_max="310dp"
+        app:layout_constraintHorizontal_bias="1.0">
 
         <TextView
             android:id="@+id/tv_message_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnPrimary"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="This is a much longer sent message that will definitely wrap to a second line." />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0.0"
+            tools:text="This is a much longer sent message that will definitely wrap to a second line."
+            android:textColor="@color/textPrimary" />
 
         <TextView
             android:id="@+id/tv_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:textColor="#B3FFFFFF"
-            android:textSize="11sp"
-            app:layout_constraintEnd_toStartOf="@+id/iv_message_status"
-            app:layout_constraintStart_toEndOf="@+id/tv_message_body"
-            app:layout_constraintTop_toBottomOf="@+id/tv_message_body"
-            app:layout_constraintHorizontal_bias="1.0"
-            tools:text="11:45 AM" />
+            android:layout_marginEnd="4dp"
+            android:textColor="@color/chat_timestamp"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_message_status"
+        app:layout_constraintTop_toBottomOf="@+id/tv_message_body"
+        tools:text="11:45 AM" />
 
         <ImageView
             android:id="@+id/iv_message_status"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:layout_marginStart="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_timestamp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_timestamp"
-            app:tint="#B3FFFFFF"
-            tools:src="@drawable/ic_check_single" />
+            app:tint="@color/chat_timestamp"
+        tools:src="@drawable/ic_check_single" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -66,18 +68,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:cardBackgroundColor="?attr/colorPrimary"
-        app:cardCornerRadius="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="300dp">
-        <ImageView
-            android:id="@+id/iv_media"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:minHeight="150dp"/>
-    </com.google.android.material.card.MaterialCardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:cardBackgroundColor="@color/chat_bubble_sent"
+    app:cardCornerRadius="18dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintWidth_max="300dp">
+    <ImageView
+        android:id="@+id/iv_media"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:minHeight="150dp"
+        android:scaleType="centerCrop"/>
+</com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>

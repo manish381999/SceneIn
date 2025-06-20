@@ -13,16 +13,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.R
 import com.tie.vibein.chat.data.models.Message
 import com.tie.vibein.chat.data.models.MessageStatus
 import com.tie.vibein.chat.persentation.adapter.ChatAdapter
+import com.tie.vibein.chat.persentation.adapter.ChatItem
 import com.tie.vibein.chat.presentation.viewmodel.ChatViewModel
 import com.tie.vibein.databinding.ActivityChatBinding
 import com.tie.vibein.utils.NetworkState
 import java.io.Serializable
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ChatActivity : AppCompatActivity() {
@@ -33,6 +36,19 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var currentUserId: String
     private var receiverId: String? = null
 
+    // A local list to hold the raw message data, which is our "source of truth".
+    private var currentMessages = mutableListOf<Message>()
+
+    private val adapterDataObserver = object : RecyclerView.AdapterDataObserver() {
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            super.onItemRangeInserted(positionStart, itemCount)
+            val totalItemCount = chatAdapter.itemCount
+            if (totalItemCount > 0) {
+                binding.rvChatMessages.smoothScrollToPosition(totalItemCount - 1)
+            }
+        }
+    }
+
     companion object {
         var isActivityVisible = false
         var currentChattingWithId: String? = null
@@ -42,8 +58,11 @@ class ChatActivity : AppCompatActivity() {
         uri?.let {
             val tempId = UUID.randomUUID().toString()
             val optimisticMessage = Message("-1", currentUserId, receiverId!!, "image", it.toString(), "", MessageStatus.SENDING, tempId)
-            chatAdapter.addMessage(optimisticMessage)
-            binding.rvChatMessages.scrollToPosition(chatAdapter.itemCount - 1)
+
+            currentMessages.add(optimisticMessage)
+            val processedList = processMessagesWithDates(currentMessages)
+            chatAdapter.submitList(processedList)
+
             viewModel.uploadMediaAndSendMessage(this, currentUserId, receiverId!!, it, "image", tempId)
         }
     }
@@ -59,8 +78,9 @@ class ChatActivity : AppCompatActivity() {
                 messageContent = data["message_content"] as? String ?: "",
                 timestamp = data["timestamp"] as? String ?: ""
             )
-            chatAdapter.addMessage(message)
-            binding.rvChatMessages.scrollToPosition(chatAdapter.itemCount - 1)
+            currentMessages.add(message)
+            val processedList = processMessagesWithDates(currentMessages)
+            chatAdapter.submitList(processedList)
         }
     }
 
@@ -82,6 +102,11 @@ class ChatActivity : AppCompatActivity() {
         if (receiverId != null) {
             viewModel.fetchChatHistory(currentUserId, receiverId!!)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        chatAdapter.unregisterAdapterDataObserver(adapterDataObserver)
     }
 
     override fun onResume() {
@@ -108,9 +133,10 @@ class ChatActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         chatAdapter = ChatAdapter(currentUserId)
-        val layoutManager = LinearLayoutManager(this).apply { stackFromEnd = true }
+        val layoutManager = LinearLayoutManager(this)
         binding.rvChatMessages.adapter = chatAdapter
         binding.rvChatMessages.layoutManager = layoutManager
+        chatAdapter.registerAdapterDataObserver(adapterDataObserver)
     }
 
     private fun setupClickListeners() {
@@ -125,8 +151,9 @@ class ChatActivity : AppCompatActivity() {
                 val tempId = UUID.randomUUID().toString()
                 val optimisticMessage = Message("-1", currentUserId, receiverId!!, "text", messageText, "", MessageStatus.SENDING, tempId)
 
-                chatAdapter.addMessage(optimisticMessage)
-                binding.rvChatMessages.scrollToPosition(chatAdapter.itemCount - 1)
+                currentMessages.add(optimisticMessage)
+                val processedList = processMessagesWithDates(currentMessages)
+                chatAdapter.submitList(processedList)
 
                 viewModel.sendMessage(currentUserId, receiverId!!, "text", messageText, tempId)
                 binding.etMessageInput.text.clear()
@@ -138,27 +165,103 @@ class ChatActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.chatHistoryState.observe(this) { state ->
             if (state is NetworkState.Success) {
-                chatAdapter.submitList(state.data)
-                binding.rvChatMessages.post {
-                    binding.rvChatMessages.scrollToPosition(chatAdapter.itemCount - 1)
-                }
+                currentMessages = state.data.toMutableList()
+                val processedList = processMessagesWithDates(currentMessages)
+                chatAdapter.submitList(processedList)
             }
         }
 
         viewModel.sendMessageState.observe(this) { state ->
             if (state is NetworkState.Success) {
                 state.data?.sentMessage?.let { serverMessage ->
-                    chatAdapter.updateSentMessage(serverMessage)
+                    val index = currentMessages.indexOfFirst { it.tempId == serverMessage.tempId }
+                    if (index != -1) {
+                        currentMessages[index] = serverMessage
+                        val processedList = processMessagesWithDates(currentMessages)
+                        chatAdapter.submitList(processedList)
+                    }
                 }
             }
         }
 
         viewModel.failedMessageTempId.observe(this) { tempId ->
             if (tempId != null) {
-                chatAdapter.markAsFailed(tempId)
+                val index = currentMessages.indexOfFirst { it.tempId == tempId }
+                if (index != -1) {
+                    currentMessages[index] = currentMessages[index].copy(status = MessageStatus.FAILED)
+                    val processedList = processMessagesWithDates(currentMessages)
+                    chatAdapter.submitList(processedList)
+                }
                 Toast.makeText(this, "Failed to send message.", Toast.LENGTH_SHORT).show()
                 viewModel.onFailedMessageHandled()
             }
         }
+    }
+
+    private fun processMessagesWithDates(messages: List<Message>): List<ChatItem> {
+        if (messages.isEmpty()) return emptyList()
+
+        val itemsWithDates = mutableListOf<ChatItem>()
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
+
+        var lastDate: Date? = null
+
+        for (message in messages) {
+            val messageTimestamp = message.timestamp
+            if (messageTimestamp.isNullOrEmpty()) {
+                itemsWithDates.add(ChatItem.MessageItem(message))
+                continue
+            }
+
+            val currentDate = inputFormat.parse(messageTimestamp) ?: continue
+
+            if (lastDate == null || !isSameDay(lastDate, currentDate)) {
+                itemsWithDates.add(ChatItem.DateItem(formatDateSeparator(currentDate)))
+            }
+
+            itemsWithDates.add(ChatItem.MessageItem(message))
+            lastDate = currentDate
+        }
+        return itemsWithDates
+    }
+
+    private fun isSameDay(date1: Date?, date2: Date?): Boolean {
+        if (date1 == null || date2 == null) return false
+        val cal1 = Calendar.getInstance().apply { time = date1 }
+        val cal2 = Calendar.getInstance().apply { time = date2 }
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
+    }
+
+    private fun formatDateSeparator(date: Date): String {
+        val today = Calendar.getInstance()
+        val yesterday = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
+        val lastWeek = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -7) }
+        val messageDate = Calendar.getInstance().apply { time = date }
+
+        // 1. Is it Today?
+        if (isSameDay(messageDate.time, today.time)) {
+            return "Today"
+        }
+
+        // 2. Is it Yesterday?
+        if (isSameDay(messageDate.time, yesterday.time)) {
+            return "Yesterday"
+        }
+
+        // 3. Is it within the last week? (e.g., "Wednesday")
+        if (messageDate.after(lastWeek)) {
+            return SimpleDateFormat("EEEE", Locale.getDefault()).format(date) // "EEEE" gives the full day name
+        }
+
+        // 4. Is it within the current year? (e.g., "Fri, 13 Jun")
+        if (messageDate.get(Calendar.YEAR) == today.get(Calendar.YEAR)) {
+            return SimpleDateFormat("E, d MMM", Locale.getDefault()).format(date) // "E, d MMM" gives "Fri, 13 Jun"
+        }
+
+        // 5. If it's a previous year (e.g., "17 Sep 2024")
+        return SimpleDateFormat("d MMM yyyy", Locale.getDefault()).format(date) // "d MMM yyyy" gives "17 Sep 2024"
     }
 }

@@ -72,8 +72,8 @@ dependencies {
     implementation ("com.intuit.sdp:sdp-android:1.0.5")
     implementation ("com.hbb20:ccp:2.5.4")
 
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.9.1")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.12.0")

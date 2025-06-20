@@ -40,4 +40,17 @@
     <color name="unjoinButtonColor">#66BB6A</color> <!-- Brighter Green -->
     <color name="fullButtonColor">#888888</color> <!-- Dim Gray -->
 
+    <!-- Chat-Specific Colors -->
+    <!-- The toolbar uses an elevated surface color, which is standard for dark theme -->
+    <color name="chat_toolbar_color">@color/colorSurface</color>
+
+    <!-- The sent bubble uses the dark variant of your primary color -->
+    <color name="chat_bubble_sent">@color/colorPrimaryVariant</color>
+
+    <!-- The received bubble uses a subtler surface variant -->
+    <color name="chat_bubble_received">@color/colorSurfaceVariant</color>
+
+    <!-- The timestamp uses your app's standard secondary text color -->
+    <color name="chat_timestamp">@color/textSecondary</color>
+
 </resources>

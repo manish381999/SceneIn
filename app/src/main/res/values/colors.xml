@@ -42,4 +42,16 @@
     <color name="unjoinButtonColor">#4CAF50</color> <!-- Green -->
     <color name="fullButtonColor">#BDBDBD</color> <!-- Gray -->
 
+    <!-- The toolbar now uses your app's main primary color -->
+    <color name="chat_toolbar_color">@color/colorPrimary</color>
+
+    <!-- The sent bubble now uses the light variant of your primary color -->
+    <color name="chat_bubble_sent">@color/colorPrimaryVariant</color>
+
+    <!-- The received bubble uses the standard surface color -->
+    <color name="chat_bubble_received">@color/colorSurface</color>
+
+    <!-- The timestamp uses your app's standard secondary text color -->
+    <color name="chat_timestamp">@color/textSecondary</color>
+
 </resources>

@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
+    android:background="@drawable/chat_background"
     tools:context=".chat.persentation.screens.ChatActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorSurface"
+        android:background="@color/chat_toolbar_color"
         app:contentInsetStart="0dp"
         app:elevation="4dp"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,56 +20,57 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="@dimen/dp_12_dsa">
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/iv_back"
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="?attr/actionBarSize"
-                android:src="@drawable/ic_arrow_back_ios"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Back"
-                app:tint="?attr/colorOnSurface" />
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/ic_arrow_back_ios"
+                app:tint="?attr/colorOnPrimary" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_toolbar_profile_pic"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                tools:src="@drawable/ic_profile_placeholder"/>
+                tools:src="@drawable/ic_profile_placeholder" />
 
             <TextView
                 android:id="@+id/tv_toolbar_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="12dp"
+                android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textColor="?attr/colorOnSurface"
+                android:textColor="?attr/colorOnPrimary"
                 android:textStyle="bold"
-                android:textSize="@dimen/_12sdp"
-                tools:text="Gunjan Jain"/>
+                android:textSize="@dimen/_14ssp"
+                tools:text="Gunjan Jain" />
 
             <ImageButton
                 android:id="@+id/iv_audio_call"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_audio_call"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Audio Call"
-                app:tint="?attr/colorPrimary" />
+                android:src="@drawable/ic_audio_call"
+                app:tint="?attr/colorOnPrimary" />
 
             <ImageButton
                 android:id="@+id/iv_video_call"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_video_call"
                 android:layout_marginEnd="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Video Call"
-                app:tint="?attr/colorPrimary" />
+                android:src="@drawable/ic_video_call"
+                app:tint="?attr/colorOnPrimary" />
         </LinearLayout>
 
     </com.google.android.material.appbar.MaterialToolbar>
@@ -103,9 +104,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="24dp"
-            app:cardElevation="0dp">
+            android:layout_marginBottom="@dimen/dp_1_dsa"
+            app:cardElevation="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -135,7 +137,7 @@
                     android:paddingTop="12dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="12dp"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="@color/textPrimary"
                     android:textColorHint="?attr/colorOnSurfaceVariant" />
 
                 <ImageButton
@@ -146,7 +148,6 @@
                     android:contentDescription="Open camera"
                     android:src="@drawable/ic_camera"
                     app:tint="?attr/colorOnSurfaceVariant" />
-
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -157,9 +158,8 @@
             android:layout_marginStart="8dp"
             android:contentDescription="Send Message"
             android:src="@drawable/ic_send"
-            app:backgroundTint="?attr/colorPrimary"
+            app:backgroundTint="?attr/colorSecondary"
             app:elevation="2dp"
             app:tint="@android:color/white" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

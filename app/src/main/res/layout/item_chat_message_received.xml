@@ -50,22 +50,37 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/media_card"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/media_bubble_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:cardBackgroundColor="@color/chat_bubble_received"
-        app:cardCornerRadius="18dp"
+        android:background="@drawable/bg_chat_bubble_received"
+        android:padding="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="300dp">
-        <ImageView
-            android:id="@+id/iv_media"
+        app:layout_constraintHorizontal_bias="0.0">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_media__grid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:minHeight="150dp"
-            android:scaleType="centerCrop"/>
-    </com.google.android.material.card.MaterialCardView>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_max="300dp" />
+
+        <TextView
+            android:id="@+id/tv_media_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:textColor="@color/chat_timestamp"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_media__grid"
+            tools:text="11:46 AM" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

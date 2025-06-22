@@ -2,35 +2,37 @@ package com.tie.vibein.utils
 
 import android.content.Context
 import android.net.Uri
-import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.util.*
 
 object FileUtils {
-    // This is now the updated, robust function
-    fun getFileFromUri(context: Context, uri: Uri): File? {
-        // --- NEW: Try to get a real filename and extension from the content provider ---
-        val cursor = context.contentResolver.query(uri, null, null, null, null)
-        val nameIndex = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
 
-        cursor?.moveToFirst()
-        val originalFileName = nameIndex?.let { cursor.getString(it) } ?: "upload_file"
-        cursor?.close()
+    // You can keep your old getFileFromUri function if it's used elsewhere,
+    // but we will use this new one for uploads.
 
-        val tempFile = File(context.cacheDir, originalFileName)
-
+    fun getMultipartBodyPartFromUri(context: Context, uri: Uri, partName: String): MultipartBody.Part? {
         return try {
-            // Copy the file content from the URI to our temporary file
-            val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
-            val outputStream = FileOutputStream(tempFile)
-            inputStream?.use { input ->
-                outputStream.use { output ->
-                    input.copyTo(output)
-                }
-            }
-            tempFile
+            val contentResolver = context.contentResolver
+
+            // 1. Get the MIME type (e.g., "image/jpeg")
+            val mimeType = contentResolver.getType(uri) ?: "image/*"
+
+            // 2. Get the file's bytes from the URI
+            val inputStream = contentResolver.openInputStream(uri) ?: return null
+            val fileBytes = inputStream.use { it.readBytes() }
+
+            // 3. Create a RequestBody from the bytes
+            val requestBody = fileBytes.toRequestBody(mimeType.toMediaTypeOrNull())
+
+            // 4. Generate a filename. The server needs one, even if it's random.
+            val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+            val filename = "${UUID.randomUUID()}.$extension"
+
+            // 5. Create and return the MultipartBody.Part
+            MultipartBody.Part.createFormData(partName, filename, requestBody)
         } catch (e: Exception) {
             e.printStackTrace()
             null

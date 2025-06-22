@@ -31,7 +31,7 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:src="@drawable/ic_arrow_back_ios"
-                app:tint="?attr/colorOnPrimary" />
+                app:tint="@color/gray500" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_toolbar_profile_pic"
@@ -47,8 +47,8 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textColor="?attr/colorOnPrimary"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/textPrimary"
                 android:textStyle="bold"
                 android:textSize="@dimen/_14ssp"
                 tools:text="Gunjan Jain" />
@@ -60,7 +60,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Audio Call"
                 android:src="@drawable/ic_audio_call"
-                app:tint="?attr/colorOnPrimary" />
+                app:tint="@color/gray500" />
 
             <ImageButton
                 android:id="@+id/iv_video_call"
@@ -70,7 +70,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Video Call"
                 android:src="@drawable/ic_video_call"
-                app:tint="?attr/colorOnPrimary" />
+                app:tint="@color/gray500"  />
         </LinearLayout>
 
     </com.google.android.material.appbar.MaterialToolbar>
@@ -104,7 +104,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardBackgroundColor="@color/colorSurface"
             app:cardCornerRadius="24dp"
             android:layout_marginBottom="@dimen/dp_1_dsa"
             app:cardElevation="1dp">
@@ -122,7 +122,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Add attachment"
                     android:src="@drawable/ic_add_attachment"
-                    app:tint="?attr/colorOnSurfaceVariant" />
+                    app:tint="@color/colorOnSurfaceVariant" />
 
                 <EditText
                     android:id="@+id/et_message_input"
@@ -137,6 +137,7 @@
                     android:paddingTop="12dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="12dp"
+                    android:fontFamily="@font/poppins"
                     android:textColor="@color/textPrimary"
                     android:textColorHint="?attr/colorOnSurfaceVariant" />
 

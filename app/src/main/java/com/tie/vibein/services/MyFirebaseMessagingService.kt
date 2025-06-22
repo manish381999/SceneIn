@@ -9,6 +9,9 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.tie.dreamsquad.utils.SP
@@ -18,116 +21,137 @@ import com.tie.vibein.chat.persentation.screens.ChatActivity
 import com.tie.vibein.credentials.data.repository.AuthRepository
 import com.tie.vibein.discover.presentation.screens.EventDetailActivity
 import com.tie.vibein.profile.persentation.screen.UserProfileActivity
-import java.io.Serializable
+import com.tie.vibein.utils.DeliveryReportWorker // Your import might be com.tie.vibein.workers.DeliveryReportWorker
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    private val TAG = "FCM_FINAL_DEBUG"
+    private val TAG = "FCM_FINAL_ROUTER"
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.e(TAG, "New FCM Token Generated: $token")
         SP.savePreferences(this, SP.FCM_TEMP_TOKEN, token)
         val userId = SP.getPreferences(this, SP.USER_ID, "")
-        if (!userId.isNullOrEmpty()) {
-            // In a production app, you would likely use a WorkManager or a Coroutine
-            // to safely send this token from a background thread.
-             val fcmManager = FcmTokenManager(AuthRepository())
-             fcmManager.updateFcmToken(userId, token)
+        if (userId != null) {
+            if (userId.isNotEmpty()) {
+                val fcmManager = FcmTokenManager(AuthRepository())
+                fcmManager.updateFcmToken(userId, token)
+            }
         }
     }
 
     /**
-     * This method is called for all incoming FCM messages and routes them correctly.
+     * Main entry point for ALL FCM messages.
+     * This will be called in all app states because the server sends data-only messages.
      */
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-
-        Log.e(TAG, "--- FCM MESSAGE RECEIVED ---")
-        Log.d(TAG, "Data Payload: ${remoteMessage.data}")
-
-        val data = remoteMessage.data
-        val notificationType = data["notification_type"]
-
-        // =====================================================================
-        // == THE KEY FIX: Check if we should broadcast INTERNALLY first. ==
-        // =====================================================================
-        if (notificationType == "new_message") {
-            val senderId = data["sender_id"]
-            if (ChatActivity.isActivityVisible && ChatActivity.currentChattingWithId == senderId) {
-                // The user is in the active chat screen. Broadcast the message internally
-                // AND stop further execution so a system notification is NOT shown.
-                Log.d(TAG, "User in active chat. Broadcasting message and stopping.")
-                broadcastNewMessage(remoteMessage.notification, data)
-                return
-            }
+        Log.d(TAG, "--- onMessageReceived CALLED ---")
+        if (remoteMessage.data.isNotEmpty()) {
+            Log.d(TAG, "Data Payload: ${remoteMessage.data}")
+            handleDataPayload(remoteMessage.data)
         }
-
-        // --- STANDARD NOTIFICATION LOGIC ---
-        // If the code reaches here, it means one of two things:
-        // 1. It was NOT a 'new_message' type (e.g., it was 'connection_request').
-        // 2. It WAS a 'new_message', but the user was NOT in the correct chat screen.
-        // In both these cases, we should show a system notification.
-
-        val title = remoteMessage.notification?.title
-        val body = remoteMessage.notification?.body
-
-        if (title.isNullOrBlank() || body.isNullOrBlank()) {
-            Log.e(TAG, "Cannot show notification because title or body is missing.")
-            return
-        }
-
-        Log.d(TAG, "Proceeding to show a system notification for type: $notificationType")
-        sendSystemNotification(title, body, data)
     }
 
-    private fun broadcastNewMessage(notification: RemoteMessage.Notification?, data: Map<String, String>) {
-        val messageDataForBroadcast = HashMap<String, String>()
-        messageDataForBroadcast.putAll(data)
-        // Ensure title and body from the notification object are included for the receiver
-        messageDataForBroadcast["title"] = notification?.title ?: ""
-        messageDataForBroadcast["body"] = notification?.body ?: ""
+    /**
+     * Central router for all messages containing a data payload.
+     */
+    private fun handleDataPayload(data: Map<String, String>) {
+        when (data["notification_type"]) {
+            "new_message" -> handleNewMessage(data)
+            "status_update" -> handleStatusUpdate(data)
+            else -> {
+                // --- THIS IS THE FIX ---
+                // This is the fallback for any other notification type
+                // like 'connection_request', 'event_join', etc.
+                Log.d(TAG, "Handling generic data message type: ${data["notification_type"]}")
+                val title = data["title"]
+                val body = data["body"]
+                // If we have a title and body in the data payload, we can show a notification.
+                if (!title.isNullOrBlank() && !body.isNullOrBlank()) {
+                    sendSystemNotification(title, body, data)
+                } else {
+                    Log.w(TAG, "Received data message of type '${data["notification_type"]}' but it has no title or body to display.")
+                }
+            }
+        }
+    }
 
-        val intent = Intent("new_message_broadcast").apply {
-            putExtra("message_data", messageDataForBroadcast)
+    private fun handleNewMessage(data: Map<String, String>) {
+        val messageId = data["message_id"]
+        if (!messageId.isNullOrBlank()) {
+            scheduleDeliveryReport(listOf(messageId))
+        }
+        val senderId = data["sender_id"]
+        if (ChatActivity.isActivityVisible && ChatActivity.currentChattingWithId == senderId) {
+            broadcastNewMessage(data)
+        } else {
+            val title = data["title"] ?: "New Message"
+            val body = data["body"] ?: "You have received a new message."
+            sendSystemNotification(title, body, data)
+        }
+    }
+
+    private fun scheduleDeliveryReport(messageIds: List<String>) {
+        Log.d(TAG, "Scheduling delivery report via WorkManager for IDs: $messageIds")
+        val workData = workDataOf(DeliveryReportWorker.KEY_MESSAGE_IDS to messageIds.toTypedArray())
+        val workRequest = OneTimeWorkRequestBuilder<DeliveryReportWorker>()
+            .setInputData(workData)
+            .build()
+        WorkManager.getInstance(applicationContext).enqueue(workRequest)
+    }
+
+    private fun handleStatusUpdate(data: Map<String, String>) {
+        Log.d("STATUS_CHAIN", "1. FCM Service is broadcasting status update: ${data["status"]}") // LOG 1
+        val intent = Intent("status_update_broadcast").apply {
+            putExtra("status", data["status"])
+            putExtra("message_ids_json", data["message_ids"])
         }
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 
-    /**
-     * Creates and displays a standard system notification that appears in the notification drawer.
-     */
+    private fun broadcastNewMessage(data: Map<String, String>) {
+        val intent = Intent("new_message_broadcast").apply {
+            putExtra("message_data", HashMap(data))
+        }
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+    }
+
     private fun sendSystemNotification(title: String, body: String, data: Map<String, String>) {
         val notificationIntent: Intent
-
-        // Decide which Activity to open when the user taps the notification.
         when (data["notification_type"]) {
-            "connection_request", "connection_accepted" -> {
-                notificationIntent = Intent(this, UserProfileActivity::class.java).apply {
-                    putExtra("user_id", data["sender_id"] ?: data["receiver_id"])
-                }
-            }
             "new_message" -> {
                 notificationIntent = Intent(this, ChatActivity::class.java).apply {
                     putExtra("receiver_id", data["sender_id"])
-                    putExtra("receiver_name", title) // Title is the sender's name for chat notifications
-                    // If you send profile pic in data payload, you'd add it here.
+                    putExtra("receiver_name", data["sender_name"])
+                    putExtra("receiver_profile_pic", data["sender_profile_pic"])
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                }
+            }
+            "connection_request", "connection_accepted" -> {
+                notificationIntent = Intent(this, UserProfileActivity::class.java).apply {
+                    putExtra("user_id", data["sender_id"] ?: data["receiver_id"])
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 }
             }
             "event_join", "event_unjoin" -> {
                 notificationIntent = Intent(this, EventDetailActivity::class.java).apply {
                     putExtra("event_id", data["event_id"])
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 }
             }
             else -> {
-                notificationIntent = Intent(this, BaseActivity::class.java)
+                notificationIntent = Intent(this, BaseActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                }
             }
         }
 
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(
-            this, System.currentTimeMillis().toInt(), notificationIntent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            this,
+            (data["sender_id"]?.hashCode() ?: System.currentTimeMillis()).toInt(),
+            notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val channelId = getString(R.string.default_notification_channel_id)
@@ -146,10 +170,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        // Group chat notifications by sender ID to stack them cleanly.
         val notificationId = data["sender_id"]?.hashCode() ?: System.currentTimeMillis().toInt()
-
         notificationManager.notify(notificationId, notificationBuilder.build())
-        Log.e(TAG, "System Notification was successfully created and displayed.")
+        Log.d(TAG, "System Notification was successfully created and displayed for type: ${data["notification_type"]}")
     }
 }

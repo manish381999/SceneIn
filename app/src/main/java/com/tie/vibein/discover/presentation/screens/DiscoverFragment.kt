@@ -190,6 +190,7 @@ class DiscoverFragment : Fragment() {
         return sdf.format(Date())
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,

@@ -27,4 +27,10 @@ interface ChatApiEndPoint {
     @Multipart
     @POST("api_v1/handle_chat_upload.php")
     suspend fun uploadMedia(@Part file: MultipartBody.Part): Response<MediaUploadResponse>
+
+    @POST("api_v1/mark_delivered.php")
+    suspend fun markMessagesAsDelivered(@Body body: MarkAsDeliveredRequest): Response<Unit>
+
+    @POST("api_v1/mark_read.php")
+    suspend fun markMessagesAsRead(@Body body: MarkAsDeliveredRequest): Response<Unit>
 }

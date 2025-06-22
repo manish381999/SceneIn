@@ -4,6 +4,7 @@ import com.tie.vibein.chat.data.retrofit.ChatApiEndPoint
 import com.tie.vibein.createEvent.data.retrofit.CreateEventApiEndPoint
 import com.tie.vibein.discover.data.retrofit.DiscoverApiEndPoint
 import com.tie.vibein.profile.data.retrofit.ProfileApiEndPoint
+import com.tie.vibein.tickets.data.retrofit.TicketApiEndPoint
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -35,5 +36,9 @@ object RetrofitClient {
     // In RetrofitClient.kt
     val chatApiEndPoint: ChatApiEndPoint by lazy {
         retrofit.create(ChatApiEndPoint::class.java)
+    }
+
+    val ticketApiEndPoint: TicketApiEndPoint by lazy {
+        retrofit.create(TicketApiEndPoint::class.java)
     }
 }

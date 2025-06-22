@@ -8,14 +8,14 @@ plugins {
 
 android {
     namespace = "com.tie.vibein"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.tie.vibein"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 36
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -104,6 +104,14 @@ dependencies {
     val media3Version = "1.3.1" // Define the version within the dependencies block for clarity if needed
     implementation("androidx.media3:media3-transformer:$media3Version")
     implementation("androidx.media3:media3-exoplayer:$media3Version")
+
+    // For pinch-to-zoom in the full-screen viewer
+    implementation ("com.github.chrisbanes:PhotoView:2.3.0")
+
+    // For easily converting a list of image URLs to a JSON string and back
+    implementation ("com.google.code.gson:gson:2.10.1")
+
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 
 
 

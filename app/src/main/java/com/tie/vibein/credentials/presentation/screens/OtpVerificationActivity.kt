@@ -21,7 +21,6 @@ import com.tie.vibein.credentials.data.repository.AuthRepository
 import com.tie.vibein.credentials.presentation.view_model.AuthViewModel
 import com.tie.vibein.credentials.presentation.view_model.AuthViewModelFactory
 import com.tie.vibein.databinding.ActivityOtpVerificationBinding
-import com.tie.vibein.ui.OnboardingActivity
 import com.tie.vibein.utils.NetworkState
 
 class OtpVerificationActivity : AppCompatActivity() {

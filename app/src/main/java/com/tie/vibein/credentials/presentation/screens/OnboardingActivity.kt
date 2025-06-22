@@ -1,7 +1,8 @@
-package com.tie.vibein.ui
+package com.tie.vibein.credentials.presentation.screens // Corrected package name based on file path
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri // --- ADD THIS IMPORT ---
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -24,11 +25,9 @@ import com.tie.vibein.credentials.presentation.view_model.AuthViewModel
 import com.tie.vibein.credentials.presentation.view_model.AuthViewModelFactory
 import com.tie.vibein.utils.NetworkState
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.File
 
 class OnboardingActivity : AppCompatActivity() {
 
@@ -36,7 +35,8 @@ class OnboardingActivity : AppCompatActivity() {
     private val eventViewModel: CreateEventViewModel by viewModels()
     private lateinit var authViewModel: AuthViewModel
 
-    private var selectedImagePath: String? = null
+    // --- MODIFICATION 1: Store the URI, not the path string ---
+    private var selectedImageUri: Uri? = null
     private var selectedCategoryIdsString: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,16 +53,8 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.rvInterested.layoutManager = LinearLayoutManager(this)
-
-        binding.ivEdit.setOnClickListener {
-            openGallery()
-        }
-
-        binding.btnSubmit.setOnClickListener {
-            validateAndSubmit()
-        }
-
-        // Add Text Watcher for validation
+        binding.ivEdit.setOnClickListener { openGallery() }
+        binding.btnSubmit.setOnClickListener { validateAndSubmit() }
         addTextWatcher(binding.etFullName)
         addTextWatcher(binding.etUserName)
         addTextWatcher(binding.etEmail)
@@ -72,9 +64,7 @@ class OnboardingActivity : AppCompatActivity() {
     private fun setupObservers() {
         eventViewModel.categoryState.observe(this) { state ->
             when (state) {
-                is NetworkState.Loading -> {
-                    // Optionally, show loading spinner
-                }
+                is NetworkState.Loading -> {}
                 is NetworkState.Success -> {
                     state.data.let { response ->
                         binding.rvInterested.adapter = CategoryAdapter(this, response.data) { selectedIds ->
@@ -95,25 +85,18 @@ class OnboardingActivity : AppCompatActivity() {
                 }
                 is NetworkState.Success -> {
                     Toast.makeText(this, "Profile updated!", Toast.LENGTH_SHORT).show()
-
-                    // Save user data to SharedPreferences
-                    state.data.let { response ->
-                        saveUserDataToPreferences(response)
-                    }
+                    saveUserDataToPreferences(state.data)
                 }
                 is NetworkState.Error -> {
                     Toast.makeText(this, "Error: ${state.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }
-
     }
 
     private fun saveUserDataToPreferences(response: VerifyOtpResponse) {
         val user = response.user
-
         user?.let {
-            // Save individual data to SharedPreferences
             SP.savePreferences(this, SP.USER_ID, it.user_id)
             SP.savePreferences(this, SP.USER_MOBILE, user.mobile_number)
             SP.savePreferences(this, SP.FULL_NAME, user.name ?: "")
@@ -127,42 +110,21 @@ class OnboardingActivity : AppCompatActivity() {
             SP.savePreferences(this, SP.USER_STATUS, it.status)
             SP.savePreferences(this, SP.USER_DELETED, it.deleted)
             SP.savePreferences(this, SP.USER_CREATED_AT, it.created_at)
-
-            // Save list of interests
             SP.saveInterestNames(this, SP.USER_INTEREST_NAMES, it.interest_names)
-
-            // Save login status as true
             SP.savePreferences(this, SP.LOGIN_STATUS, SP.SP_TRUE)
 
-            // Log all saved preferences
-            Log.d("UserDataSaved", "User ID: ${it.user_id}")
-            Log.d("UserDataSaved", "Mobile Number: ${user.mobile_number}")
-            Log.d("UserDataSaved", "Full Name: ${user.name ?: ""}")
-            Log.d("UserDataSaved", "User Name: ${it.user_name ?: ""}")
-            Log.d("UserDataSaved", "Email: ${it.email_id ?: ""}")
-            Log.d("UserDataSaved", "Profile Pic URL: ${it.profile_pic ?: ""}")
-            Log.d("UserDataSaved", "About You: ${user.about_you ?: ""}")
-            Log.d("UserDataSaved", "Country Code: ${it.country_code ?: ""}")
-            Log.d("UserDataSaved", "Country Short Name: ${it.country_short_name ?: ""}")
-            Log.d("UserDataSaved", "Is Verified: ${it.is_verified}")
-            Log.d("UserDataSaved", "Status: ${it.status}")
-            Log.d("UserDataSaved", "Deleted: ${it.deleted}")
-            Log.d("UserDataSaved", "Created At: ${it.created_at}")
-            Log.d("UserDataSaved", "Interest Names: ${it.interest_names.joinToString(", ")}")
-
-            // Move to BaseActivity
+            Log.d("UserDataSaved", "All user data saved. Moving to BaseActivity.")
             val intent = Intent(this, BaseActivity::class.java)
             startActivity(intent)
+            finish() // Finish OnboardingActivity so user can't go back
         }
     }
-
 
     private fun validateAndSubmit() {
         val fullName = binding.etFullName.text.toString().trim()
         val userName = binding.etUserName.text.toString().trim()
         val email = binding.etEmail.text.toString().trim()
         val about = binding.etEventDescription.text.toString().trim()
-
         var isValid = true
 
         if (fullName.isEmpty()) {
@@ -181,6 +143,10 @@ class OnboardingActivity : AppCompatActivity() {
             binding.etEventDescription.error = "Tell us about yourself"
             isValid = false
         }
+        if (selectedImageUri == null) {
+            Toast.makeText(this, "Please select a profile picture", Toast.LENGTH_SHORT).show()
+            isValid = false
+        }
 
         if (!isValid) return
 
@@ -189,28 +155,21 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun submitProfile(fullName: String, userName: String, email: String, about: String) {
         val userId = SP.getPreferences(this, SP.USER_ID) ?: ""
-        val userIdBody = userId.toRequestBody()
-        val nameBody = fullName.toRequestBody()
-        val userNameBody = userName.toRequestBody()
-        val emailBody = email.toRequestBody()
-        val aboutBody = about.toRequestBody()
-        val interestBody = selectedCategoryIdsString.toRequestBody()
 
-        val profile_pic = selectedImagePath?.let {
-            val file = File(it)
-            val mediaType = "image/*".toMediaTypeOrNull()
-            val requestFile = RequestBody.create(mediaType, file)
-            MultipartBody.Part.createFormData("profile_pic", file.name, requestFile)
+        // --- MODIFICATION 3: Create the MultipartBody.Part directly from the stored URI ---
+        val profilePicPart: MultipartBody.Part? = selectedImageUri?.let { uri ->
+            // "profile_pic" is the name your server API expects.
+            FileUtils.getMultipartBodyPartFromUri(this, uri, "profile_pic")
         }
 
         authViewModel.updateUser(
-            userId = userIdBody,
-            name = nameBody,
-            userName = userNameBody,
-            emailId = emailBody,
-            aboutYou = aboutBody,
-            interest = interestBody,
-            profilePic = profile_pic
+            userId = userId.toRequestBody(),
+            name = fullName.toRequestBody(),
+            userName = userName.toRequestBody(),
+            emailId = email.toRequestBody(),
+            aboutYou = about.toRequestBody(),
+            interest = selectedCategoryIdsString.toRequestBody(),
+            profilePic = profilePicPart // Pass the newly created part
         )
     }
 
@@ -220,32 +179,26 @@ class OnboardingActivity : AppCompatActivity() {
         galleryResultLauncher.launch(intent)
     }
 
+    // --- MODIFICATION 2: The launcher now just saves the URI and updates the UI ---
     private val galleryResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val uri = result.data?.data
             uri?.let {
-                val file = FileUtils.getFileFromUri(this, it)
-                file?.let {
-                    selectedImagePath = it.absolutePath
-                    binding.ivProfile.setImageURI(uri)
-                } ?: Toast.makeText(this, "Unable to load image", Toast.LENGTH_SHORT).show()
-            }
+                selectedImageUri = it // Simply store the URI
+                binding.ivProfile.setImageURI(it) // Update the image view
+            } ?: Toast.makeText(this, "Failed to get image", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun addTextWatcher(editText: android.widget.EditText) {
         editText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (!s.isNullOrEmpty()) editText.error = null
-            }
+            override fun afterTextChanged(s: Editable?) { if (!s.isNullOrEmpty()) editText.error = null }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
 
-    // Extension function to convert a String to RequestBody
-    private fun String.toRequestBody(): RequestBody =
-        this.toRequestBody("text/plain".toMediaType())
+    private fun String.toRequestBody(): RequestBody = this.toRequestBody("text/plain".toMediaType())
 }

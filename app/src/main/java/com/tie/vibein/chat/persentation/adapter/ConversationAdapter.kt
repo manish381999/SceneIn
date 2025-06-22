@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 class ConversationAdapter(
     private val onClick: (Conversation) -> Unit
@@ -51,40 +52,37 @@ class ConversationAdapter(
     // ======================================================================
 
     private fun formatTimestamp(timestamp: String): String {
-        // Return a blank space immediately if the timestamp is invalid
         if (timestamp.isBlank()) return " "
 
-        try {
+        return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            val messageDateAsDate = inputFormat.parse(timestamp) ?: return " "
+            val messageDate = inputFormat.parse(timestamp) ?: return " "
 
+            val calendar = Calendar.getInstance().apply { time = messageDate }
             val today = Calendar.getInstance()
             val yesterday = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
             val aWeekAgo = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -7) }
-            val messageDate = Calendar.getInstance().apply { time = messageDateAsDate }
 
-            return when {
-                // Case 1: If today -> show time (e.g., "10:30 AM")
-                isSameDay(messageDate.time, today.time) -> {
-                    SimpleDateFormat("h:mm a", Locale.getDefault()).format(messageDateAsDate)
+            when {
+                isSameDay(calendar.time, today.time) -> {
+                    SimpleDateFormat("h:mm a", Locale.getDefault()).format(calendar.time)
                 }
-                // Case 2: If yesterday -> show "Yesterday"
-                isSameDay(messageDate.time, yesterday.time) -> {
+                isSameDay(calendar.time, yesterday.time) -> {
                     "Yesterday"
                 }
-                // Case 3: If within the last week -> show day name (e.g., "Thursday")
-                messageDate.after(aWeekAgo) -> {
-                    SimpleDateFormat("EEEE", Locale.getDefault()).format(messageDateAsDate)
+                calendar.after(aWeekAgo) -> {
+                    SimpleDateFormat("EEEE", Locale.getDefault()).format(calendar.time) // like "Monday"
                 }
-                // Case 4: If older than a week -> show date (e.g., "15/06/25")
                 else -> {
-                    SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(messageDateAsDate)
+                    SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(calendar.time)
                 }
             }
         } catch (e: Exception) {
-            return " " // Return empty space on any parsing error
+            " "
         }
     }
+
+
 
     // NEW: Helper function to compare dates accurately
     private fun isSameDay(date1: Date?, date2: Date?): Boolean {

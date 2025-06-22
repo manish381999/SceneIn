@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"> <!-- I've increased height slightly for better visuals, but you can keep 100dp -->
+
+    <!-- Your Original Image View -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivGridImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
+
+    <!--
+    Uploading Overlay:
+    This is also a ShapeableImageView to perfectly match the rounded corners.
+    It's initially hidden.
+    -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/uploadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
+
+    <!--
+    Uploading Progress Bar:
+    Sits in the center on top of the overlay.
+    It's also initially hidden.
+    -->
+    <ProgressBar
+        android:id="@+id/uploadingProgress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateTint="@android:color/white"
+        android:visibility="gone" />
+
+</FrameLayout>

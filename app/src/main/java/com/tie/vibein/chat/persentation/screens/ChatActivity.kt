@@ -4,9 +4,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,16 +16,16 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.R
-import com.tie.vibein.chat.data.models.Message
-import com.tie.vibein.chat.data.models.MessageStatus
+import com.tie.vibein.chat.data.models.*
 import com.tie.vibein.chat.persentation.adapter.ChatAdapter
 import com.tie.vibein.chat.persentation.adapter.ChatItem
 import com.tie.vibein.chat.presentation.viewmodel.ChatViewModel
 import com.tie.vibein.databinding.ActivityChatBinding
 import com.tie.vibein.utils.NetworkState
-import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,8 +36,8 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var currentUserId: String
     private var receiverId: String? = null
+    private var receiverName: String? = null
 
-    // A local list to hold the raw message data, which is our "source of truth".
     private var currentMessages = mutableListOf<Message>()
 
     private val adapterDataObserver = object : RecyclerView.AdapterDataObserver() {
@@ -54,33 +55,67 @@ class ChatActivity : AppCompatActivity() {
         var currentChattingWithId: String? = null
     }
 
-    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(40)) { uris ->
+        if (uris.isNotEmpty() && receiverId != null) {
             val tempId = UUID.randomUUID().toString()
-            val optimisticMessage = Message("-1", currentUserId, receiverId!!, "image", it.toString(), "", MessageStatus.SENDING, tempId)
-
+            val uriStrings = uris.map { it.toString() }
+            val contentJson = createImageUrlJson(uriStrings)
+            val optimisticMessage = Message("-1", currentUserId, receiverId!!, "image", contentJson, "", false, false, MessageStatus.SENDING, tempId)
             currentMessages.add(optimisticMessage)
             val processedList = processMessagesWithDates(currentMessages)
             chatAdapter.submitList(processedList)
-
-            viewModel.uploadMediaAndSendMessage(this, currentUserId, receiverId!!, it, "image", tempId)
+            viewModel.uploadMultipleFilesAndSend(this, currentUserId, receiverId!!, uris, tempId)
         }
     }
 
     private val messageReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val data = intent?.getSerializableExtra("message_data") as? HashMap<*, *> ?: return
+
             val message = Message(
                 messageId = data["message_id"] as? String ?: "",
                 senderId = data["sender_id"] as? String ?: "",
                 receiverId = data["receiver_id"] as? String ?: "",
                 messageType = data["chat_message_type"] as? String ?: "text",
                 messageContent = data["message_content"] as? String ?: "",
-                timestamp = data["timestamp"] as? String ?: ""
+                timestamp = data["timestamp"] as? String ?: "",
+                isDelivered = (data["is_delivered"] as? String)?.toBoolean() ?: false,
+                isRead = (data["is_read"] as? String)?.toBoolean() ?: false,
+                status = MessageStatus.SENT
             )
+
+            // Add the new message to the UI
             currentMessages.add(message)
             val processedList = processMessagesWithDates(currentMessages)
             chatAdapter.submitList(processedList)
+
+            // --- THIS IS THE CRITICAL FIX ---
+            // Now that the message is on screen, tell the server it's been read.
+            // This will trigger the blue tick for the sender.
+            if (message.messageId.isNotBlank()) {
+                viewModel.markMessageAsRead(message.messageId)
+            }
+        }
+    }
+
+    private val statusUpdateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Log.d("STATUS_CHAIN", "2. ChatActivity's statusUpdateReceiver received the broadcast.") // LOG 2
+            val statusStr = intent?.getStringExtra("status")
+            val messageIdsJson = intent?.getStringExtra("message_ids_json")
+            if (statusStr.isNullOrEmpty() || messageIdsJson.isNullOrEmpty()) return
+
+            try {
+                val newStatus = MessageStatus.valueOf(statusStr)
+                val messageIds: List<String> = Gson().fromJson(messageIdsJson, object : TypeToken<List<String>>() {}.type)
+
+                if (messageIds.isNotEmpty()) {
+                    Log.d("STATUS_CHAIN", "3. Calling ViewModel with status: $newStatus for IDs: $messageIds") // LOG 3
+                    viewModel.triggerStatusUpdate(messageIds, newStatus)
+                }
+            } catch (e: Exception) {
+                Log.e("STATUS_CHAIN", "Error processing status update broadcast", e)
+            }
         }
     }
 
@@ -91,7 +126,7 @@ class ChatActivity : AppCompatActivity() {
 
         currentUserId = SP.getPreferences(this, SP.USER_ID) ?: ""
         receiverId = intent.getStringExtra("receiver_id")
-        val receiverName = intent.getStringExtra("receiver_name")
+        receiverName = intent.getStringExtra("receiver_name")
         val receiverProfilePic = intent.getStringExtra("receiver_profile_pic")
 
         setupToolbar(receiverName, receiverProfilePic)
@@ -114,6 +149,7 @@ class ChatActivity : AppCompatActivity() {
         isActivityVisible = true
         currentChattingWithId = receiverId
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, IntentFilter("new_message_broadcast"))
+        LocalBroadcastManager.getInstance(this).registerReceiver(statusUpdateReceiver, IntentFilter("status_update_broadcast"))
     }
 
     override fun onPause() {
@@ -121,6 +157,7 @@ class ChatActivity : AppCompatActivity() {
         isActivityVisible = false
         currentChattingWithId = null
         LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(statusUpdateReceiver)
     }
 
     private fun setupToolbar(name: String?, profilePicUrl: String?) {
@@ -132,10 +169,22 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        chatAdapter = ChatAdapter(currentUserId)
-        val layoutManager = LinearLayoutManager(this)
+        chatAdapter = ChatAdapter(currentUserId) { clickedMessage, positionInMessage ->
+            val clickedImageUrl = clickedMessage.getImageUrls().getOrNull(positionInMessage) ?: return@ChatAdapter
+            val allMediaItems = currentMessages.filter { it.messageType == "image" }.flatMap { msg ->
+                val sender = if (msg.senderId == currentUserId) "You" else (receiverName ?: "Them")
+                msg.getImageUrls().map { url -> MediaItem(url, sender, msg.timestamp) }
+            }
+            val overallStartIndex = allMediaItems.indexOfFirst { it.url == clickedImageUrl && it.timestamp == clickedMessage.timestamp }
+            if (overallStartIndex == -1) return@ChatAdapter
+            val intent = Intent(this, MediaViewerActivity::class.java).apply {
+                putExtra("media_items", ArrayList(allMediaItems))
+                putExtra("start_position", overallStartIndex)
+            }
+            startActivity(intent)
+        }
         binding.rvChatMessages.adapter = chatAdapter
-        binding.rvChatMessages.layoutManager = layoutManager
+        binding.rvChatMessages.layoutManager = LinearLayoutManager(this)
         chatAdapter.registerAdapterDataObserver(adapterDataObserver)
     }
 
@@ -144,25 +193,25 @@ class ChatActivity : AppCompatActivity() {
         binding.etMessageInput.addTextChangedListener { text ->
             binding.btnSendMessage.isEnabled = text.toString().trim().isNotEmpty()
         }
-
         binding.btnSendMessage.setOnClickListener {
             val messageText = binding.etMessageInput.text.toString().trim()
             if (messageText.isNotEmpty() && receiverId != null) {
                 val tempId = UUID.randomUUID().toString()
-                val optimisticMessage = Message("-1", currentUserId, receiverId!!, "text", messageText, "", MessageStatus.SENDING, tempId)
-
+                val optimisticMessage = Message("-1", currentUserId, receiverId!!, "text", messageText, "", false, false, MessageStatus.SENDING, tempId)
                 currentMessages.add(optimisticMessage)
                 val processedList = processMessagesWithDates(currentMessages)
                 chatAdapter.submitList(processedList)
-
                 viewModel.sendMessage(currentUserId, receiverId!!, "text", messageText, tempId)
                 binding.etMessageInput.text.clear()
             }
         }
-        binding.btnAddAttachment.setOnClickListener { imagePickerLauncher.launch("image/*") }
+        binding.btnAddAttachment.setOnClickListener {
+            imagePickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
     }
 
     private fun observeViewModel() {
+        // This observer handles the initial loading of the chat history.
         viewModel.chatHistoryState.observe(this) { state ->
             if (state is NetworkState.Success) {
                 currentMessages = state.data.toMutableList()
@@ -171,19 +220,25 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
+        // This observer handles the result of sending a new message.
         viewModel.sendMessageState.observe(this) { state ->
             if (state is NetworkState.Success) {
                 state.data?.sentMessage?.let { serverMessage ->
-                    val index = currentMessages.indexOfFirst { it.tempId == serverMessage.tempId }
-                    if (index != -1) {
-                        currentMessages[index] = serverMessage
-                        val processedList = processMessagesWithDates(currentMessages)
-                        chatAdapter.submitList(processedList)
+                    // --- FIX: Check that tempId is not null before comparing ---
+                    val tempId = serverMessage.tempId
+                    if (tempId != null) {
+                        val index = currentMessages.indexOfFirst { it.tempId == tempId }
+                        if (index != -1) {
+                            currentMessages[index] = serverMessage
+                            val processedList = processMessagesWithDates(currentMessages)
+                            chatAdapter.submitList(processedList)
+                        }
                     }
                 }
             }
         }
 
+        // This observer handles a failed message send.
         viewModel.failedMessageTempId.observe(this) { tempId ->
             if (tempId != null) {
                 val index = currentMessages.indexOfFirst { it.tempId == tempId }
@@ -196,31 +251,68 @@ class ChatActivity : AppCompatActivity() {
                 viewModel.onFailedMessageHandled()
             }
         }
+
+        // =====================================================================
+        // == THIS IS THE MISSING CODE BLOCK THAT YOU NEED TO ADD ==
+        // =====================================================================
+        // This new observer listens for real-time status updates (DELIVERED/READ)
+        // that are triggered by the silent FCM notifications.
+        // In observeViewModel()
+        viewModel.messageStatusUpdate.observe(this) { update ->
+            if (update != null) {
+                Log.d("STATUS_CHAIN", "4. LiveData observer in ChatActivity has fired.") // LOG 4
+                val (messageIds, newStatus) = update
+                var hasChanged = false
+
+                // Create a NEW list. This is crucial for DiffUtil to detect changes.
+                val updatedMessages = currentMessages.map { message ->
+                    // Check if this message is one of the ones that needs its status updated.
+                    if (message.messageId in messageIds) {
+                        // Only upgrade a status (e.g., from SENT to DELIVERED).
+                        // Don't downgrade (e.g., from READ back to DELIVERED).
+                        if (message.status.ordinal < newStatus.ordinal) {
+                            hasChanged = true
+                            Log.d("STATUS_CHAIN", "5. Found message ${message.messageId} to update. New status: $newStatus") // LOG 5
+                            // Return a *copy* of the message with the new status.
+                            message.copy(status = newStatus)
+                        } else {
+                            message // Status is already the same or higher, no change needed.
+                        }
+                    } else {
+                        message // This message is not in the update list, return it as is.
+                    }
+                }
+
+                if (hasChanged) {
+                    Log.d("STATUS_CHAIN", "6. Changes were made. Submitting new list to adapter.") // LOG 6
+                    // Replace the old list with the new one.
+                    currentMessages = updatedMessages.toMutableList()
+                    // Submit the new list to the adapter.
+                    val processedList = processMessagesWithDates(currentMessages)
+                    chatAdapter.submitList(processedList)
+                }
+
+                // Acknowledge that the event has been handled.
+                viewModel.onStatusUpdateHandled()
+            }
+        }
     }
 
     private fun processMessagesWithDates(messages: List<Message>): List<ChatItem> {
         if (messages.isEmpty()) return emptyList()
-
         val itemsWithDates = mutableListOf<ChatItem>()
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).apply {
-            timeZone = TimeZone.getTimeZone("UTC")
-        }
-
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).apply { timeZone = TimeZone.getTimeZone("UTC") }
         var lastDate: Date? = null
-
         for (message in messages) {
             val messageTimestamp = message.timestamp
-            if (messageTimestamp.isNullOrEmpty()) {
+            if (messageTimestamp.isBlank()) {
                 itemsWithDates.add(ChatItem.MessageItem(message))
                 continue
             }
-
-            val currentDate = inputFormat.parse(messageTimestamp) ?: continue
-
+            val currentDate = try { inputFormat.parse(messageTimestamp) } catch (e: Exception) { null } ?: continue
             if (lastDate == null || !isSameDay(lastDate, currentDate)) {
                 itemsWithDates.add(ChatItem.DateItem(formatDateSeparator(currentDate)))
             }
-
             itemsWithDates.add(ChatItem.MessageItem(message))
             lastDate = currentDate
         }
@@ -231,8 +323,7 @@ class ChatActivity : AppCompatActivity() {
         if (date1 == null || date2 == null) return false
         val cal1 = Calendar.getInstance().apply { time = date1 }
         val cal2 = Calendar.getInstance().apply { time = date2 }
-        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
     }
 
     private fun formatDateSeparator(date: Date): String {
@@ -240,28 +331,11 @@ class ChatActivity : AppCompatActivity() {
         val yesterday = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
         val lastWeek = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -7) }
         val messageDate = Calendar.getInstance().apply { time = date }
-
-        // 1. Is it Today?
-        if (isSameDay(messageDate.time, today.time)) {
-            return "Today"
+        return when {
+            isSameDay(messageDate.time, today.time) -> "Today"
+            isSameDay(messageDate.time, yesterday.time) -> "Yesterday"
+            messageDate.after(lastWeek) -> SimpleDateFormat("EEEE", Locale.getDefault()).format(date)
+            else -> SimpleDateFormat("E, d MMM yyyy", Locale.getDefault()).format(date)
         }
-
-        // 2. Is it Yesterday?
-        if (isSameDay(messageDate.time, yesterday.time)) {
-            return "Yesterday"
-        }
-
-        // 3. Is it within the last week? (e.g., "Wednesday")
-        if (messageDate.after(lastWeek)) {
-            return SimpleDateFormat("EEEE", Locale.getDefault()).format(date) // "EEEE" gives the full day name
-        }
-
-        // 4. Is it within the current year? (e.g., "Fri, 13 Jun")
-        if (messageDate.get(Calendar.YEAR) == today.get(Calendar.YEAR)) {
-            return SimpleDateFormat("E, d MMM", Locale.getDefault()).format(date) // "E, d MMM" gives "Fri, 13 Jun"
-        }
-
-        // 5. If it's a previous year (e.g., "17 Sep 2024")
-        return SimpleDateFormat("d MMM yyyy", Locale.getDefault()).format(date) // "d MMM yyyy" gives "17 Sep 2024"
     }
 }

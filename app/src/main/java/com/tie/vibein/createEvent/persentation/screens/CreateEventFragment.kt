@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -18,16 +19,13 @@ import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.R
 import com.tie.vibein.createEvent.persentation.view_model.CreateEventViewModel
 import com.tie.vibein.databinding.FragmentCreateEventBinding
-import com.tie.vibein.utils.FileUtils
+import com.tie.vibein.utils.FileUtils // Ensure this import points to your FileUtils
 import com.tie.vibein.utils.NetworkState
 import com.tie.vibein.utils.PincodeHelper
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
-
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.File
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.util.*
 
 class CreateEventFragment : Fragment() {
@@ -35,20 +33,20 @@ class CreateEventFragment : Fragment() {
     private var _binding: FragmentCreateEventBinding? = null
     private val binding get() = _binding!!
 
+    // --- MODIFICATION 1: We only need to store the URI, not the file path string ---
     private var selectedImageUri: Uri? = null
-    private var cover_image: String? = null
-    private var selectedCategoryId: String? = null
 
+    private var selectedCategoryId: String? = null
     private var eventDeliveryMode: String? = null
     private var venueLocation: String? = null
     private var meetingLink: String? = null
-
     private var selectedEventType: String? = null
     private var selectedAgeId: String? = null
     private var ticketPrice: String? = null
 
     private val viewModel: CreateEventViewModel by viewModels()
 
+    // --- MODIFICATION 2: The image picker now only saves the URI and updates the UI ---
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
@@ -57,10 +55,7 @@ class CreateEventFragment : Fragment() {
                 binding.ivPlaceholder.visibility = View.GONE
                 binding.tvUploadCoverImage.visibility = View.GONE
                 binding.btnChangeImage.visibility = View.VISIBLE
-
-                val imageFile: File? = FileUtils.getFileFromUri(requireContext(), it)
-                cover_image = imageFile?.absolutePath
-                Log.d("CreateEventFragment", "Selected Image Path: $cover_image")
+                Log.d("CreateEventFragment", "Selected Image URI: $selectedImageUri")
             }
         }
 
@@ -92,26 +87,22 @@ class CreateEventFragment : Fragment() {
         binding.etLink.clearErrorOnInput()
         binding.etTicketPrice.clearErrorOnInput()
     }
+
     private fun EditText.clearErrorOnInput() {
         this.doAfterTextChanged { this.error = null }
     }
 
     private fun initComponents() {
         binding.btnChangeImage.visibility = View.GONE
-
-        // Set default selection for event mode
         binding.rgMode.check(R.id.rb_in_person)
         eventDeliveryMode = "In-Person"
         binding.venueContainer.visibility = View.VISIBLE
         binding.onlineContainer.visibility = View.GONE
-
-        // Set default selection for event type
         binding.rgEventType.check(R.id.rbFree)
         selectedEventType = "Free"
         binding.tvTicketPriceLabel.visibility = View.GONE
         binding.etTicketPrice.visibility = View.GONE
     }
-
 
     private fun onClickListener() {
         binding.cvCoverImage.setOnClickListener {
@@ -150,15 +141,12 @@ class CreateEventFragment : Fragment() {
 
         binding.etPincode.doAfterTextChanged { text ->
             val pincode = text.toString()
-            Log.d("PincodeDebug", "Typed: $pincode")
             if (pincode.length == 6) {
                 PincodeHelper.fetchCityFromPincode(pincode) { city ->
-                    Log.d("PincodeDebug", "City: $city")
                     binding.etCity.setText(city ?: "")
                 }
             }
         }
-
 
         binding.rgEventType.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -214,7 +202,15 @@ class CreateEventFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                if (selectedCategoryId.isNullOrEmpty() || selectedAgeId.isNullOrEmpty()) return@setOnClickListener
+                if (selectedCategoryId.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "Please select a category", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                if (selectedAgeId.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "Please select an age restriction", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
 
                 val params = mutableMapOf<String, RequestBody>().apply {
                     val userId = SP.getPreferences(requireContext(), SP.USER_ID) ?: ""
@@ -237,14 +233,18 @@ class CreateEventFragment : Fragment() {
                     put("full_address", address.toRequestBody())
                 }
 
-                val cover_image: MultipartBody.Part? = cover_image?.let { path ->
-                    val file = File(path)
-                    val mediaType = "image/*".toMediaTypeOrNull()
-                    val requestFile = RequestBody.create(mediaType, file)
-                    MultipartBody.Part.createFormData("cover_image", file.name, requestFile)
+                // --- MODIFICATION 3: Create the MultipartBody.Part directly from the stored URI ---
+                val coverImagePart: MultipartBody.Part? = selectedImageUri?.let { uri ->
+                    // "cover_image" is the name your server API expects for the file part
+                    FileUtils.getMultipartBodyPartFromUri(requireContext(), uri, "cover_image")
                 }
 
-                viewModel.createEvent(params, cover_image)
+                if (coverImagePart == null) {
+                    Toast.makeText(requireContext(), "Please select a cover image", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                viewModel.createEvent(params, coverImagePart)
             }
         }
     }
@@ -310,7 +310,6 @@ class CreateEventFragment : Fragment() {
                                 id: Long
                             ) {
                                 selectedAgeId = if (position == 0) null else activeAges[position - 1].id
-                                Log.d("CreateEventFragment", "Selected Age Restriction ID: $selectedAgeId")
                             }
 
                             override fun onNothingSelected(parentView: AdapterView<*>?) {}
@@ -327,12 +326,16 @@ class CreateEventFragment : Fragment() {
             when (state) {
                 is NetworkState.Loading -> {
                     Log.d("CreateEventFragment", "Creating event...")
+                    // You might want to show a progress bar here
                 }
                 is NetworkState.Success -> {
                     Log.d("CreateEventFragment", "Event created successfully: ${state.data.message}")
+                    Toast.makeText(requireContext(), "Event created successfully!", Toast.LENGTH_LONG).show()
+                    // Optionally, navigate away from the fragment
                 }
                 is NetworkState.Error -> {
                     Log.e("CreateEventFragment", "Event creation failed: ${state.message}")
+                    Toast.makeText(requireContext(), "Event creation failed: ${state.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -345,12 +348,15 @@ class CreateEventFragment : Fragment() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePicker = DatePickerDialog(requireContext(), { _, y, m, d ->
-            val selectedDate = String.format("%02d-%02d-%04d", d, m + 1, y)
+            val selectedDate = String.format("%04d-%02d-%02d", y, m + 1, d) // Changed to YYYY-MM-DD
             binding.etDate.setText(selectedDate)
         }, year, month, day)
 
+        datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
         datePicker.show()
     }
+
+
 
     private fun showTimePicker(onTimeSelected: (String) -> Unit) {
         val calendar = Calendar.getInstance()
@@ -365,11 +371,10 @@ class CreateEventFragment : Fragment() {
             val formatter = java.text.SimpleDateFormat("hh:mm a", Locale.getDefault())
             val formattedTime = formatter.format(cal.time)
             onTimeSelected(formattedTime)
-        }, hour, minute, false) // false = 12-hour format
+        }, hour, minute, false)
 
         timePicker.show()
     }
-
 
     private fun validateModeInput(): Boolean {
         return when (eventDeliveryMode) {
@@ -377,22 +382,16 @@ class CreateEventFragment : Fragment() {
                 val pincode = binding.etPincode.text.toString().trim()
                 val city = binding.etCity.text.toString().trim()
                 val address = binding.etFullAddress.text.toString().trim()
-
                 var isValid = true
 
-                if (pincode.isEmpty()) {
-                    binding.etPincode.error = "Pincode is required"
-                    isValid = false
-                } else if (pincode.length != 6) {
+                if (pincode.length != 6) {
                     binding.etPincode.error = "Enter a valid 6-digit pincode"
                     isValid = false
                 }
-
                 if (city.isEmpty()) {
                     binding.etCity.error = "City is required"
                     isValid = false
                 }
-
                 if (address.isEmpty()) {
                     binding.etFullAddress.error = "Full address is required"
                     isValid = false
@@ -402,10 +401,8 @@ class CreateEventFragment : Fragment() {
                     venueLocation = "$address, $city - $pincode"
                     meetingLink = null
                 }
-
                 isValid
             }
-
             "Online" -> {
                 val link = binding.etLink.text.toString().trim()
                 if (link.isEmpty()) {
@@ -417,25 +414,11 @@ class CreateEventFragment : Fragment() {
                     true
                 }
             }
-
-            else -> {
-                Log.e("CreateEventFragment", "No mode selected")
-                false
-            }
+            else -> false
         }
     }
 
-
     private fun validateEventTypeInput(): Boolean {
-        val selectedId = binding.rgEventType.checkedRadioButtonId
-        val selectedEventType = when (selectedId) {
-            R.id.rbFree -> "Free"
-            R.id.rbPaid -> "Paid"
-            else -> null
-        }
-
-        Log.d("CreateEventFragment", "Selected Event Type: $selectedEventType")
-
         return if (selectedEventType == "Paid") {
             ticketPrice = binding.etTicketPrice.text.toString().trim()
             if (ticketPrice!!.isEmpty()) {
@@ -445,7 +428,8 @@ class CreateEventFragment : Fragment() {
                 true
             }
         } else {
-            true // No validation needed for Free event
+            ticketPrice = "0"
+            true
         }
     }
 

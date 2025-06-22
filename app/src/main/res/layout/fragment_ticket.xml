@@ -1,14 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     tools:context=".tickets.persentation.screens.TicketFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <!-- An illustrative icon. You can replace this with your own graphic. -->
+    <ImageView
+        android:id="@+id/ivComingSoonIcon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_ticket"
+        app:layout_constraintBottom_toTopOf="@+id/tvComingSoonTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="?attr/colorPrimary"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Coming Soon Icon" />
 
-</FrameLayout>
+    <!-- The main "Coming Soon" title -->
+    <TextView
+        android:id="@+id/tvComingSoonTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Marketplace Coming Soon!"
+        android:textColor="@color/textPrimary"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- A descriptive subtitle to manage user expectations -->
+    <TextView
+        android:id="@+id/tvComingSoonSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:text="Our secure ticket resale feature is under construction. Get ready to buy and sell tickets with confidence!"
+        android:textAlignment="center"
+        android:textColor="@color/textSecondary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvComingSoonTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

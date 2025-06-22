@@ -1,9 +1,21 @@
 package com.tie.vibein.chat.data.models
 
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.google.gson.reflect.TypeToken
 import java.io.Serializable
 import java.util.UUID
 
+// The statuses your UI will use
+enum class MessageStatus {
+    SENDING,
+    SENT,       // Single Tick
+    DELIVERED,  // Double Tick
+    READ,       // Blue Double Tick
+    FAILED
+}
+
+// Main Message data class
 data class Message(
     @SerializedName("message_id") val messageId: String,
     @SerializedName("sender_id") val senderId: String,
@@ -12,17 +24,53 @@ data class Message(
     @SerializedName("message_content") var messageContent: String,
     @SerializedName("timestamp") var timestamp: String,
 
-    // UI-only properties with default values.
-    // They MUST be `var` to be updatable.
+    // --- NEW: These fields will now be correctly parsed from the server ---
+    @SerializedName("is_delivered") val isDelivered: Boolean,
+    @SerializedName("is_read") val isRead: Boolean,
+
+    // --- UI-only properties ---
     var status: MessageStatus = MessageStatus.SENT,
-    var tempId: String = UUID.randomUUID().toString()
+    var tempId: String? = UUID.randomUUID().toString()
 
-) : Serializable
-
-enum class MessageStatus {
-    SENDING, SENT, FAILED
+) : Serializable {
+    fun getImageUrls(): List<String> {
+        if (messageType != "image" || messageContent.isBlank()) {
+            return emptyList()
+        }
+        return try {
+            val type = object : TypeToken<List<String>>() {}.type
+            Gson().fromJson(messageContent, type)
+        } catch (e: Exception) {
+            listOf(messageContent)
+        }
+    }
 }
-// Data class for the main conversation list in ChatFragment.
+
+// Helper to create the JSON for sending image URLs
+fun createImageUrlJson(urls: List<String>): String {
+    return Gson().toJson(urls)
+}
+
+// Wrapper classes for API responses
+data class GetConversationsResponse(
+    val status: String,
+    val conversations: List<Conversation>
+)
+data class GetChatHistoryResponse(
+    val status: String,
+    val messages: List<Message>
+)
+data class MediaUploadResponse(
+    val status: String,
+    val message: String,
+    @SerializedName("file_urls")
+    val fileUrls: List<String>?
+)
+data class SendMessageResponse(
+    val status: String,
+    val message: String,
+    @SerializedName("sent_message") val sentMessage: Message?
+)
 data class Conversation(
     @SerializedName("other_user_id") val otherUserId: String,
     @SerializedName("other_user_name") val name: String,
@@ -33,25 +81,8 @@ data class Conversation(
     @SerializedName("connection_status") val connectionStatus: String
 )
 
-// Wrapper classes for API responses.
-data class GetConversationsResponse(
-    val status: String,
-    val conversations: List<Conversation>
-)
-
-data class GetChatHistoryResponse(
-    val status: String,
-    val messages: List<Message>
-)
-
-data class MediaUploadResponse(
-    val status: String,
-    val message: String,
-    @SerializedName("file_url") val fileUrl: String?
-)
-
-data class SendMessageResponse(
-    val status: String,
-    val message: String,
-    @SerializedName("sent_message") val sentMessage: Message?
+// Data class for the 'mark_delivered' request body
+data class MarkAsDeliveredRequest(
+    @SerializedName("message_ids")
+    val messageIds: List<String>
 )

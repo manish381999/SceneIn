@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This is a Merge root, which is more efficient as it doesn't add an extra view layer -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <!-- The RecyclerView for the image grid -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_media_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="300dp" />
+
+    <!-- A simple barrier to make sure the timestamp is always below the grid -->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="rv_media_grid" />
+
+    <!-- The timestamp -->
+    <TextView
+        android:id="@+id/tv_media_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:textColor="@color/chat_timestamp"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_media_message_status"
+        app:layout_constraintTop_toTopOf="@id/barrier"
+        tools:text="11:45 AM" />
+
+    <!-- The message status icon (will be hidden for received messages) -->
+    <ImageView
+        android:id="@+id/iv_media_message_status"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_media_timestamp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_media_timestamp"
+        app:tint="@color/chat_timestamp"
+        tools:src="@drawable/ic_check_single" />
+
+</merge>

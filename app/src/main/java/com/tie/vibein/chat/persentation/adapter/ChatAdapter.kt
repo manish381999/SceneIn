@@ -3,9 +3,8 @@ package com.tie.vibein.chat.persentation.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -17,54 +16,51 @@ import com.tie.vibein.databinding.ItemChatMessageReceivedBinding
 import com.tie.vibein.databinding.ItemChatMessageSentBinding
 import java.text.SimpleDateFormat
 import java.util.*
+class ChatAdapter(
+    private val currentUserId: String,
+    // UPDATED: The callback is now simpler. It just reports which message and which image inside it was clicked.
+    private val onImageClick: (message: Message, positionInMessage: Int) -> Unit
+) : ListAdapter<ChatItem, RecyclerView.ViewHolder>(ChatItemDiffCallback) {
 
-// UPDATED: The adapter now works with a list of ChatItem
-class ChatAdapter(private val currentUserId: String) : ListAdapter<ChatItem, RecyclerView.ViewHolder>(ChatItemDiffCallback) {
-
-    // Define integer constants for our view types
     private val VIEW_TYPE_SENT = 1
     private val VIEW_TYPE_RECEIVED = 2
     private val VIEW_TYPE_DATE_SEPARATOR = 3
 
-    // --- ViewHolder for Sent Messages (Unchanged) ---
     inner class SentViewHolder(private val binding: ItemChatMessageSentBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.rvMediaGrid.layoutManager = GridLayoutManager(binding.root.context, 2)
+            val spacing = binding.root.context.resources.getDimensionPixelSize(R.dimen.dp_5)
+            binding.rvMediaGrid.addItemDecoration(GridSpacingItemDecoration(2, spacing, false))
+        }
         fun bind(message: Message) {
-            handleDisplay(message, binding.mediaCard, binding.textBubbleLayout, binding.ivMedia, binding.tvMessageBody)
-            binding.tvTimestamp.text = formatTimestamp(message)
-            when (message.status ?: MessageStatus.SENT) {
-                MessageStatus.SENDING -> binding.ivMessageStatus.setImageResource(R.drawable.ic_clock)
-                MessageStatus.SENT -> binding.ivMessageStatus.setImageResource(R.drawable.ic_check_single)
-                MessageStatus.FAILED -> binding.ivMessageStatus.setImageResource(R.drawable.ic_error)
-            }
+            handleDisplay(message, binding)
         }
     }
 
-    // --- ViewHolder for Received Messages (Unchanged) ---
     inner class ReceivedViewHolder(private val binding: ItemChatMessageReceivedBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.rvMediaGrid.layoutManager = GridLayoutManager(binding.root.context, 2)
+            val spacing = binding.root.context.resources.getDimensionPixelSize(R.dimen.dp_5)
+            binding.rvMediaGrid.addItemDecoration(GridSpacingItemDecoration(2, spacing, false))
+        }
         fun bind(message: Message) {
-            handleDisplay(message, binding.mediaCard, binding.textBubbleLayout, binding.ivMedia, binding.tvMessageBody)
-            binding.tvTimestamp.text = formatTimestamp(message)
+            handleDisplay(message, binding)
         }
     }
 
-    // --- NEW: ViewHolder for the Date Separator ---
     inner class DateSeparatorViewHolder(private val binding: ItemChatDateSeparatorBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(dateItem: ChatItem.DateItem) {
             binding.tvDateHeader.text = dateItem.date
         }
     }
 
-    // UPDATED: This now determines the view type based on the ChatItem sealed class
     override fun getItemViewType(position: Int): Int {
         return when (val item = getItem(position)) {
-            is ChatItem.MessageItem -> {
-                if (item.message.senderId == currentUserId) VIEW_TYPE_SENT else VIEW_TYPE_RECEIVED
-            }
+            is ChatItem.MessageItem -> if (item.message.senderId == currentUserId) VIEW_TYPE_SENT else VIEW_TYPE_RECEIVED
             is ChatItem.DateItem -> VIEW_TYPE_DATE_SEPARATOR
         }
     }
 
-    // UPDATED: This creates the correct ViewHolder based on the view type
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
@@ -75,7 +71,6 @@ class ChatAdapter(private val currentUserId: String) : ListAdapter<ChatItem, Rec
         }
     }
 
-    // UPDATED: This binds the data to the correct ViewHolder
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         when (holder) {
@@ -85,39 +80,71 @@ class ChatAdapter(private val currentUserId: String) : ListAdapter<ChatItem, Rec
         }
     }
 
-    // --- Helper functions (Unchanged) ---
-    private fun handleDisplay(message: Message, mediaCard: View, textBubble: View, imageView: ImageView, textView: TextView) {
+    // Overloaded function for Sent Messages
+    private fun handleDisplay(message: Message, binding: ItemChatMessageSentBinding) {
         if (message.messageType == "image") {
-            mediaCard.visibility = View.VISIBLE
-            textBubble.visibility = View.GONE
-            Glide.with(imageView.context).load(message.messageContent).placeholder(R.drawable.ic_placeholder).into(imageView)
+            binding.mediaBubbleLayout.visibility = View.VISIBLE
+            binding.textBubbleLayout.visibility = View.GONE
+            binding.tvMediaTimestamp.text = formatTimestamp(message)
+            binding.ivMediaMessageStatus.visibility = View.VISIBLE
+            when (message.status ?: MessageStatus.SENT) {
+                MessageStatus.SENDING -> binding.ivMediaMessageStatus.setImageResource(R.drawable.ic_clock)
+                MessageStatus.SENT -> binding.ivMediaMessageStatus.setImageResource(R.drawable.ic_check_single)
+                MessageStatus.FAILED -> binding.ivMediaMessageStatus.setImageResource(R.drawable.ic_error)
+            }
+            setupImageGrid(binding.rvMediaGrid, message)
         } else {
-            mediaCard.visibility = View.GONE
-            textBubble.visibility = View.VISIBLE
-            textView.text = message.messageContent
+            binding.mediaBubbleLayout.visibility = View.GONE
+            binding.textBubbleLayout.visibility = View.VISIBLE
+            binding.tvMessageBody.text = message.messageContent
+            binding.tvTimestamp.text = formatTimestamp(message)
+            when (message.status ?: MessageStatus.SENT) {
+                MessageStatus.SENDING -> binding.ivMediaMessageStatus.setImageResource(R.drawable.ic_clock)
+                MessageStatus.SENT -> binding.ivMediaMessageStatus.setImageResource(R.drawable.ic_check_single)
+                MessageStatus.FAILED -> binding.ivMediaMessageStatus.setImageResource(R.drawable.ic_error)
+            }
         }
     }
+
+    // Overloaded function for Received Messages
+    private fun handleDisplay(message: Message, binding: ItemChatMessageReceivedBinding) {
+        if (message.messageType == "image") {
+            binding.mediaBubbleLayout.visibility = View.VISIBLE
+            binding.textBubbleLayout.visibility = View.GONE
+            binding.tvMediaTimestamp.text = formatTimestamp(message)
+            setupImageGrid(binding.rvMediaGrid, message)
+        } else {
+            binding.mediaBubbleLayout.visibility = View.GONE
+            binding.textBubbleLayout.visibility = View.VISIBLE
+            binding.tvMessageBody.text = message.messageContent
+            binding.tvTimestamp.text = formatTimestamp(message)
+        }
+    }
+
+    // UPDATED: This now calls the simpler onImageClick callback
+    private fun setupImageGrid(imageGrid: RecyclerView, message: Message) {
+        val imageUrls = message.getImageUrls()
+        (imageGrid.layoutManager as? GridLayoutManager)?.spanCount = if (imageUrls.size == 1) 1 else 2
+        val gridAdapter = ImageGridAdapter(imageUrls) { position ->
+            // Pass the entire message object and the clicked position back to the activity
+            onImageClick(message, position)
+        }
+        imageGrid.adapter = gridAdapter
+    }
+
     private fun formatTimestamp(message: Message): String {
         if (message.status == MessageStatus.SENDING) return "Sending..."
         if (message.timestamp.isNullOrEmpty()) return ""
         try {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).apply { timeZone = TimeZone.getTimeZone("UTC") }
             val date = inputFormat.parse(message.timestamp)
-            val outputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
-            outputFormat.timeZone = TimeZone.getDefault()
+            val outputFormat = SimpleDateFormat("h:mm a", Locale.getDefault()).apply { timeZone = TimeZone.getDefault() }
             return outputFormat.format(date ?: Date())
         } catch (e: Exception) { return "" }
     }
 }
 
-// UPDATED: The DiffUtil now compares ChatItem objects
 object ChatItemDiffCallback : DiffUtil.ItemCallback<ChatItem>() {
-    override fun areItemsTheSame(oldItem: ChatItem, newItem: ChatItem): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: ChatItem, newItem: ChatItem): Boolean {
-        return oldItem == newItem
-    }
+    override fun areItemsTheSame(oldItem: ChatItem, newItem: ChatItem): Boolean = oldItem.id == newItem.id
+    override fun areContentsTheSame(oldItem: ChatItem, newItem: ChatItem): Boolean = oldItem == newItem
 }

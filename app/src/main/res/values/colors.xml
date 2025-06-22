@@ -1,57 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Brand Colors -->
-    <color name="colorPrimary">#2196F3</color>  <!-- Slightly more modern blue -->
-    <color name="colorPrimaryVariant">#BBDEFB</color> <!-- Lighter shade for components -->
-    <color name="colorSecondary">#2196F3</color> <!-- Keeping consistent -->
-    <color name="colorSecondaryVariant">#BBDEFB</color> <!-- Keeping consistent -->
+    <!--
+    VibeIn "Foundation" Palette - Light Theme
+    Strategy: Consistency, Clarity, and Familiarity. Inspired by proven UI principles.
+    -->
+
+    <!-- I. PRIMARY BRAND COLOR -->
+    <color name="colorPrimary">#007BFF</color>          <!-- A clean, modern, trustworthy VibeIn Blue. -->
+    <color name="colorPrimaryVariant">#D9E9FF</color>  <!-- The light, muted blue for chat bubbles. Like WhatsApp. -->
+    <color name="colorSecondary">#007BFF</color>        <!-- Secondary actions use the same primary color for consistency. -->
+    <color name="colorSecondaryVariant">#0056B3</color>  <!-- A darker shade for pressed states. -->
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorOnSecondary">#FFFFFF</color>
 
-
+    <!-- II. NEUTRAL FOUNDATION -->
     <!-- Background & Surface -->
-    <color name="colorBackground">#FAFAFA</color> <!-- Very light gray, softer than pure white -->
-    <color name="colorSurface">#FFFFFF</color> <!-- Pure white for cards and dialogs -->
-    <color name="colorSurfaceVariant">#EEEEEE</color>
-    <color name="colorOnSurfaceVariant">#757575</color>
+    <color name="colorBackground">#F2F2F7</color>     <!-- iOS-style light grey. Very clean. -->
+    <color name="colorSurface">#FFFFFF</color>         <!-- Pure white for cards. -->
+    <color name="colorSurfaceVariant">#EFEFF4</color>  <!-- The standard received chat bubble color. Like WhatsApp. -->
+    <color name="colorOnSurfaceVariant">#000000</color>
 
     <!-- Text Colors -->
-    <color name="textPrimary">#212121</color> <!-- Dark gray for main text -->
-    <color name="textSecondary">#757575</color> <!-- Medium gray for secondary text -->
+    <color name="textPrimary">#000000</color>         <!-- Pure black for highest contrast on white/light backgrounds. -->
+    <color name="textSecondary">#6E6E73</color>       <!-- Standard secondary text color. -->
     <color name="textOnPrimary">#FFFFFF</color>
     <color name="textOnSecondary">#FFFFFF</color>
-    <color name="textError">#D32F2F</color> <!-- More vibrant red for errors -->
-
+    <color name="textError">#D70015</color>           <!-- Standard error red. -->
     <!-- Error & Grays -->
-    <color name="colorError">#D32F2F</color>
-    <color name="gray100">#F5F5F5</color>
-    <color name="gray200">#EEEEEE</color>
-    <color name="gray300">#E0E0E0</color>
-    <color name="gray400">#BDBDBD</color>
-    <color name="gray500">#9E9E9E</color>
-    <color name="gray600">#757575</color>
-    <color name="gray700">#616161</color>
-    <color name="gray800">#424242</color>
+    <color name="colorError">#D70015</color>
+    <color name="gray100">#F2F2F7</color>
+    <color name="gray200">#E5E5EA</color>
+    <color name="gray300">#D1D1D6</color>
+    <color name="gray400">#C7C7CC</color>
+    <color name="gray500">#8E8E93</color>
+    <color name="gray600">#6E6E73</color>
+    <color name="gray700">#3A3A3C</color>
+    <color name="gray800">#1C1C1E</color>
+    <!-- System Colors -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 
-    <color name="black">#000</color>
-    <color name="white">#fff</color>
 
-    <color name="shimmer_background">#E0E0E0</color>
+    <!-- III. SPECIFIC COMPONENT COLORS -->
+    <color name="shimmer_background">#E5E5EA</color>
 
-    <color name="joinButtonColor">#2196F3</color> <!-- Purple -->
-    <color name="unjoinButtonColor">#4CAF50</color> <!-- Green -->
-    <color name="fullButtonColor">#BDBDBD</color> <!-- Gray -->
+    <!-- Button Colors (Clear states) -->
+    <color name="joinButtonColor">@color/colorPrimary</color>
+    <!-- We will use a dedicated green for 'unjoin' as it's a destructive-like action confirmation -->
+    <color name="unjoinButtonColor">#34C759</color>
+    <color name="fullButtonColor">@color/gray300</color>
 
-    <!-- The toolbar now uses your app's main primary color -->
-    <color name="chat_toolbar_color">@color/colorPrimary</color>
-
-    <!-- The sent bubble now uses the light variant of your primary color -->
-    <color name="chat_bubble_sent">@color/colorPrimaryVariant</color>
-
-    <!-- The received bubble uses the standard surface color -->
-    <color name="chat_bubble_received">@color/colorSurface</color>
-
-    <!-- The timestamp uses your app's standard secondary text color -->
+    <!-- Chat System (Following WhatsApp's established, proven model) -->
+    <color name="chat_toolbar_color">@color/colorBackground</color> <!-- Use the light grey background for a seamless look. -->
+    <color name="chat_bubble_sent">@color/colorPrimaryVariant</color> <!-- Light, muted blue. Easy on the eyes. -->
+    <color name="chat_bubble_received">@color/colorSurfaceVariant</color> <!-- A clear, neutral background. -->
     <color name="chat_timestamp">@color/textSecondary</color>
-
 </resources>

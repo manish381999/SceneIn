@@ -105,6 +105,12 @@ dependencies {
     implementation("androidx.media3:media3-transformer:$media3Version")
     implementation("androidx.media3:media3-exoplayer:$media3Version")
 
+    // For pinch-to-zoom in the full-screen viewer
+    implementation ("com.github.chrisbanes:PhotoView:2.3.0")
+
+    // For easily converting a list of image URLs to a JSON string and back
+    implementation ("com.google.code.gson:gson:2.10.1")
+
 
 
 

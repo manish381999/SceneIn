@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context=".chat.persentation.screens.MediaViewerActivity">
+
+    <!-- The Toolbar at the top. -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorSurface"
+        app:contentInsetStart="0dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- A dedicated, clickable back button inside the Toolbar -->
+    <ImageButton
+        android:id="@+id/iv_back"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_arrow_back_ios"
+        app:layout_constraintStart_toStartOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="@id/toolbar"
+        app:tint="?attr/colorOnSurface" />
+
+    <!-- A LinearLayout to hold our centered title and subtitle -->
+    <LinearLayout
+        android:id="@+id/ll_toolbar_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toEndOf="@id/toolbar"
+        app:layout_constraintStart_toEndOf="@id/iv_back"
+        app:layout_constraintTop_toTopOf="@id/toolbar">
+
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            android:layout_marginEnd="@dimen/dp_20_dsa"
+            tools:text="Manish Kumar Singh" />
+
+        <TextView
+            android:id="@+id/tv_toolbar_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="@dimen/_8ssp"
+            android:layout_marginEnd="@dimen/dp_20_dsa"
+            tools:text="Yesterday at 2:43 AM" />
+    </LinearLayout>
+
+    <!-- The ViewPager is correctly constrained BELOW the toolbar. -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager_media"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,12 +10,13 @@ import com.tie.vibein.chat.data.models.*
 import com.tie.vibein.chat.data.repository.ChatRepository
 import com.tie.vibein.utils.FileUtils
 import com.tie.vibein.utils.NetworkState
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 
-// This enum for filters is correct.
 enum class ChatFilter {
     ALL, REQUESTS, UNREAD
 }
@@ -23,10 +24,7 @@ enum class ChatFilter {
 class ChatViewModel : ViewModel() {
     private val repository = ChatRepository()
 
-    // --- Private properties to hold the original, complete lists from the API ---
     private var allFetchedConversations = listOf<Conversation>()
-
-    // --- LiveData for the UI to observe ---
     private val _conversationsState = MutableLiveData<NetworkState<List<Conversation>>>()
     val conversationsState: LiveData<NetworkState<List<Conversation>>> = _conversationsState
 
@@ -36,18 +34,12 @@ class ChatViewModel : ViewModel() {
     private val _chatHistoryState = MutableLiveData<NetworkState<List<Message>>>()
     val chatHistoryState: LiveData<NetworkState<List<Message>>> = _chatHistoryState
 
-    // LiveData to report the SUCCESSFUL sending of a message
     private val _sendMessageState = MutableLiveData<NetworkState<SendMessageResponse>>()
     val sendMessageState: LiveData<NetworkState<SendMessageResponse>> = _sendMessageState
 
-    private val _uploadState = MutableLiveData<NetworkState<String>>()
-    val uploadState: LiveData<NetworkState<String>> = _uploadState
-
-    // **THE FIX**: A dedicated LiveData to report only the tempId of a FAILED message.
     private val _failedMessageTempId = MutableLiveData<String?>()
     val failedMessageTempId: LiveData<String?> = _failedMessageTempId
 
-    // fetchConversations and its filter logic are correct and do not need changes.
     fun fetchConversations(userId: String) {
         _conversationsState.value = NetworkState.Loading
         viewModelScope.launch {
@@ -84,7 +76,6 @@ class ChatViewModel : ViewModel() {
         }
     }
 
-    // fetchChatHistory is correct and does not need changes.
     fun fetchChatHistory(currentUserId: String, otherUserId: String) {
         _chatHistoryState.value = NetworkState.Loading
         viewModelScope.launch {
@@ -101,7 +92,6 @@ class ChatViewModel : ViewModel() {
         }
     }
 
-    // Handles sending for both text and media URLs
     fun sendMessage(senderId: String, receiverId: String, messageType: String, content: String, tempId: String) {
         viewModelScope.launch {
             try {
@@ -109,7 +99,6 @@ class ChatViewModel : ViewModel() {
                 if (response.isSuccessful && response.body()?.status == "success") {
                     val serverMessage = response.body()!!.sentMessage
                     if (serverMessage != null) {
-                        // Attach the tempId to the server response for the UI to match it
                         val uiUpdateMessage = serverMessage.copy(tempId = tempId, status = MessageStatus.SENT)
                         val updatedResponse = response.body()!!.copy(sentMessage = uiUpdateMessage)
                         _sendMessageState.value = NetworkState.Success(updatedResponse)
@@ -126,42 +115,54 @@ class ChatViewModel : ViewModel() {
         }
     }
 
-    fun uploadMediaAndSendMessage(
+    // ======================================================================
+    // == NEW: Function to handle multiple file uploads in parallel ==
+    // ======================================================================
+    fun uploadMultipleFilesAndSend(
         context: Context,
         senderId: String,
         receiverId: String,
-        mediaUri: Uri,
-        messageType: String, // "image" or "video"
+        mediaUris: List<Uri>,
         tempId: String
     ) {
         viewModelScope.launch {
-            val mediaFile = FileUtils.getFileFromUri(context.applicationContext, mediaUri)
-            if (mediaFile == null) {
-                _sendMessageState.value = NetworkState.Error("Failed to access selected file")
-                _failedMessageTempId.value = tempId
-                return@launch
-            }
             try {
-                val mimeType = context.contentResolver.getType(mediaUri) ?: "image/*"
-                val requestFile = mediaFile.asRequestBody(mimeType.toMediaTypeOrNull())
-                val body = MultipartBody.Part.createFormData("uploaded_file", mediaFile.name, requestFile)
-
-                val uploadResponse = repository.uploadMedia(body)
-                if (uploadResponse.isSuccessful && uploadResponse.body()?.status == "success") {
-                    val fileUrl = uploadResponse.body()!!.fileUrl
-                    if (fileUrl.isNullOrEmpty()) throw Exception("Server returned an empty URL.")
-                    sendMessage(senderId, receiverId, messageType, fileUrl, tempId)
-                } else {
-                    throw Exception(uploadResponse.body()?.message ?: "Media upload failed.")
+                // Launch all uploads in parallel using async
+                val uploadJobs = mediaUris.map { uri ->
+                    async {
+                        val mediaFile = FileUtils.getFileFromUri(context.applicationContext, uri)
+                            ?: throw Exception("Failed to process URI: $uri")
+                        try {
+                            val mimeType = context.contentResolver.getType(uri) ?: "image/*"
+                            val requestFile = mediaFile.asRequestBody(mimeType.toMediaTypeOrNull())
+                            val body = MultipartBody.Part.createFormData("uploaded_file", mediaFile.name, requestFile)
+                            val response = repository.uploadMedia(body)
+                            if (response.isSuccessful && response.body()?.status == "success" && !response.body()!!.fileUrl.isNullOrEmpty()) {
+                                response.body()!!.fileUrl!!
+                            } else {
+                                throw Exception("Upload failed for $uri")
+                            }
+                        } finally {
+                            mediaFile.delete() // Ensure temp file is always deleted
+                        }
+                    }
                 }
+
+                // Wait for all parallel uploads to complete
+                val uploadedUrls = uploadJobs.awaitAll()
+
+                // If we got here, all uploads were successful
+                val contentJson = createImageUrlJson(uploadedUrls)
+                sendMessage(senderId, receiverId, "image", contentJson, tempId)
+
             } catch (e: Exception) {
-                _sendMessageState.value = NetworkState.Error(e.message ?: "Upload failed.")
+                // If any of the uploads fail, the entire operation fails
+                _sendMessageState.value = NetworkState.Error(e.message ?: "One or more uploads failed.")
                 _failedMessageTempId.value = tempId
-            } finally {
-                mediaFile.delete() // Clean up temp file
             }
         }
     }
+
 
     fun onFailedMessageHandled() {
         _failedMessageTempId.value = null

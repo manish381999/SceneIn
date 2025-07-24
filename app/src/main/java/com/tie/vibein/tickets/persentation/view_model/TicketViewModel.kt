@@ -13,27 +13,42 @@ import com.tie.vibein.utils.NetworkState
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 
 class TicketViewModel : ViewModel() {
     private val repository = TicketRepository()
 
-    // --- LiveData for each API call, using specific model classes ---
-    private val _browseTicketsState = MutableLiveData<NetworkState<List<Ticket>>>()
-    val browseTicketsState: LiveData<NetworkState<List<Ticket>>> = _browseTicketsState
+    // State for parsing OCR text from a ticket
+    private val _parseTextState = MutableLiveData<NetworkState<AnalyzedTicketData>>()
+    val parseTextState: LiveData<NetworkState<AnalyzedTicketData>> = _parseTextState
 
-
+    // State for creating a new ticket listing
     private val _createTicketState = MutableLiveData<NetworkState<GenericApiResponse>>()
-    val createTicketState: LiveData<NetworkState<GenericApiResponse>> get() = _createTicketState
+    val createTicketState: LiveData<NetworkState<GenericApiResponse>> = _createTicketState
 
-    private val _createOrderState = MutableLiveData<NetworkState<CreateOrderResponse>>()
-    val createOrderState: LiveData<NetworkState<CreateOrderResponse>> = _createOrderState
-
+    // State for verifying a payout method
     private val _verifyPayoutState = MutableLiveData<NetworkState<PayoutVerificationResponse>>()
     val verifyPayoutState: LiveData<NetworkState<PayoutVerificationResponse>> = _verifyPayoutState
 
-    // A single LiveData for simple success/error actions like reveal, complete, dispute
+    // State for browsing tickets in the marketplace
+    private val _browseTicketsState = MutableLiveData<NetworkState<List<Ticket>>>()
+    val browseTicketsState: LiveData<NetworkState<List<Ticket>>> = _browseTicketsState
+
+    // State for fetching a user's purchased and listed tickets
+    private val _myActivityState = MutableLiveData<NetworkState<MyActivityResponse>>()
+    val myActivityState: LiveData<NetworkState<MyActivityResponse>> = _myActivityState
+
+    // State for creating a payment order
+    private val _createOrderState = MutableLiveData<NetworkState<CreateOrderResponse>>()
+    val createOrderState: LiveData<NetworkState<CreateOrderResponse>> = _createOrderState
+
+    // State for actions on a purchased ticket (reveal, complete, dispute, relist)
     private val _transactionActionState = MutableLiveData<NetworkState<GenericApiResponse>>()
     val transactionActionState: LiveData<NetworkState<GenericApiResponse>> = _transactionActionState
+
+    // --- NEW: State for actions on a listed ticket (update price, delist) ---
+    private val _listingActionState = MutableLiveData<NetworkState<GenericApiResponse>>()
+    val listingActionState: LiveData<NetworkState<GenericApiResponse>> = _listingActionState
 
 
     // =================================================================
@@ -41,6 +56,23 @@ class TicketViewModel : ViewModel() {
     // =================================================================
 
     // --- SELLER FLOW ---
+
+    fun parseOcrText(rawText: String) {
+        _parseTextState.value = NetworkState.Loading
+        viewModelScope.launch {
+            _parseTextState.value = try {
+                val response = repository.parseOcrText(rawText)
+                if (response.isSuccessful && response.body()?.status == "success") {
+                    NetworkState.Success(response.body()!!.data)
+                } else {
+                    NetworkState.Error(response.body()?.message ?: "Could not extract details.")
+                }
+            } catch (e: Exception) {
+                NetworkState.Error(e.message ?: "An error occurred.")
+            }
+        }
+    }
+
 
     fun createTicket(
         params: Map<String, RequestBody>,
@@ -52,6 +84,45 @@ class TicketViewModel : ViewModel() {
             _createTicketState.postValue(result)
         }
     }
+
+
+
+    fun updateTicket(ticketId: Int, sellerId: String, newPrice: String) {
+        _listingActionState.value = NetworkState.Loading
+        viewModelScope.launch {
+            try {
+                // We will also rename the repository function for consistency
+                val response = repository.updateTicket(ticketId, sellerId, newPrice)
+                if(response.isSuccessful) {
+                    _listingActionState.postValue(NetworkState.Success(response.body()!!))
+                } else {
+                    val errorMsg = JSONObject(response.errorBody()!!.string()).getString("message")
+                    _listingActionState.postValue(NetworkState.Error(errorMsg))
+                }
+            } catch (e: Exception) {
+                _listingActionState.postValue(e.message?.let { NetworkState.Error(it) })
+            }
+        }
+    }
+
+
+
+    // --- NEW: Function to trigger delisting ---
+    fun delistTicket(ticketId: Int, sellerId: String) {
+        _listingActionState.value = NetworkState.Loading
+        viewModelScope.launch {
+            try {
+                val response = repository.delistTicket(ticketId, sellerId)
+                if(response.isSuccessful) _listingActionState.postValue(NetworkState.Success(response.body()!!))
+                else _listingActionState.postValue(NetworkState.Error(JSONObject(response.errorBody()!!.string()).getString("message")))
+            } catch (e: Exception) { _listingActionState.postValue(e.message?.let {
+                NetworkState.Error(
+                    it
+                )
+            }) }
+        }
+    }
+
     fun verifyUpiPayout(userId: String, vpa: String) {
         _verifyPayoutState.value = NetworkState.Loading
         viewModelScope.launch {
@@ -118,6 +189,22 @@ class TicketViewModel : ViewModel() {
         }
     }
 
+    fun fetchMyActivity(userId: String) {
+        _myActivityState.value = NetworkState.Loading
+        viewModelScope.launch {
+            try {
+                val response = repository.getMyActivity(userId)
+                if (response.isSuccessful && response.body()?.status == "success") {
+                    _myActivityState.value = NetworkState.Success(response.body()!!)
+                } else {
+                    NetworkState.Error("Failed to load your tickets.")
+                }
+            } catch (e: Exception) {
+                NetworkState.Error(e.message ?: "An error occurred.")
+            }
+        }
+    }
+
     fun revealTicket(transactionId: Int, currentUserId: String) {
         _transactionActionState.value = NetworkState.Loading
         viewModelScope.launch {
@@ -162,6 +249,24 @@ class TicketViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 NetworkState.Error(e.message ?: "An error occurred.")
+            }
+        }
+    }
+
+    fun relistTicket(transactionId: Int, newSellerId: String, newSellingPrice: String) {
+        _transactionActionState.value = NetworkState.Loading
+        viewModelScope.launch {
+            _transactionActionState.value = try {
+                val response = repository.relistTicket(transactionId, newSellerId, newSellingPrice)
+                if (response.isSuccessful && response.body()?.status == "success") {
+                    NetworkState.Success(response.body()!!)
+                } else {
+                    // Try to parse a specific error message from the backend JSON response
+                    val errorMsg = JSONObject(response.errorBody()!!.string()).getString("message")
+                    NetworkState.Error(errorMsg)
+                }
+            } catch (e: Exception) {
+                NetworkState.Error(e.message ?: "An error occurred during relist.")
             }
         }
     }

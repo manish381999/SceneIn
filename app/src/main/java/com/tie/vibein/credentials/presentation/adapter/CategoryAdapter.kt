@@ -18,7 +18,7 @@ class CategoryAdapter(
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     private val selectedIds = mutableSetOf<String>()
-    private val maxSelection = 4  // Maximum allowed selections
+    private val maxSelection = 3  // Maximum allowed selections
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val binding = ItemCategoryBinding.inflate(LayoutInflater.from(context), parent, false)

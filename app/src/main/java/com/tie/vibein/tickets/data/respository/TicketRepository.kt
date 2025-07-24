@@ -4,7 +4,8 @@ import android.content.Context
 import android.net.Uri
 import com.tie.vibein.credentials.data.retrofit.RetrofitClient
 import com.tie.vibein.tickets.data.models.GenericApiResponse
-import com.tie.vibein.utils.FileUtils
+import com.tie.vibein.tickets.data.models.ParseTextResponse
+
 import com.tie.vibein.utils.NetworkState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,6 +14,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Response
 
 class TicketRepository {
     private val api = RetrofitClient.ticketApiEndPoint
@@ -30,6 +32,11 @@ class TicketRepository {
             accountNumber = accountNumber
         )
 
+    suspend fun parseOcrText(rawText: String): Response<ParseTextResponse> {
+        val requestBody = mapOf("raw_text" to rawText)
+        return api.parseOcrText(requestBody)
+    }
+
     suspend fun createTicket(
         params: Map<String, RequestBody>,
         ticketFile: MultipartBody.Part?
@@ -42,6 +49,8 @@ class TicketRepository {
                     eventDate = params["eventDate"]!!,
                     eventTime = params["eventTime"]!!,
                     eventVenue = params["eventVenue"]!!,
+                    eventCity = params["eventCity"]!!,
+                    numberOfTickets = params["numberOfTickets"]!!,
                     originalPrice = params["originalPrice"]!!,
                     sellingPrice = params["sellingPrice"]!!,
                     source = params["source"]!!,
@@ -60,12 +69,30 @@ class TicketRepository {
         }
     }
 
+    suspend fun updateTicket(ticketId: Int, sellerId: String, newPrice: String): Response<GenericApiResponse> {
+        return api.updateTicket(ticketId, sellerId, newPrice)
+    }
+
+    suspend fun delistTicket(ticketId: Int, sellerId: String): Response<GenericApiResponse> {
+        return api.delistTicket(ticketId, sellerId)
+    }
+
+    suspend fun relistTicket(transactionId: Int, newSellerId: String, newSellingPrice: String): Response<GenericApiResponse> {
+        return api.relistTicket(
+            transactionId = transactionId,
+            newSellerId = newSellerId,
+            newSellingPrice = newSellingPrice
+        )
+    }
+
 
     // --- BUYER ---
     suspend fun browseTickets() = api.browseTickets()
 
     suspend fun createOrder(ticketId: Int, buyerId: String, buyerName: String, buyerEmail: String, buyerPhone: String) =
         api.createOrder(ticketId, buyerId, buyerName, buyerEmail, buyerPhone)
+
+    suspend fun getMyActivity(userId: String) = api.getMyActivity(userId)
 
     suspend fun revealTicket(transactionId: Int, currentUserId: String) =
         api.revealTicket(transactionId, currentUserId)
@@ -75,4 +102,6 @@ class TicketRepository {
 
     suspend fun createDispute(transactionId: Int, currentUserId: String, reason: String) =
         api.createDispute(transactionId, currentUserId, reason)
+
+
 }

@@ -213,7 +213,7 @@ class CreateEventFragment : Fragment() {
                 }
 
                 val params = mutableMapOf<String, RequestBody>().apply {
-                    val userId = SP.getPreferences(requireContext(), SP.USER_ID) ?: ""
+                    val userId = SP.getString(requireContext(), SP.USER_ID) ?: ""
                     put("user_id", userId.toRequestBody())
                     put("event_name", eventName.toRequestBody())
                     put("category_id", selectedCategoryId!!.toRequestBody())

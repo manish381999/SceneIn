@@ -124,7 +124,7 @@ class ChatActivity : AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        currentUserId = SP.getPreferences(this, SP.USER_ID) ?: ""
+        currentUserId = SP.getString(this, SP.USER_ID) ?: ""
         receiverId = intent.getStringExtra("receiver_id")
         receiverName = intent.getStringExtra("receiver_name")
         val receiverProfilePic = intent.getStringExtra("receiver_profile_pic")

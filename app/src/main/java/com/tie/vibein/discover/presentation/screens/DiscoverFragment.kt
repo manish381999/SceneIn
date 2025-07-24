@@ -96,7 +96,7 @@ class DiscoverFragment : Fragment() {
 
                     binding.tvLocation.text = "$city, $country"
 
-                    val userId = SP.getPreferences(requireContext(), SP.USER_ID) ?: ""
+                    val userId = SP.getString(requireContext(), SP.USER_ID) ?: ""
                     val currentDate = getCurrentDate()
                     viewModel.fetchCityEvents(userId, city!!, currentDate)
                 }

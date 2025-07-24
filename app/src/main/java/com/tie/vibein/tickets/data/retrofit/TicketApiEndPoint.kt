@@ -22,6 +22,9 @@ interface TicketApiEndPoint {
         @Field("account_number") accountNumber: String? = null
     ): Response<PayoutVerificationResponse>
 
+    @POST("api_v1/tickets_parse_text.php")
+    suspend fun parseOcrText(@Body body: Map<String, String>): Response<ParseTextResponse>
+
     @Multipart
     @POST("api_v1/tickets_create.php")
     suspend fun createTicket(
@@ -30,11 +33,38 @@ interface TicketApiEndPoint {
         @Part("eventDate") eventDate: RequestBody,
         @Part("eventTime") eventTime: RequestBody,
         @Part("eventVenue") eventVenue: RequestBody,
+        @Part("eventCity") eventCity: RequestBody,
+        @Part("numberOfTickets") numberOfTickets: RequestBody,
         @Part("originalPrice") originalPrice: RequestBody,
         @Part("sellingPrice") sellingPrice: RequestBody,
         @Part("source") source: RequestBody,
         @Part ticketFile: MultipartBody.Part? // Nullable, just like your cover_image
     ): Response<GenericApiResponse>
+
+    @FormUrlEncoded
+    @POST("api_v1/tickets_update.php")
+    suspend fun updateTicket(
+        @Field("ticket_id") ticketId: Int,
+        @Field("seller_id") sellerId: String,
+        @Field("selling_price") SellingPrice: String
+    ): Response<GenericApiResponse>
+
+    @FormUrlEncoded
+    @POST("api_v1/tickets_delist.php")
+    suspend fun delistTicket(
+        @Field("ticket_id") ticketId: Int,
+        @Field("seller_id") sellerId: String
+    ): Response<GenericApiResponse>
+
+    @FormUrlEncoded
+    @POST("api_v1/tickets_relist.php")
+    suspend fun relistTicket(
+        @Field("transaction_id") transactionId: Int,
+        @Field("new_seller_id") newSellerId: String,
+        @Field("new_selling_price") newSellingPrice: String
+    ): Response<GenericApiResponse>
+
+
 
     // == BUYER FLOW ==
 
@@ -50,6 +80,10 @@ interface TicketApiEndPoint {
         @Field("buyer_email") buyerEmail: String,
         @Field("buyer_phone") buyerPhone: String
     ): Response<CreateOrderResponse>
+
+    @FormUrlEncoded
+    @POST("api_v1/tickets_my_activity.php") // Using POST with form-data
+    suspend fun getMyActivity(@Field("user_id") userId: String): Response<MyActivityResponse>
 
     @FormUrlEncoded
     @POST("api_v1/tickets_reveal.php")
@@ -72,4 +106,6 @@ interface TicketApiEndPoint {
         @Field("current_user_id") currentUserId: String,
         @Field("reason") reason: String
     ): Response<GenericApiResponse>
+
+
 }

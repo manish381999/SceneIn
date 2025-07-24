@@ -43,7 +43,7 @@ class EventDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         eventId = intent.getStringExtra("event_id")
-        userId = SP.getPreferences(this, SP.USER_ID) ?: ""
+        userId = SP.getString(this, SP.USER_ID) ?: ""
         source = intent.getStringExtra("source") // "discover" or "profile"
 
         setupObservers()
@@ -254,7 +254,7 @@ class EventDetailActivity : AppCompatActivity() {
 
         binding.btnJoinEvent.setOnClickListener {
             val current = currentEvent ?: return@setOnClickListener
-            val userId = SP.getPreferences(this, SP.USER_ID) ?: return@setOnClickListener
+            val userId = SP.getString(this, SP.USER_ID) ?: return@setOnClickListener
 
             // Restrict join/unjoin after event date for both sources
             if (!canUnjoinEvent(current.event_date)) {

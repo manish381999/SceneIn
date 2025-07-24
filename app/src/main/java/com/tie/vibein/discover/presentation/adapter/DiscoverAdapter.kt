@@ -60,7 +60,7 @@ class DiscoverAdapter(
             binding.btnJoin.setBackgroundResource(backgroundRes)
 
             binding.btnJoin.setOnClickListener {
-                val userId = SP.getPreferences(context, SP.USER_ID) ?: ""
+                val userId = SP.getString(context, SP.USER_ID) ?: ""
                 val currentPosition = adapterPosition
 
                 if (currentPosition != RecyclerView.NO_POSITION) {

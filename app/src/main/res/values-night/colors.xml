@@ -41,6 +41,11 @@
     <!-- III. SPECIFIC COMPONENT COLORS -->
     <color name="shimmer_background">#2C2C2E</color>
 
+    <color name="colorSuccess">#30D158</color>       <!-- A brighter green that has good contrast on black/dark grey. -->
+    <color name="colorOnSuccess">#FFFFFF</color>
+    <color name="colorWarning">#FF9F0A</color>       <!-- A brighter orange for dark mode. -->
+    <color name="colorOnWarning">#000000</color>
+
     <!-- Button Colors -->
     <color name="joinButtonColor">@color/colorPrimary</color>
     <color name="unjoinButtonColor">#30D158</color>  <!-- Brighter green for dark mode -->
@@ -51,4 +56,6 @@
     <color name="chat_bubble_sent">@color/colorPrimaryVariant</color> <!-- The muted, dark blue bubble. -->
     <color name="chat_bubble_received">@color/colorSurfaceVariant</color> <!-- The dark grey bubble. -->
     <color name="chat_timestamp">@color/textSecondary</color>
+
+
 </resources>

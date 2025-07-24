@@ -4,10 +4,10 @@
     <!-- When the EditText is focused -->
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <solid android:color="#1E1E1E"/> <!-- Inner fill -->
+            <solid android:color="@color/colorSurface"/> <!-- Inner fill -->
             <stroke
                 android:width="2dp"
-                android:color="#A63694"/> <!-- Border color when focused -->
+                android:color="@color/gray200"/> <!-- Border color when focused -->
             <corners android:radius="8dp"/>
         </shape>
     </item>
@@ -15,10 +15,10 @@
     <!-- Default background -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#1E1E1E"/> <!-- Inner fill -->
+            <solid android:color="@color/colorSurface"/> <!-- Inner fill -->
             <stroke
                 android:width="1dp"
-                android:color="#666666"/> <!-- Default border color -->
+                android:color="@color/gray200"/> <!-- Default border color -->
             <corners android:radius="8dp"/>
         </shape>
     </item>

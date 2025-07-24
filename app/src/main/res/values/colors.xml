@@ -15,7 +15,8 @@
 
     <!-- II. NEUTRAL FOUNDATION -->
     <!-- Background & Surface -->
-    <color name="colorBackground">#F2F2F7</color>     <!-- iOS-style light grey. Very clean. -->
+    <color name="colorBackground">#F2F2F7</color>
+    <!-- iOS-style light grey. Very clean. -->
     <color name="colorSurface">#FFFFFF</color>         <!-- Pure white for cards. -->
     <color name="colorSurfaceVariant">#EFEFF4</color>  <!-- The standard received chat bubble color. Like WhatsApp. -->
     <color name="colorOnSurfaceVariant">#000000</color>
@@ -44,6 +45,11 @@
     <!-- III. SPECIFIC COMPONENT COLORS -->
     <color name="shimmer_background">#E5E5EA</color>
 
+    <color name="colorSuccess">#34C759</color>       <!-- A standard, accessible iOS green for success/live status. -->
+    <color name="colorOnSuccess">#FFFFFF</color>
+    <color name="colorWarning">#FF9500</color>       <!-- A standard, accessible iOS orange for warnings/sold status. -->
+    <color name="colorOnWarning">#FFFFFF</color>
+
     <!-- Button Colors (Clear states) -->
     <color name="joinButtonColor">@color/colorPrimary</color>
     <!-- We will use a dedicated green for 'unjoin' as it's a destructive-like action confirmation -->
@@ -55,4 +61,6 @@
     <color name="chat_bubble_sent">@color/colorPrimaryVariant</color> <!-- Light, muted blue. Easy on the eyes. -->
     <color name="chat_bubble_received">@color/colorSurfaceVariant</color> <!-- A clear, neutral background. -->
     <color name="chat_timestamp">@color/textSecondary</color>
+
+
 </resources>

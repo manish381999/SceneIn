@@ -30,7 +30,7 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        currentUserId = SP.getPreferences(requireContext(), SP.USER_ID) ?: ""
+        currentUserId = SP.getString(requireContext(), SP.USER_ID) ?: ""
         if (currentUserId.isEmpty()) {
             binding.tvNoChats.text = "Please log in to see your messages."
             binding.tvNoChats.visibility = View.VISIBLE

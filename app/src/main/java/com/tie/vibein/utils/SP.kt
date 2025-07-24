@@ -1,11 +1,12 @@
 package com.tie.dreamsquad.utils
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.preference.PreferenceManager
 
 object SP {
 
-    // Constants for SharedPreferences keys
+    // --- All your existing and new constants ---
     const val FCM_TEMP_TOKEN = "fcm_temp_token"
     const val SP_TRUE = "SP_TRUE"
     const val SP_FALSE = "SP_FALSE"
@@ -19,7 +20,7 @@ object SP {
     const val USER_ABOUT_YOU = "USER_ABOUT_YOU"
     const val USER_COUNTRY_CODE = "USER_COUNTRY_CODE"
     const val USER_COUNTRY_SHORT_NAME = "USER_COUNTRY_SHORT_NAME"
-    const val USER_IS_VERIFIED = "USER_IS_VERIFIED"
+    const val USER_IS_VERIFIED = "USER_IS_VERIFIED" // Note: This key suggests a boolean, consider using the boolean functions for it
     const val USER_STATUS = "USER_STATUS"
     const val USER_DELETED = "USER_DELETED"
     const val USER_CREATED_AT = "USER_CREATED_AT"
@@ -33,38 +34,70 @@ object SP {
     const val CACHED_STATE = "CACHED_STATE"
     const val CACHED_SUBLOCALITY = "CACHED_SUBLOCALITY"
 
+    // --- New constants for the ticket system ---
+    const val IS_PAYOUT_VERIFIED = "is_payout_verified"
+    const val PAYOUT_INFO_DISPLAY = "payout_info_display"
+
+    // --- END OF NEW CONSTANTS ---
 
 
-
-    // Save String data in SharedPreferences
-    fun savePreferences(mContext: Context, key: String, value: String?) {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext)
-        val editor = sharedPreferences.edit()
-        editor.putString(key, value).apply()
+    private fun getSharedPrefs(context: Context): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context)
     }
 
-    // Save List of Strings as a comma-separated String in SharedPreferences
+    // =================================================================
+    // == SAVE FUNCTIONS ===============================================
+    // =================================================================
+
+    /**
+     * Saves a String value.
+     */
+    fun saveString(mContext: Context, key: String, value: String?) {
+        getSharedPrefs(mContext).edit().putString(key, value).apply()
+    }
+
+    /**
+     * Saves a Boolean value.
+     */
+    fun saveBoolean(mContext: Context, key: String, value: Boolean) {
+        getSharedPrefs(mContext).edit().putBoolean(key, value).apply()
+    }
+
+
+    // =================================================================
+    // == GET FUNCTIONS (WITH CLEAR, UNAMBIGUOUS NAMES) ================
+    // =================================================================
+
+    /**
+     * Retrieves a String value, returning a nullable String?
+     */
+    fun getString(context: Context, key: String, defaultValue: String? = null): String? {
+        return getSharedPrefs(context).getString(key, defaultValue)
+    }
+
+    /**
+     * Retrieves a Boolean value, with a default of 'false'.
+     */
+    fun getBoolean(context: Context, key: String, defaultValue: Boolean = false): Boolean {
+        return getSharedPrefs(context).getBoolean(key, defaultValue)
+    }
+
+
+    // =================================================================
+    // == SPECIFIC HELPER FUNCTIONS (No change needed) =================
+    // =================================================================
+
     fun saveInterestNames(mContext: Context, key: String, interestNames: List<String>?) {
-        val interestNamesString = interestNames?.joinToString(",") ?: ""
-        savePreferences(mContext, key, interestNamesString)
+        val interestNamesString = interestNames?.joinToString(",")
+        saveString(mContext, key, interestNamesString) // Uses the new specific name
     }
 
-    // Retrieve String data from SharedPreferences
-    fun getPreferences(context: Context, key: String, defaultValue: String = ""): String? {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        return sharedPreferences.getString(key, defaultValue)
+    fun getInterestNames(context: Context, key: String): List<String> {
+        val interestNamesString = getString(context, key, "") // Uses the new specific name
+        return if (!interestNamesString.isNullOrEmpty()) interestNamesString.split(",") else emptyList()
     }
 
-    // Retrieve List of Strings from SharedPreferences (as a comma-separated String)
-    fun getInterestNames(context: Context, key: String, defaultValue: String = ""): List<String> {
-        val interestNamesString = getPreferences(context, key, defaultValue)
-        return interestNamesString?.split(",") ?: emptyList()
-    }
-
-    // Remove all data from SharedPreferences (for logout, clear user data)
     fun removeAllSharedPreferences(mContext: Context) {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext)
-        val editor = sharedPreferences.edit()
-        editor.clear().apply()
+        getSharedPrefs(mContext).edit().clear().apply()
     }
 }

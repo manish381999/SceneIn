@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- State when the tab is selected -->
+    <item android:drawable="@drawable/tab_background_selected"
+        android:state_selected="true"/>
+
+    <!-- Default state (when the tab is not selected) -->
+    <item android:drawable="@drawable/tab_background_unselected"/>
+
+</selector>

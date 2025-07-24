@@ -30,6 +30,8 @@
         <item name="android:textColorPrimary">@color/textPrimary</item>
         <item name="android:textColorSecondary">@color/textSecondary</item>
         <item name="android:windowBackground">@color/colorBackground</item>
+
+
     </style>
 
 
@@ -47,6 +49,44 @@
         <!-- Here we apply our custom drawable with the rounded corners -->
         <item name="android:background">@drawable/bottom_sheet_background</item>
     </style>
+
+    <style name="Widget.App.ChipGroup" parent="Widget.MaterialComponents.ChipGroup">
+        <item name="chipSpacingHorizontal">8dp</item>
+        <item name="singleLine">true</item>
+    </style>
+
+    <style name="Widget.App.Chip" parent="Widget.MaterialComponents.Chip.Filter">
+        <!-- Use our new color selectors to make the chip theme-aware -->
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="chipBackgroundColor">@color/chip_background_color</item>
+
+        <!-- No stroke for a cleaner, more modern look -->
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="android:elevation" tools:ignore="NewApi">2dp</item>
+
+        <!-- ============================================= -->
+        <!-- == THE FIX: THIS LINE HIDES THE CHECKMARK === -->
+        <!-- ============================================= -->
+        <item name="checkedIconVisible">false</item>
+
+    </style>
+
+    <style name="Theme.Razorpay" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- This makes the status bar translucent, creating a seamless feel when Razorpay launches. -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- This prevents a strange flicker or "blink" when the activity opens. -->
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+    </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/colorBackground</item>
+
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
+
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.VibeIn</item>
+    </style>
+
 
 
 </resources>

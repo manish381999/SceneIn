@@ -35,6 +35,7 @@
         <item name="android:windowBackground">@color/colorBackground</item>
 
 
+
     </style>
 
     <style name="TabTextStyle" parent="TextAppearance.Design.Tab">
@@ -75,6 +76,23 @@
         <item name="checkedIconVisible">false</item>
 
     </style>
+
+    <style name="Theme.Razorpay" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- This makes the status bar translucent, creating a seamless feel when Razorpay launches. -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- This prevents a strange flicker or "blink" when the activity opens. -->
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+    </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/colorBackground</item>
+
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
+
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.VibeIn</item>
+    </style>
+
 
 
 

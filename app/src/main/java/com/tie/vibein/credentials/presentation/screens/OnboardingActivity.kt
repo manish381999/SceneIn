@@ -1,6 +1,7 @@
 package com.tie.vibein.credentials.presentation.screens // Corrected package name based on file path
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.net.Uri // --- ADD THIS IMPORT ---
 import android.os.Bundle
@@ -97,21 +98,30 @@ class OnboardingActivity : AppCompatActivity() {
     private fun saveUserDataToPreferences(response: VerifyOtpResponse) {
         val user = response.user
         user?.let {
-            SP.savePreferences(this, SP.USER_ID, it.user_id)
-            SP.savePreferences(this, SP.USER_MOBILE, user.mobile_number)
-            SP.savePreferences(this, SP.FULL_NAME, user.name ?: "")
-            SP.savePreferences(this, SP.USER_NAME, it.user_name ?: "")
-            SP.savePreferences(this, SP.USER_EMAIL, it.email_id ?: "")
-            SP.savePreferences(this, SP.USER_PROFILE_PIC, it.profile_pic ?: "")
-            SP.savePreferences(this, SP.USER_ABOUT_YOU, user.about_you ?: "")
-            SP.savePreferences(this, SP.USER_COUNTRY_CODE, it.country_code ?: "")
-            SP.savePreferences(this, SP.USER_COUNTRY_SHORT_NAME, it.country_short_name ?: "")
-            SP.savePreferences(this, SP.USER_IS_VERIFIED, it.is_verified)
-            SP.savePreferences(this, SP.USER_STATUS, it.status)
-            SP.savePreferences(this, SP.USER_DELETED, it.deleted)
-            SP.savePreferences(this, SP.USER_CREATED_AT, it.created_at)
+            SP.saveString(this, SP.USER_ID, it.user_id)
+            SP.saveString(this, SP.USER_MOBILE, user.mobile_number)
+            SP.saveString(this, SP.FULL_NAME, user.name ?: "")
+            SP.saveString(this, SP.USER_NAME, it.user_name ?: "")
+            SP.saveString(this, SP.USER_EMAIL, it.email_id ?: "")
+            SP.saveString(this, SP.USER_PROFILE_PIC, it.profile_pic ?: "")
+            SP.saveString(this, SP.USER_ABOUT_YOU, user.about_you ?: "")
+            SP.saveString(this, SP.USER_COUNTRY_CODE, it.country_code ?: "")
+            SP.saveString(this, SP.USER_COUNTRY_SHORT_NAME, it.country_short_name ?: "")
+            SP.saveBoolean(this, SP.USER_IS_VERIFIED, it.is_verified)
+            SP.saveString(this, SP.USER_STATUS, it.status)
+            SP.saveString(this, SP.USER_DELETED, it.deleted)
+            SP.saveString(this, SP.USER_CREATED_AT, it.created_at)
             SP.saveInterestNames(this, SP.USER_INTEREST_NAMES, it.interest_names)
-            SP.savePreferences(this, SP.LOGIN_STATUS, SP.SP_TRUE)
+            SP.saveString(this, SP.LOGIN_STATUS, SP.SP_TRUE)
+
+            SP.saveBoolean(this, SP.IS_PAYOUT_VERIFIED, user.payout_method_verified)
+            Log.d(TAG, "Saved IS_PAYOUT_VERIFIED: ${user.payout_method_verified}")
+
+            // Save the display-friendly string provided by the server
+            // Use a fallback message just in case
+            val displayInfo = user.payout_info_display ?: "No payout method has been added."
+            SP.saveString(this, SP.PAYOUT_INFO_DISPLAY, displayInfo)
+            Log.d(TAG, "Saved PAYOUT_INFO_DISPLAY: $displayInfo")
 
             Log.d("UserDataSaved", "All user data saved. Moving to BaseActivity.")
             val intent = Intent(this, BaseActivity::class.java)
@@ -154,7 +164,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun submitProfile(fullName: String, userName: String, email: String, about: String) {
-        val userId = SP.getPreferences(this, SP.USER_ID) ?: ""
+        val userId = SP.getString(this, SP.USER_ID) ?: ""
 
         // --- MODIFICATION 3: Create the MultipartBody.Part directly from the stored URI ---
         val profilePicPart: MultipartBody.Part? = selectedImageUri?.let { uri ->

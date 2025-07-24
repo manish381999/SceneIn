@@ -71,18 +71,14 @@ class LoginActivity : AppCompatActivity() {
     private fun setupPhoneInputWatcher() {
         binding.etMobileNumber.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val input = s.toString().trim()
 
-                if (input.length == 10 && input.all { it.isDigit() }) {
-                    binding.btnContinue.setBackgroundResource(R.drawable.bg_login_btn_enable)
-                    binding.btnContinue.setTextColor(ContextCompat.getColor(this@LoginActivity, android.R.color.black))
-                    binding.btnContinue.isEnabled = true
-                } else {
-                    binding.btnContinue.setBackgroundResource(R.drawable.bg_login_btn_disable)
-                    binding.btnContinue.setTextColor(ContextCompat.getColor(this@LoginActivity, android.R.color.white))
-                    binding.btnContinue.isEnabled = false
-                }
+                // ✅ SIMPLIFIED LOGIC:
+                // Just enable or disable the button. The `selector_button_background.xml`
+                // you created will handle all visual changes (color, etc.) automatically.
+                binding.btnContinue.isEnabled = (input.length == 10 && input.all { it.isDigit() })
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -156,8 +152,8 @@ class LoginActivity : AppCompatActivity() {
 
         val notification = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_notification_icon)
-            .setContentTitle("Your OTP Code")
-            .setContentText("Your OTP is: $otp")
+            .setContentTitle("VibeIn Verification Code")
+            .setContentText("Your code is $otp. Do not share it with anyone.")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .build()

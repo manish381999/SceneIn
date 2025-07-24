@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBackground"
     android:padding="24dp">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <!-- Back Arrow -->
     <ImageView
         android:id="@+id/iv_back"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_arrow_back"
+        android:src="@drawable/ic_arrow_back_ios"
         android:contentDescription="Back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -24,7 +36,7 @@
         android:layout_height="wrap_content"
         android:text="OTP Verification"
         android:textSize="20sp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/textPrimary"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/iv_back"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +49,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="We have sent a verification code to +91 9123141559"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/textPrimary"
         android:textSize="14sp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
@@ -69,7 +81,7 @@
             android:gravity="center"
             android:inputType="number"
             android:maxLength="1"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/textPrimary"
             android:background="@drawable/otp_box_background"/>
 
         <EditText
@@ -81,7 +93,7 @@
             android:gravity="center"
             android:inputType="number"
             android:maxLength="1"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/textPrimary"
             android:background="@drawable/otp_box_background"/>
         <EditText
             android:id="@+id/et_otp_3"
@@ -92,7 +104,7 @@
             android:gravity="center"
             android:inputType="number"
             android:maxLength="1"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/textPrimary"
             android:background="@drawable/otp_box_background"/>
         <EditText
             android:id="@+id/et_otp_4"
@@ -103,7 +115,7 @@
             android:gravity="center"
             android:inputType="number"
             android:maxLength="1"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/textPrimary"
             android:background="@drawable/otp_box_background"/>
         <EditText
             android:id="@+id/et_otp_5"
@@ -114,7 +126,7 @@
             android:gravity="center"
             android:inputType="number"
             android:maxLength="1"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/textPrimary"
             android:background="@drawable/otp_box_background"/>
         <EditText
             android:id="@+id/et_otp_6"
@@ -125,7 +137,7 @@
             android:gravity="center"
             android:inputType="number"
             android:maxLength="1"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/textPrimary"
             android:background="@drawable/otp_box_background"/>
 
         <!-- Repeat similar EditTexts up to et_otp_6 -->
@@ -139,7 +151,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Didn’t get the OTP? (Request again in 0:23s)"
-        android:textColor="#CCCCCC"
+        android:textColor="@color/textSecondary"
         android:textSize="14sp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/otp_container"
@@ -165,11 +177,11 @@
             android:layout_height="wrap_content"
             android:text="SMS"
             android:enabled="false"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:textColor="@android:color/white"
+            android:textColor="@color/textOnPrimary"
             android:drawableLeft="@drawable/ic_sms"
+            android:drawableTint="@color/textOnPrimary"
             android:paddingHorizontal="24dp"
-            android:background="@drawable/bg_login_btn_disable"
+            android:background="@drawable/selector_button_background"
             app:backgroundTint="@null"
             android:layout_marginEnd="12dp"/>
 
@@ -178,9 +190,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="WhatsApp"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:textColor="@android:color/white"
-            android:background="@drawable/bg_login_btn_disable"
+            android:textColor="@color/textOnPrimary"
+            android:drawableTint="@color/textOnPrimary"
+            android:background="@drawable/selector_button_background"
             app:backgroundTint="@null"
             android:enabled="false"
             android:drawableLeft="@drawable/ic_whatsapp"
@@ -193,7 +205,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Back to login"
-        android:textColor="@android:color/white"
+        android:textColor="@color/textPrimary"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/btn_container"
@@ -208,10 +220,10 @@
         android:layout_height="wrap_content"
         android:text="Continue"
         android:textAllCaps="false"
-        android:background="@drawable/bg_login_btn_disable"
+        android:background="@drawable/selector_button_background"
         app:backgroundTint="@null"
         android:enabled="false"
-        android:textColor="@android:color/black"
+        android:textColor="@color/textOnPrimary"
         android:textSize="@dimen/_14ssp"
         android:layout_marginStart="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_15sdp"

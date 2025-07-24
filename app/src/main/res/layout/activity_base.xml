@@ -27,6 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        android:background="@drawable/bg_event"
         app:menu="@menu/menu_bottom_nav"
         app:itemIconSize="@dimen/_20sdp"
         app:itemTextColor="@color/black"

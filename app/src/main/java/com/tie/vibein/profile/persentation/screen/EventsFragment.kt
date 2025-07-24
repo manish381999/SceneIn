@@ -39,7 +39,7 @@ class EventsFragment : Fragment() {
     }
 
     private fun initComponents() {
-        val userId = SP.getPreferences(requireContext(), SP.USER_ID) ?: ""
+        val userId = SP.getString(requireContext(), SP.USER_ID) ?: ""
         binding.rvEvent.layoutManager = LinearLayoutManager(requireContext())
 
         profileViewModel.fetchEventsByUser(userId)

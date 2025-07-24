@@ -49,10 +49,10 @@ class ProfileFragment : Fragment() {
     private fun initComponents() {
         val context = requireContext()
 
-        val fullName = SP.getPreferences(context, SP.FULL_NAME)
-        val userName = SP.getPreferences(context, SP.USER_NAME)
-        val aboutYou = SP.getPreferences(context, SP.USER_ABOUT_YOU)
-        val profilePicUrl = SP.getPreferences(context, SP.USER_PROFILE_PIC)
+        val fullName = SP.getString(context, SP.FULL_NAME)
+        val userName = SP.getString(context, SP.USER_NAME)
+        val aboutYou = SP.getString(context, SP.USER_ABOUT_YOU)
+        val profilePicUrl = SP.getString(context, SP.USER_PROFILE_PIC)
         val interestNames = SP.getInterestNames(context, SP.USER_INTEREST_NAMES)
 
         binding.tvFullName.text = fullName

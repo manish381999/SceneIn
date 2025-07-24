@@ -5,34 +5,23 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_login_blur"
+    android:background="@color/colorBackground"
     tools:context=".credentials.presentation.screens.LoginActivity">
 
 
 
     <ImageView
         android:id="@+id/logoImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_vibeln_logo"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:src="@drawable/app_logo"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/_20sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- App Name -->
-    <TextView
-        android:id="@+id/appNameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:fontFamily="@font/poppins_bold"
-        android:text="VibeIn"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/_28ssp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoImage" />
+
 
     <!-- Subtitle -->
     <TextView
@@ -42,11 +31,11 @@
         android:layout_marginTop="@dimen/_5sdp"
         android:fontFamily="@font/poppins_medium"
         android:text="Feel the vibe of events &amp; moments"
-        android:textColor="@android:color/white"
+        android:textColor="@color/textPrimary"
         android:textSize="@dimen/_12ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appNameText" />
+        app:layout_constraintTop_toBottomOf="@id/logoImage" />
 
 
     <TextView
@@ -56,7 +45,7 @@
         android:layout_marginTop="@dimen/_50sdp"
         android:fontFamily="@font/poppins_semibold"
         android:text="Log in or sign up"
-        android:textColor="@android:color/white"
+        android:textColor="@color/textPrimary"
         android:textSize="@dimen/_14ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +60,7 @@
         android:layout_marginStart="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_15sdp"
         app:layout_constraintTop_toBottomOf="@id/login_signup"
-        android:background="@drawable/bg_input_field"
+        android:background="@drawable/bg_input_themed"
         android:padding="12dp"
         android:gravity="center_vertical">
 
@@ -82,6 +71,8 @@
             android:layout_marginEnd="8dp"
             app:ccp_defaultNameCode="IN"
             app:ccp_showFlag="true"
+            app:ccp_contentColor="@color/textPrimary"
+            app:ccp_arrowColor="@color/textPrimary"
             app:ccp_showFullName="false"
             app:ccp_showNameCode="false"
             app:ccp_showPhoneCode="true"
@@ -95,8 +86,8 @@
             android:inputType="phone"
             android:maxLength="10"
             android:hint="Enter phone number"
-            android:textColor="@android:color/white"
-            android:textColorHint="#AAFFFFFF"
+            android:textColor="@color/textPrimary"
+            android:textColorHint="@color/textSecondary"
             android:background="@android:color/transparent"
             android:textSize="16sp" />
     </LinearLayout>
@@ -109,10 +100,9 @@
         android:layout_height="wrap_content"
         android:text="Continue"
         android:textAllCaps="false"
-       android:background="@drawable/bg_login_btn_disable"
+       android:background="@drawable/selector_button_background"
         app:backgroundTint="@null"
         android:enabled="false"
-        android:textColor="@android:color/black"
         android:textSize="@dimen/_14ssp"
         android:layout_marginStart="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_15sdp"
@@ -137,7 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="OR"
-        android:textColor="@android:color/white"
+        android:textColor="@color/textPrimary"
         android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/btn_continue"
         app:layout_constraintStart_toStartOf="parent"
@@ -158,7 +148,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/googleCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_50_dsa"
         android:layout_marginTop="@dimen/_12sdp"
         app:cardCornerRadius="@dimen/_14sdp"
         app:cardElevation="@dimen/_4sdp"
@@ -177,8 +167,8 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:src="@drawable/ic_google" />
 
             <TextView
@@ -188,7 +178,7 @@
                 android:text="Login with Google"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
-                android:textSize="@dimen/_16ssp"
+                android:textSize="@dimen/_13ssp"
                />
 
 
@@ -202,7 +192,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="By continuing, you agree to our"
-        android:textColor="@android:color/white"
+        android:textColor="@color/textSecondary"
         android:textAlignment="center"
         android:textSize="@dimen/_12ssp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -216,7 +206,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Terms of Service"
-        android:textColor="@android:color/white"
+        android:textColor="@color/textSecondary"
         android:textAlignment="center"
         android:textSize="@dimen/_12ssp"
         app:layout_constraintEnd_toStartOf="@id/tv_privacy_policy"
@@ -228,7 +218,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="#474143"
+        android:background="@color/gray400"
         app:layout_constraintTop_toBottomOf="@id/tv_terms_of_service"
         app:layout_constraintStart_toStartOf="@id/tv_terms_of_service"
         app:layout_constraintEnd_toEndOf="@id/tv_terms_of_service"
@@ -239,7 +229,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Privacy Policy"
-        android:textColor="@android:color/white"
+        android:textColor="@color/textSecondary"
         android:textAlignment="center"
         android:textSize="@dimen/_12ssp"
         android:layout_marginStart="@dimen/_5sdp"
@@ -251,7 +241,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="#474143"
+        android:background="@color/gray400"
         app:layout_constraintTop_toBottomOf="@id/tv_privacy_policy"
         app:layout_constraintStart_toStartOf="@id/tv_privacy_policy"
         app:layout_constraintEnd_toEndOf="@id/tv_privacy_policy"

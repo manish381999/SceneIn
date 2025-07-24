@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!--
+    The fill color is a very light gray (your gray100 color).
+    This visually indicates that the field is not interactive.
+    -->
+    <solid android:color="@color/gray100" />
+
+    <!--
+    The corners have the same radius as your other input fields
+    to maintain a consistent UI style.
+    -->
+    <corners android:radius="8dp" />
+
+    <!--
+    A subtle stroke (border) to give it definition, slightly darker
+    than the background but not as prominent as an active field.
+    -->
+    <stroke
+        android:width="1dp"
+        android:color="@color/gray200" />
+
+</shape>

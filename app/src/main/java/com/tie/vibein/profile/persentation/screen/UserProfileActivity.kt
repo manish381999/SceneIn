@@ -44,7 +44,7 @@ class UserProfileActivity : AppCompatActivity() {
         binding = ActivityUserProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        currentUserId = SP.getPreferences(this, SP.USER_ID) ?: ""
+        currentUserId = SP.getString(this, SP.USER_ID) ?: ""
         profileUserId = intent.getStringExtra("user_id")
 
         initComponents()

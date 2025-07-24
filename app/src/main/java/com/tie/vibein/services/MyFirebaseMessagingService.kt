@@ -30,8 +30,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.e(TAG, "New FCM Token Generated: $token")
-        SP.savePreferences(this, SP.FCM_TEMP_TOKEN, token)
-        val userId = SP.getPreferences(this, SP.USER_ID, "")
+        SP.saveString(this, SP.FCM_TEMP_TOKEN, token)
+        val userId = SP.getString(this, SP.USER_ID, "")
         if (userId != null) {
             if (userId.isNotEmpty()) {
                 val fcmManager = FcmTokenManager(AuthRepository())
@@ -138,6 +138,27 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 notificationIntent = Intent(this, EventDetailActivity::class.java).apply {
                     putExtra("event_id", data["event_id"])
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                }
+            }
+            "ticket_sold" -> {
+                // Should take the user to their "My Listings" screen.
+                // We'll open the main activity and tell it to switch to the right tab.
+                notificationIntent = Intent(this, BaseActivity::class.java).apply {
+                    putExtra("navigate_to_tab", "tickets")
+                    putExtra("ticket_sub_tab_index", 1) // 0 for Browse, 1 for My Listings
+                }
+            }
+            "payout_queued", "payout_processed" -> {
+                notificationIntent = Intent(this, BaseActivity::class.java).apply {
+                    putExtra("navigate_to_tab", "tickets")
+                    putExtra("ticket_sub_tab_index", 1)
+                }
+            }
+            "dispute_raised" -> {
+                notificationIntent = Intent(this, BaseActivity::class.java).apply {
+                    putExtra("navigate_to_tab", "tickets")
+                    putExtra("ticket_sub_tab_index", 1)
+                    // You could also add a transaction_id extra to open a detail view
                 }
             }
             else -> {

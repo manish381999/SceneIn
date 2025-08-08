@@ -50,6 +50,7 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/iv_notifications"
                 android:layout_width="@dimen/_22sdp"
                 android:layout_height="@dimen/_22sdp"
                 android:src="@drawable/ic_notification_bell"

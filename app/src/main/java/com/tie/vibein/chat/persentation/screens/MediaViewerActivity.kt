@@ -22,6 +22,7 @@ import com.tie.vibein.R
 import com.tie.vibein.chat.data.models.MediaItem
 import com.tie.vibein.databinding.ActivityMediaViewerBinding
 import com.tie.vibein.databinding.ItemMediaViewerPageBinding
+import com.tie.vibein.utils.EdgeToEdgeUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,6 +34,7 @@ class MediaViewerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         binding = ActivityMediaViewerBinding.inflate(layoutInflater)

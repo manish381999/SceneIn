@@ -1,5 +1,6 @@
 package com.tie.vibein.discover.presentation.screens
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import com.tie.vibein.R
 import com.tie.vibein.databinding.FragmentDiscoverBinding
 import com.tie.vibein.discover.presentation.adapter.DiscoverAdapter
 import com.tie.vibein.discover.presentation.viewmodel.DiscoverViewModel
+import com.tie.vibein.notifications.presentation.screens.NotificationsActivity
 import com.tie.vibein.utils.LocationHelper
 import com.tie.vibein.utils.NetworkState
 import java.text.SimpleDateFormat
@@ -62,6 +64,9 @@ class DiscoverFragment : Fragment() {
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             fetchAndDisplayLocation()
+        }
+        binding.ivNotifications.setOnClickListener { // Use your correct ID
+            startActivity(Intent(requireContext(), NotificationsActivity::class.java))
         }
 
         observeViewModel()

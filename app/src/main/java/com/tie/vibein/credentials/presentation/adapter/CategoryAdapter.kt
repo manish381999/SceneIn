@@ -3,7 +3,6 @@ package com.tie.vibein.credentials.presentation.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -14,86 +13,66 @@ import com.tie.vibein.databinding.ItemCategoryBinding
 class CategoryAdapter(
     private val context: Context,
     private val categories: List<Category>,
+    // Pre-select items based on the user's saved preference IDs
+    initialSelectedIds: MutableList<String>,
+    // A listener to report back the new list of selected IDs
     private val onSelectionChanged: (List<String>) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
-    private val selectedIds = mutableSetOf<String>()
-    private val maxSelection = 3  // Maximum allowed selections
+    // A MutableSet is the most efficient way to track selected items.
+    private val selectedIds: MutableSet<String> = initialSelectedIds.toMutableSet()
+
+    // The maximum number of items the user is allowed to select.
+    private val SELECTION_LIMIT = 4
+
+    inner class CategoryViewHolder(val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val binding = ItemCategoryBinding.inflate(LayoutInflater.from(context), parent, false)
         return CategoryViewHolder(binding)
     }
 
+    override fun getItemCount(): Int = categories.size
+
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val start = position * 3
-        val end = (start + 3).coerceAtMost(categories.size)
-        holder.bind(categories.subList(start, end))
+        val category = categories[position]
+        val isCurrentlySelected = selectedIds.contains(category.id)
+
+        holder.binding.tvCategoryName.text = category.category_name
+        updateSelectionState(holder, isCurrentlySelected) // Set initial state
+
+        holder.itemView.setOnClickListener {
+            // --- THIS IS THE DEFINITIVE, CORRECT SELECTION LOGIC ---
+
+            // Check if the item is already selected
+            if (selectedIds.contains(category.id)) {
+                // If it is, deselect it.
+                selectedIds.remove(category.id)
+                updateSelectionState(holder, false)
+            } else {
+                // If it's not selected, check if we have reached the limit.
+                if (selectedIds.size < SELECTION_LIMIT) {
+                    // If we are under the limit, select it.
+                    selectedIds.add(category.id)
+                    updateSelectionState(holder, true)
+                } else {
+                    // If we are at the limit, show a message and do not allow selection.
+                    Toast.makeText(context, "You can only select up to $SELECTION_LIMIT interests.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // After any change, report the new full list of selected IDs back to the activity.
+            onSelectionChanged(selectedIds.toList())
+        }
     }
 
-    override fun getItemCount(): Int = (categories.size + 2) / 3
-
-    inner class CategoryViewHolder(private val binding: ItemCategoryBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(rowCategories: List<Category>) {
-            val chipGroup = binding.chipGroup
-            chipGroup.removeAllViews() // Clear any existing views
-
-            rowCategories.forEach { category ->
-                val textView = TextView(context).apply {
-                    text = category.category_name
-                    isClickable = true
-                    isFocusable = true
-
-                    // Adjust padding for a larger item
-                    setPadding(32, 16, 32, 16) // Increased padding
-
-                    // Set the font size for better visibility
-                    textSize = 18f // Adjust font size
-
-                    // Set initial background (unselected)
-                    setBackgroundResource(R.drawable.bg_category_chip_unselected)
-
-                    // Set the default text color
-                    setTextColor(ContextCompat.getColor(context, R.color.textPrimary))
-
-                    // Handle background change on click (selected/unselected)
-                    setOnClickListener {
-                        if (selectedIds.contains(category.id)) {
-                            // Unselect item
-                            selectedIds.remove(category.id)
-                            setBackgroundResource(R.drawable.bg_category_chip_unselected)
-                            setTextColor(ContextCompat.getColor(context, R.color.textPrimary)) // Unselected text color
-                        } else {
-                            // Check if less than 3 items are selected
-                            if (selectedIds.size < maxSelection) {
-                                // Select item
-                                selectedIds.add(category.id)
-                                setBackgroundResource(R.drawable.bg_category_chip_selected)
-                                setTextColor(ContextCompat.getColor(context, R.color.textOnPrimary)) // Selected text color
-                            } else {
-                                // Show a message that only 3 items can be selected
-                                Toast.makeText(context, "You can only select up to $maxSelection items.", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                        onSelectionChanged(selectedIds.toList())
-                    }
-
-                    // Optionally, add margins between the TextViews
-                    val layoutParams = ViewGroup.MarginLayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                    ).apply {
-                        setMargins(8, 8, 8, 8) // Adjust margins as needed
-                    }
-                    layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
-                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                    this.layoutParams = layoutParams
-                }
-
-                chipGroup.addView(textView)
-            }
+    private fun updateSelectionState(holder: CategoryViewHolder, isSelected: Boolean) {
+        if (isSelected) {
+            holder.binding.tvCategoryName.setBackgroundResource(R.drawable.bg_category_selected)
+            holder.binding.tvCategoryName.setTextColor(ContextCompat.getColor(context, R.color.white))
+        } else {
+            holder.binding.tvCategoryName.setBackgroundResource(R.drawable.bg_category_unselected)
+            holder.binding.tvCategoryName.setTextColor(ContextCompat.getColor(context, R.color.textPrimary))
         }
     }
 }

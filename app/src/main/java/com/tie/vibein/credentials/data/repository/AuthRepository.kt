@@ -32,6 +32,11 @@ class AuthRepository {
         return api.updateUser(userId, name, userName, emailId, aboutYou, interest, profilePic)
     }
 
+    suspend fun removeProfilePicture(userId: String) = api.removeProfilePicture(userId)
+
+    suspend fun checkUsernameAvailability(userName: String, userId: String) =
+        api.checkUsernameAvailability(userName, userId)
+
     suspend fun sendFcmToken(mobileNumber: String, fcmToken: String): Response<ApiResponse> {
         return api.sendFcmToken(mobileNumber, fcmToken)
     }

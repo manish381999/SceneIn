@@ -3,6 +3,7 @@ package com.tie.vibein.credentials.data.retrofit
 import com.tie.vibein.chat.data.retrofit.ChatApiEndPoint
 import com.tie.vibein.createEvent.data.retrofit.CreateEventApiEndPoint
 import com.tie.vibein.discover.data.retrofit.DiscoverApiEndPoint
+import com.tie.vibein.notification.data.retrofit.NotificationApiEndPoint
 import com.tie.vibein.profile.data.retrofit.ProfileApiEndPoint
 import com.tie.vibein.tickets.data.retrofit.TicketApiEndPoint
 import retrofit2.Retrofit
@@ -40,5 +41,9 @@ object RetrofitClient {
 
     val ticketApiEndPoint: TicketApiEndPoint by lazy {
         retrofit.create(TicketApiEndPoint::class.java)
+    }
+
+    val notificationApiEndPoint: NotificationApiEndPoint by lazy {
+        retrofit.create(NotificationApiEndPoint::class.java)
     }
 }

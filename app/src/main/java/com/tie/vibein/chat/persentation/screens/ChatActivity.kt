@@ -25,6 +25,7 @@ import com.tie.vibein.chat.persentation.adapter.ChatAdapter
 import com.tie.vibein.chat.persentation.adapter.ChatItem
 import com.tie.vibein.chat.presentation.viewmodel.ChatViewModel
 import com.tie.vibein.databinding.ActivityChatBinding
+import com.tie.vibein.utils.EdgeToEdgeUtils
 import com.tie.vibein.utils.NetworkState
 import java.text.SimpleDateFormat
 import java.util.*
@@ -121,6 +122,7 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

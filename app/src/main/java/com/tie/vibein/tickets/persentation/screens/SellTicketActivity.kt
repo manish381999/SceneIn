@@ -21,6 +21,7 @@ import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.databinding.ActivitySellTicketBinding
 import com.tie.vibein.tickets.data.models.AnalyzedTicketData
 import com.tie.vibein.tickets.presentation.viewmodel.TicketViewModel
+import com.tie.vibein.utils.EdgeToEdgeUtils
 import com.tie.vibein.utils.NetworkState
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -61,6 +62,7 @@ class SellTicketActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivitySellTicketBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

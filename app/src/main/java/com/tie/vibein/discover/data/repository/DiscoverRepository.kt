@@ -3,8 +3,7 @@ package com.tie.vibein.discover.data.repository
 import com.tie.vibein.createEvent.data.models.ApiResponse
 import com.tie.vibein.credentials.data.retrofit.RetrofitClient
 import com.tie.vibein.discover.data.model.GetEventsResponse
-import com.tie.vibein.discover.data.models.EventDetailsResponse
-import com.tie.vibein.discover.data.models.GetUsersResponse
+import com.tie.vibein.discover.data.models.EventDetailResponse
 import retrofit2.Response
 
 class DiscoverRepository {
@@ -30,15 +29,12 @@ class DiscoverRepository {
     suspend fun getEventDetailsById(
         userId: String,
         eventId: String
-    ): Response<EventDetailsResponse> {
+    ): Response<EventDetailResponse> {
         return api.getEventDetailsById(userId, eventId)
     }
 
-    suspend fun getUserDetailsById(
-        userId: String,
-        page: Int,
-        limit: Int
-    ): Response<GetUsersResponse> {
-        return api.getUserDetailsById(userId, page, limit)
-    }
+    suspend fun getEventParticipants(viewerId: String, eventId: String, page: Int) =
+        api.getEventParticipants(viewerId, eventId, page)
+
+
 }

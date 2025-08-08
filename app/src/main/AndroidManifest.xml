@@ -24,7 +24,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting"
         tools:targetApi="31">
-
+        <activity
+            android:name=".profile.persentation.screen.ProfilePicturePreviewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VibeIn"/>
+        <activity
+            android:name=".profile.persentation.screen.EditProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VibeIn" />
+        <activity
+            android:name=".credentials.presentation.screens.CropActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VibeIn" />
+        <activity
+            android:name=".notifications.presentation.screens.ConnectionRequestsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VibeIn" />
+        <activity
+            android:name=".notifications.presentation.screens.NotificationsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VibeIn" />
         <activity
             android:name=".tickets.persentation.screens.ManageListingActivity"
             android:exported="false"
@@ -41,10 +60,11 @@
             android:name=".tickets.persentation.screens.CheckoutActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="false"
-            android:theme="@style/Theme.Razorpay" /> <activity
-        android:name=".tickets.persentation.screens.TicketDetailActivity"
-        android:exported="false"
-        android:theme="@style/Theme.VibeIn" />
+            android:theme="@style/Theme.Razorpay" />
+        <activity
+            android:name=".tickets.persentation.screens.TicketDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VibeIn" />
         <activity
             android:name=".tickets.persentation.screens.SellTicketActivity"
             android:exported="false"
@@ -82,12 +102,12 @@
             android:name=".credentials.presentation.screens.LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
-
         <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -99,6 +119,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification_icon" />
@@ -108,6 +129,7 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -115,9 +137,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_provider_paths" />
         </provider>
-
     </application>
 
 </manifest>

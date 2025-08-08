@@ -6,6 +6,62 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:shimmer_auto_start="true"
+        app:shimmer_duration="1500">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_15_dsa">
+
+            <!-- Repeat a few placeholder views -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_100_dsa"
+                android:layout_marginBottom="@dimen/dp_10_dsa"
+                android:background="@drawable/shimmer_placeholder"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_100_dsa"
+                android:layout_marginBottom="@dimen/dp_10_dsa"
+                android:background="@drawable/shimmer_placeholder"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_100_dsa"
+                android:layout_marginBottom="@dimen/dp_10_dsa"
+                android:background="@drawable/shimmer_placeholder"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_100_dsa"
+                android:layout_marginBottom="@dimen/dp_10_dsa"
+                android:background="@drawable/shimmer_placeholder"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_100_dsa"
+                android:layout_marginBottom="@dimen/dp_10_dsa"
+                android:background="@drawable/shimmer_placeholder"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_100_dsa"
+                android:layout_marginBottom="@dimen/dp_10_dsa"
+                android:background="@drawable/shimmer_placeholder"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_100_dsa"
+                android:layout_marginBottom="@dimen/dp_10_dsa"
+                android:background="@drawable/shimmer_placeholder"/>
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mToolBar"
         android:layout_width="match_parent"
@@ -67,23 +123,6 @@
                 app:civ_border_color="#D1B3FF"
                 />
 
-
-            <ImageView
-                android:id="@+id/iv_edit"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_margin="4dp"
-                android:background="@drawable/bg_circle_white"
-                android:src="@drawable/ic_camera"
-                android:padding="@dimen/dp_6_dsa"
-                android:elevation="@dimen/dp_2"
-                app:layout_constraintTop_toTopOf="@+id/ivProfile"
-                app:layout_constraintEnd_toEndOf="@id/ivProfile"
-                app:layout_constraintBottom_toBottomOf="@id/ivProfile"
-                app:layout_constraintStart_toStartOf="@id/ivProfile"
-                app:layout_constraintVertical_bias="1.1"
-                app:layout_constraintHorizontal_bias="1"
-                />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditProfile"

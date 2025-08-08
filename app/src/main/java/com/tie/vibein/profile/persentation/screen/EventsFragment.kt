@@ -6,24 +6,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.R
 import com.tie.vibein.createEvent.persentation.screens.CreateEventFragment
 import com.tie.vibein.databinding.FragmentEventsBinding
 import com.tie.vibein.profile.presentation.adapter.EventAdapter
-import com.tie.vibein.profile.presentation.viewmodel.ProfileViewModel
+import com.tie.vibein.profile.persentation.view_model.ProfileViewModel
 import com.tie.vibein.utils.NetworkState
 
 class EventsFragment : Fragment() {
 
     private var _binding: FragmentEventsBinding? = null
     private val binding get() = _binding!!
+    // We get the ProfileViewModel instance shared from the parent fragment (ProfileFragment)
+    private val profileViewModel: ProfileViewModel by viewModels({ requireParentFragment() })
 
-    private val profileViewModel: ProfileViewModel by viewModels()
+    // The adapter is now a class-level property
+    private lateinit var eventAdapter: EventAdapter
+    private var userId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,51 +39,70 @@ class EventsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initComponents()
+
+        // This userId will be from the parent ProfileFragment, determining whose events to show.
+        // It's better to get this from arguments, passed by the ProfileViewPagerAdapter.
+        userId = SP.getString(requireContext(), SP.USER_ID)
+
+        setupRecyclerView()
+        setupClickListeners()
+        setupObservers()
+
+        // Initial data fetch
+        if (!userId.isNullOrEmpty()) {
+            profileViewModel.fetchEventsByUser(userId!!)
+        }
     }
 
-    private fun initComponents() {
-        val userId = SP.getString(requireContext(), SP.USER_ID) ?: ""
+    private fun setupRecyclerView() {
+        // --- THIS IS THE FIX ---
+        // Initialize the adapter ONCE with an empty list.
+        eventAdapter = EventAdapter(requireContext())
         binding.rvEvent.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvEvent.adapter = eventAdapter
+        // --- END OF FIX ---
+    }
 
-        profileViewModel.fetchEventsByUser(userId)
+    private fun setupClickListeners() {
+        binding.btnCreateEvent.setOnClickListener {
+            // Your navigation logic to CreateEventFragment is correct
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_profile, CreateEventFragment()) // Assuming fragment_profile is your container ID
+                .addToBackStack(null)
+                .commit()
+        }
+    }
 
-        profileViewModel.eventsState.observe(viewLifecycleOwner, Observer { state ->
+    private fun setupObservers() {
+        profileViewModel.eventsState.observe(viewLifecycleOwner) { state ->
+            // You can add shimmer or progress bar logic here
+            binding.progressBar.isVisible = state is NetworkState.Loading
+
             when (state) {
-                is NetworkState.Loading -> {
-                    // Show loading UI
-                }
-
                 is NetworkState.Success -> {
-                    val allEvents = state.data
-                    val filteredEvents = allEvents.filter { it.status == "1" }
+                    // Filter the events to only show active ones.
+                    val activeEvents = state.data.filter { it.status == "1" }
 
-                    if (filteredEvents.isEmpty()) {
-                        binding.rvEvent.visibility = View.GONE
-                        binding.emptyStateLayout.visibility = View.VISIBLE
-                    } else {
-                        binding.rvEvent.visibility = View.VISIBLE
-                        binding.emptyStateLayout.visibility = View.GONE
-                        val adapter = EventAdapter(requireContext(), filteredEvents)
-                        binding.rvEvent.adapter = adapter
-                    }
-                    binding.btnCreateEvent.setOnClickListener {
-                        // Create an instance of CreateEventFragment
-                        val createEventFragment = CreateEventFragment()
+                    // Set visibility of the empty state and the RecyclerView.
+                    binding.emptyStateLayout.isVisible = activeEvents.isEmpty()
+                    binding.rvEvent.isVisible = activeEvents.isNotEmpty()
 
-                        // Begin a FragmentTransaction and replace the current fragment with CreateEventFragment
-                        requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_profile, createEventFragment)  // Use the ID of your container
-                            .addToBackStack(null)  // Optional: To add to back stack
-                            .commit()
-                    }
+                    // --- THIS IS THE FIX ---
+                    // Call the updateEvents function to populate the adapter with the new data.
+                    eventAdapter.updateEvents(activeEvents)
+                    // --- END OF FIX ---
                 }
-
                 is NetworkState.Error -> {
                     Log.e("EventsFragment", "Error: ${state.message}")
+                    binding.emptyStateLayout.isVisible = true
+                    binding.rvEvent.isVisible = false
+                    Toast.makeText(requireContext(), "Error loading events.", Toast.LENGTH_SHORT).show()
+                }
+                is NetworkState.Loading -> {
+                    // Handled above by progress bar
                 }
             }
-        })
+        }
     }
 
     override fun onDestroyView() {

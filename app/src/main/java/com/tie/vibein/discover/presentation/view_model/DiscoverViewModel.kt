@@ -7,7 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.tie.vibein.createEvent.data.models.ApiResponse
 import com.tie.vibein.discover.data.model.EventSummary
 import com.tie.vibein.discover.data.models.EventDetail
-import com.tie.vibein.discover.data.models.GetUsersResponse
+import com.tie.vibein.discover.data.models.Participant
+
 import com.tie.vibein.discover.data.repository.DiscoverRepository
 import com.tie.vibein.utils.NetworkState
 import kotlinx.coroutines.launch
@@ -29,13 +30,14 @@ class DiscoverViewModel : ViewModel() {
     private val _unjoinEventState = MutableLiveData<NetworkState<ApiResponse>?>()
     val unjoinEventState: LiveData<NetworkState<ApiResponse>?> get() = _unjoinEventState
 
-    // LiveData for user details
-    private val _userDetailsState = MutableLiveData<NetworkState<List<GetUsersResponse.User>>>()
-    val userDetailsState: LiveData<NetworkState<List<GetUsersResponse.User>>> get() = _userDetailsState
 
     // LiveData for single event detail (EventDetail)
     private val _eventDetailsState = MutableLiveData<NetworkState<EventDetail?>>()
     val eventDetailsState: LiveData<NetworkState<EventDetail?>> get() = _eventDetailsState
+
+    private val _participantsState = MutableLiveData<NetworkState<List<Participant>>>()
+    val participantsState: LiveData<NetworkState<List<Participant>>> get() = _participantsState
+
 
     // Fetch events by city (list of EventSummary)
     fun fetchCityEvents(userId: String, city: String, currentDate: String) {
@@ -108,25 +110,7 @@ class DiscoverViewModel : ViewModel() {
         _unjoinEventState.value = null
     }
 
-    // Fetch user details by ID
-    fun fetchUserDetailsById(userId: String, page: Int, limit: Int) {
-        _userDetailsState.value = NetworkState.Loading
 
-        viewModelScope.launch {
-            try {
-                val response: Response<GetUsersResponse> = repository.getUserDetailsById(userId, page, limit)
-                if (response.isSuccessful && response.body()?.status == "success") {
-                    val users = response.body()?.users ?: emptyList()
-                    _userDetailsState.postValue(NetworkState.Success(users))
-                } else {
-                    val message = response.body()?.message ?: "Unknown error"
-                    _userDetailsState.postValue(NetworkState.Error(message))
-                }
-            } catch (e: Exception) {
-                _userDetailsState.postValue(NetworkState.Error("Exception: ${e.localizedMessage}"))
-            }
-        }
-    }
 
     // Fetch single event details by event ID (EventDetail)
     fun fetchEventDetailsById(userId: String, eventId: String) {
@@ -134,7 +118,7 @@ class DiscoverViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val response: Response<com.tie.vibein.discover.data.models.EventDetailsResponse> =
+                val response: Response<com.tie.vibein.discover.data.models.EventDetailResponse> =
                     repository.getEventDetailsById(userId, eventId)
 
                 if (response.isSuccessful && response.body()?.status == "success") {
@@ -146,6 +130,23 @@ class DiscoverViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _eventDetailsState.postValue(NetworkState.Error("Exception: ${e.localizedMessage}"))
+            }
+        }
+    }
+
+
+    fun fetchEventParticipants(viewerId: String, eventId: String, page: Int) {
+        _participantsState.value = NetworkState.Loading
+        viewModelScope.launch {
+            try {
+                val response = repository.getEventParticipants(viewerId, eventId, page)
+                if (response.isSuccessful) {
+                    _participantsState.postValue(NetworkState.Success(response.body()!!.participants))
+                } else {
+                    _participantsState.postValue(NetworkState.Error("Failed to load participants."))
+                }
+            } catch(e: Exception) {
+                _participantsState.postValue(NetworkState.Error(e.message ?: "An error occurred."))
             }
         }
     }

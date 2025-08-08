@@ -1,41 +1,51 @@
 package com.tie.vibein.discover.data.models
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data class EventDetailsResponse(
-    val status: String,
-    val message: String,
-    val event: EventDetail
-) : Parcelable
+import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-@Parcelize
+// This represents the main response from your get_event_details_by_id.php
+data class EventDetailResponse(
+    @SerializedName("status") val status: String,
+    @SerializedName("message") val message: String,
+    @SerializedName("event") val event: EventDetail
+)
+
+// This is the complete object for a single event
 data class EventDetail(
-    val id: String,
-    val user_id: String,
-    val event_name: String,
-    val category_id: String,
-    val event_description: String,
-    val event_date: String,
-    val start_time: String,
-    val end_time: String,
-    val eventDeliveryMode: String,
-    val venueLocation: String?,
-    val meetingLink: String?,
-    val maximum_participants: String,
-    val selectedEventType: String,
-    val ticketPrice: String,
-    val cover_image: String?,
-    val created_date: String,
-    val status: String,
-    val pincode: String?,
-    val city: String?,
-    val full_address: String?,
-    val category_name: String?,
-    val age_restriction: String?,
-    val participants_user_id: String?,
-    val joined_participants: Int?,
-    val role: String?,
-    val has_joined: Boolean,
-    val is_full: Boolean
-) : Parcelable
+    @SerializedName("id") val id: String,
+    @SerializedName("user_id") val user_id: String,
+    @SerializedName("event_name") val event_name: String?,
+    @SerializedName("event_description") val event_description: String?,
+    @SerializedName("event_date") val event_date: String?,
+    @SerializedName("start_time") val start_time: String?,
+    @SerializedName("end_time") val end_time: String?,
+    @SerializedName("eventDeliveryMode") val eventDeliveryMode: String?,
+    @SerializedName("venueLocation") val venueLocation: String?,
+    @SerializedName("maximum_participants") val maximum_participants: String,
+    @SerializedName("ticketPrice") val ticketPrice: String?,
+    @SerializedName("cover_image") val cover_image: String?,
+    @SerializedName("category_name") val category_name: String?,
+    @SerializedName("age_restriction") val age_restriction: String?,
+    @SerializedName("joined_participants") val joined_participants: Int,
+    @SerializedName("has_joined") val has_joined: Boolean,
+    @SerializedName("is_full") val is_full: Boolean,
+    // --- The new, nested objects ---
+    @SerializedName("host_details") val host_details: HostDetails?,
+    @SerializedName("participants_preview") val participants_preview: List<ParticipantPreview>
+)
+
+// A simple data class for the host's details
+data class HostDetails(
+    @SerializedName("user_id") val user_id: Int,
+    @SerializedName("name") val name: String?,
+    @SerializedName("user_name") val user_name: String?,
+    @SerializedName("profile_pic") val profile_pic: String?
+)
+
+// A simple data class for the participants in the preview list
+data class ParticipantPreview(
+    @SerializedName("user_id") val user_id: Int,
+    @SerializedName("name") val name: String?,
+    @SerializedName("user_name") val user_name: String?,
+    @SerializedName("profile_pic") val profile_pic: String?
+)

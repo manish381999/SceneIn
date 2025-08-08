@@ -13,8 +13,11 @@ import com.tie.vibein.profile.data.models.Event
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EventAdapter(private val context: Context, private val eventList: List<Event>) :
+class EventAdapter(private val context: Context) : // The list is no longer in the constructor
     RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
+
+    // --- THIS IS THE FIX 1/2: The internal list is now a mutable var ---
+    private var eventList: List<Event> = emptyList()
 
     inner class EventViewHolder(val binding: ItemEventBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -26,14 +29,12 @@ class EventAdapter(private val context: Context, private val eventList: List<Eve
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = eventList[position]
 
-        // Format date and time based on year
         val formattedDateTime = formatEventDateTime(event.event_date, event.start_time)
         holder.binding.tvDateTime.text = formattedDateTime
-
         holder.binding.tvEventName.text = event.event_name
         holder.binding.tvEventFullAddress.text = event.venueLocation
         holder.binding.tvEventJoined.text = "${event.joined_participants ?: "0"} joined"
-        holder.binding.tvRole.text=event.role
+        holder.binding.tvRole.text = event.role
 
         Glide.with(context)
             .load(event.cover_image)
@@ -41,35 +42,41 @@ class EventAdapter(private val context: Context, private val eventList: List<Eve
             .into(holder.binding.ivCoverImage)
 
         holder.binding.btnViewDetails.setOnClickListener {
-            val intent = Intent(context, EventDetailActivity::class.java)
-            intent.putExtra("event_id", event.id)
-            intent.putExtra("source", "profile")
+            val intent = Intent(context, EventDetailActivity::class.java).apply {
+                putExtra("event_id", event.id)
+                putExtra("source", "profile")
+            }
             context.startActivity(intent)
         }
     }
 
     override fun getItemCount(): Int = eventList.size
 
-    private fun formatEventDateTime(dateStr: String, timeStr: String): String {
+    // --- THIS IS THE FIX 2/2: The missing updateEvents function ---
+    /**
+     * Updates the list of events in the adapter and refreshes the RecyclerView.
+     */
+    fun updateEvents(newEvents: List<Event>) {
+        this.eventList = newEvents
+        notifyDataSetChanged() // Tell the RecyclerView to redraw itself
+    }
+
+    private fun formatEventDateTime(dateStr: String?, timeStr: String?): String {
+        if (dateStr.isNullOrBlank() || timeStr.isNullOrBlank()) return "Date not specified"
         return try {
             val inputFormat = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
             val dateTime = inputFormat.parse("$dateStr $timeStr") ?: return "$dateStr, $timeStr"
-
             val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-
-            val eventCalendar = Calendar.getInstance()
-            eventCalendar.time = dateTime
+            val eventCalendar = Calendar.getInstance().apply { time = dateTime }
             val eventYear = eventCalendar.get(Calendar.YEAR)
-
             val outputFormat = if (eventYear == currentYear) {
-                SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault())  // e.g., May 03 15:26
+                SimpleDateFormat("MMM dd, hh:mm a", Locale.getDefault())
             } else {
-                SimpleDateFormat("MMM dd yyyy, HH:mm", Locale.getDefault())  // e.g., May 03, 2024 15:26
+                SimpleDateFormat("MMM dd yyyy, hh:mm a", Locale.getDefault())
             }
-
             outputFormat.format(dateTime)
         } catch (e: Exception) {
-            "$dateStr, $timeStr" // fallback in case of error
+            "$dateStr, $timeStr"
         }
     }
 }

@@ -1,25 +1,76 @@
 package com.tie.vibein.profile.persentation.screen
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.tie.vibein.R
-
+import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import com.tie.dreamsquad.utils.SP
+import com.tie.vibein.databinding.FragmentTicketsBinding
+import com.tie.vibein.profile.persentation.view_model.ProfileViewModel
+import com.tie.vibein.tickets.persentation.adapter.MyTicketsAdapter // We reuse this great adapter
+import com.tie.vibein.tickets.persentation.screens.PurchasedTicketDetailActivity
+import com.tie.vibein.utils.NetworkState
 
 class TicketsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentTicketsBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: ProfileViewModel by viewModels({ requireParentFragment() })
+    private lateinit var myTicketsAdapter: MyTicketsAdapter
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tickets, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentTicketsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val currentUserId = SP.getString(requireContext(), SP.USER_ID) ?: ""
+
+        setupRecyclerView()
+        setupObservers()
+
+        if (currentUserId.isNotEmpty()) {
+            viewModel.fetchMyTicketsActivity(currentUserId)
+        }
+    }
+
+    private fun setupRecyclerView() {
+        myTicketsAdapter = MyTicketsAdapter { clickedTicket ->
+            if (clickedTicket.transactionId != null) { // This is a purchased ticket
+                val intent = Intent(requireContext(), PurchasedTicketDetailActivity::class.java).apply {
+                    putExtra("TICKET_DATA", clickedTicket)
+                }
+                startActivity(intent)
+            } else { // This is a listed ticket
+                // TODO: Navigate to ManageListingActivity
+                Toast.makeText(requireContext(), "Tapped your ${clickedTicket.listingStatus} ticket", Toast.LENGTH_SHORT).show()
+            }
+        }
+        binding.rvTickets.adapter = myTicketsAdapter
+    }
+
+    private fun setupObservers() {
+        viewModel.myTicketsState.observe(viewLifecycleOwner) { state ->
+            binding.progressBar.isVisible = state is NetworkState.Loading
+            when(state) {
+                is NetworkState.Success -> {
+                    val allMyTickets = (state.data.listedTickets + state.data.purchasedTickets)
+                       // .sortedByDescending { it.created_at }
+                    binding.tvEmptyMessage.isVisible = allMyTickets.isEmpty()
+                    myTicketsAdapter.submitList(allMyTickets)
+                }
+                is NetworkState.Error -> {
+                    Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_SHORT).show()
+                }
+                else -> {}
+            }
+        }
+    }
+
+    override fun onDestroyView() { super.onDestroyView(); _binding = null }
 }

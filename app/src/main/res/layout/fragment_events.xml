@@ -15,6 +15,18 @@
      app:layout_constraintStart_toStartOf="parent"
      app:layout_constraintEnd_toEndOf="parent" />
 
+ <ProgressBar
+     android:id="@+id/progressBar"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_gravity="center"
+     app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintBottom_toBottomOf="parent"
+     android:visibility="gone"/>
+
+
  <!-- Empty State Layout -->
  <LinearLayout
      android:id="@+id/emptyStateLayout"
@@ -54,5 +66,7 @@
       app:backgroundTint="@null"
       app:cornerRadius="8dp" />
  </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

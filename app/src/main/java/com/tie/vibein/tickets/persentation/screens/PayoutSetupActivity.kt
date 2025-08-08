@@ -11,6 +11,7 @@ import com.google.android.material.tabs.TabLayout
 import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.databinding.ActivityPayoutSetupBinding
 import com.tie.vibein.tickets.presentation.viewmodel.TicketViewModel
+import com.tie.vibein.utils.EdgeToEdgeUtils
 import com.tie.vibein.utils.NetworkState
 import org.json.JSONObject
 
@@ -21,6 +22,7 @@ class PayoutSetupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivityPayoutSetupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

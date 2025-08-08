@@ -23,6 +23,17 @@ class TicketFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupViewPagerWithTabs()
         setupClickListeners()
+
+        // --- THIS IS THE FINAL PIECE OF THE LOGIC ---
+        // Check if the arguments bundle (passed from BaseActivity) contains our index.
+        val initialTabIndex = arguments?.getInt("initial_tab_index", 0) ?: 0
+
+        // After a small delay to ensure the UI is fully laid out,
+        // switch to the requested tab.
+        binding.viewPager.post {
+            binding.viewPager.setCurrentItem(initialTabIndex, false) // false for no smooth scroll
+        }
+        // --- END OF LOGIC ---
     }
 
     private fun setupViewPagerWithTabs() {

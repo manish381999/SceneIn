@@ -28,6 +28,7 @@ import com.tie.vibein.credentials.data.repository.AuthRepository
 import com.tie.vibein.credentials.presentation.view_model.AuthViewModel
 import com.tie.vibein.credentials.presentation.view_model.AuthViewModelFactory
 import com.tie.vibein.databinding.ActivityOtpVerificationBinding
+import com.tie.vibein.utils.EdgeToEdgeUtils
 import com.tie.vibein.utils.NetworkState
 import java.util.regex.Pattern
 
@@ -52,6 +53,7 @@ class OtpVerificationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivityOtpVerificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

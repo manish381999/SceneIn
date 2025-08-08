@@ -4,12 +4,22 @@ import com.tie.vibein.credentials.data.retrofit.RetrofitClient
 import com.tie.vibein.profile.data.models.ConnectionActionResponse
 import com.tie.vibein.profile.data.models.ConnectionStatusResponse
 import com.tie.vibein.profile.data.models.GetEventsByUserResponse
-import com.tie.vibein.profile.data.retrofit.ProfileApiEndPoint
+import com.tie.vibein.profile.data.models.GetUserResponse
 import retrofit2.Response
 
 class ProfileRepository {
 
     private val api = RetrofitClient.profileApiEndPoint
+
+
+
+    // === NEW: Repository function for the private profile ===
+    suspend fun getMyProfile(userId: String) = api.getMyProfile(userId)
+
+    // === UPDATED: Replaces getEventsByUser ===
+    suspend fun getPublicUserProfile(userId: String): Response<GetUserResponse> {
+        return api.getPublicUserProfile(userId)
+    }
 
     suspend fun getEventsByUser(userId: String): Response<GetEventsByUserResponse> {
         return api.getEventsByUser(userId)
@@ -29,4 +39,9 @@ class ProfileRepository {
     suspend fun respondToConnectionRequest(connectionId: String, response: String): Response<ConnectionActionResponse> {
         return api.respondToConnectionRequest(connectionId, response)
     }
+
+    suspend fun getMyTicketsActivity(userId: String) = api.getMyTicketsActivity(userId)
+
+    // --- NEW: Repository function for the "Connections" tab ---
+    suspend fun getMyConnections(userId: String) = api.getMyConnections(userId)
 }

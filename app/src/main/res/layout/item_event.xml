@@ -1,139 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cvEvent"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="@dimen/dp_10_dsa"
-        app:cardElevation="@dimen/dp_3_dsa"
-        app:cardCornerRadius="@dimen/dp_15_dsa"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:background="@drawable/bg_event">
 
+        <!-- Cover Image with Role Badge -->
+        <FrameLayout
+            android:id="@+id/image_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
+            <ImageView
+                android:id="@+id/ivCoverImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/backgrounds/scenic" />
 
+            <TextView
+                android:id="@+id/tvRole"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|start"
+                android:layout_margin="12dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:background="@drawable/bg_pill"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="HOSTING" />
+
+        </FrameLayout>
+
+        <!-- Details Section -->
         <LinearLayout
+            android:id="@+id/details_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/image_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/tvEventName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textStyle="bold"
+                tools:text="Summer water park" />
+
+            <TextView
+                android:id="@+id/tvDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawableStart="@drawable/ic_calendar"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/textSecondary"
+                tools:text="Aug 30, 10:00 AM" />
+
+            <TextView
+                android:id="@+id/tvEventFullAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:drawableStart="@drawable/ic_location"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/textSecondary"
+                tools:text="VGP Wonder World" />
+
+            <TextView
+                android:id="@+id/tvEventJoined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:drawableStart="@drawable/ic_group_"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/textSecondary"
+                tools:text="1 joined"/>
+
+        </LinearLayout>
+
+        <!-- Action Button Section -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/gray100"
+            app:layout_constraintTop_toBottomOf="@id/details_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnViewDetails"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:background="@drawable/bg_event">
+            android:text="View Details"
+            android:gravity="center"
+            app:icon="@drawable/ic_arrow_forward_ios"
+            app:iconGravity="textEnd"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.8">
-
-                <ImageView
-                    android:id="@+id/ivCoverImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_placeholder"/>
-
-                <TextView
-                    android:id="@+id/tvRole"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|start"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:text="Hosting"
-                    android:textSize="@dimen/sp_14_dsa"
-                    android:padding="@dimen/dp_5_dsa"
-                    android:background="@color/colorPrimary"
-                    android:textColor="@color/textOnPrimary"/>
-            </FrameLayout>
-
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.2"
-                android:padding="@dimen/dp_5_dsa"
-                android:layout_marginStart="@dimen/dp_5_dsa"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvEventName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rock Band"
-                    android:textColor="@color/textPrimary"
-                    android:textSize="@dimen/_12ssp"
-                    android:fontFamily="@font/poppins_medium"/>
-
-                <TextView
-                    android:id="@+id/tvDateTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="May 01, 6:13 PM"
-                    android:gravity="center"
-                    android:fontFamily="@font/poppins"
-                    android:drawablePadding="@dimen/dp_5_dsa"
-                    android:textColor="@color/textPrimary"
-                    android:textSize="@dimen/_10ssp"
-                    app:drawableStartCompat="@drawable/ic_event" />
-
-                <TextView
-                    android:id="@+id/tvEventFullAddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Coffee? Coffee!, T. Nagar"
-                    android:gravity="center"
-                    android:drawableStart="@drawable/ic_location"
-                    android:layout_marginTop="@dimen/dp_5_dsa"
-                    android:drawablePadding="@dimen/dp_5_dsa"
-                    android:textSize="@dimen/_10ssp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:scrollHorizontally="false"
-                    android:textColor="@color/textPrimary" />
-
-
-                <TextView
-                    android:id="@+id/tvEventJoined"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="24 joined"
-                    android:gravity="center"
-                    android:drawableStart="@drawable/ic_group"
-                    android:layout_marginTop="@dimen/dp_5_dsa"
-                    android:drawablePadding="@dimen/dp_5_dsa"
-                    android:textSize="@dimen/_10ssp"/>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnViewDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_28ssp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginHorizontal="@dimen/dp_15_dsa"
-                    android:background="@drawable/bg_edit_profile"
-                    android:layout_marginBottom="@dimen/dp_3_dsa"
-                    app:backgroundTint="@null"
-                    android:textAllCaps="false"
-                    android:fontFamily="@font/poppins_medium"
-                    android:gravity="center"
-                    android:text="View Details"
-                    android:textColor="@color/textPrimary"
-                    android:textSize="@dimen/_10ssp"
-                    app:icon="@drawable/ic_eye"
-                    app:iconGravity="textStart"
-                    app:iconPadding="@dimen/dp_5_dsa"
-                    app:iconTint="@color/textPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

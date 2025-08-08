@@ -2,8 +2,8 @@ package com.tie.vibein.discover.data.retrofit
 
 import com.tie.vibein.createEvent.data.models.ApiResponse
 import com.tie.vibein.discover.data.model.GetEventsResponse
-import com.tie.vibein.discover.data.models.EventDetailsResponse
-import com.tie.vibein.discover.data.models.GetUsersResponse
+import com.tie.vibein.discover.data.models.EventDetailResponse
+import com.tie.vibein.discover.data.models.ParticipantsResponse
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -41,13 +41,15 @@ interface DiscoverApiEndPoint {
     suspend fun getEventDetailsById(
         @Field("user_id") userId: String,
         @Field("event_id") eventId: String
-    ): Response<EventDetailsResponse>
+    ): Response<EventDetailResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/get_user_details_by_id.php")
-    suspend fun getUserDetailsById(
-        @Field("user_id") userId: String, // Can be single or comma-separated multiple user ids
-        @Field("page") page: Int,
-        @Field("limit") limit: Int
-    ): Response<GetUsersResponse>
+    @POST("api_v1/get_event_participants.php")
+    suspend fun getEventParticipants(
+        @Field("viewer_id") viewerId: String,
+        @Field("event_id") eventId: String,
+        @Field("page") page: Int
+    ): Response<ParticipantsResponse>
+
+
 }

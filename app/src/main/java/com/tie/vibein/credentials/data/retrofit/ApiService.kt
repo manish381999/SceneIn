@@ -2,7 +2,9 @@ package com.tie.vibein.credentials.data.retrofit
 
 import com.tie.vibein.createEvent.data.models.ApiResponse
 import com.tie.vibein.credentials.data.models.LoginOtpResponse
+import com.tie.vibein.credentials.data.models.UsernameCheckResponse
 import com.tie.vibein.credentials.data.models.VerifyOtpResponse
+import com.tie.vibein.tickets.data.models.GenericApiResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -40,6 +42,17 @@ interface ApiService {
         @Part("interest") interest: RequestBody,
         @Part profilePic: MultipartBody.Part? // nullable if user doesn't upload a new photo
     ): Response<VerifyOtpResponse>
+
+    @FormUrlEncoded
+    @POST("api_v1/remove_profile_picture.php")
+    suspend fun removeProfilePicture(@Field("user_id") userId: String): Response<GenericApiResponse>
+
+    @FormUrlEncoded
+    @POST("api_v1/check_username.php")
+    suspend fun checkUsernameAvailability(
+        @Field("user_name") userName: String,
+        @Field("user_id") userId: String
+    ): Response<UsernameCheckResponse>
 
     @FormUrlEncoded
     @POST("api_v1/save_fcm_token.php")

@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.credentials.presentation.screens.LoginActivity
+import com.tie.vibein.utils.EdgeToEdgeUtils
 
 // Assuming BaseActivity is in this package, otherwise add the correct import
 // import com.tie.vibein.main.BaseActivity
@@ -38,7 +39,7 @@ class SplashActivity : AppCompatActivity() {
         // 1. Install the splash screen. This MUST be called before super.onCreate().
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         // 2. Set the condition to keep the splash screen visible.
         // It will stay on screen as long as `keepSplashScreenOn` is true.
         splashScreen.setKeepOnScreenCondition { keepSplashScreenOn }

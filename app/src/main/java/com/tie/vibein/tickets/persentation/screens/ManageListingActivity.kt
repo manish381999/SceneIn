@@ -11,7 +11,9 @@ import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.databinding.ActivityManageListingBinding
 import com.tie.vibein.tickets.data.models.Ticket
 import com.tie.vibein.tickets.presentation.viewmodel.TicketViewModel
+import com.tie.vibein.utils.EdgeToEdgeUtils
 import com.tie.vibein.utils.NetworkState
+import com.tie.vibein.utils.dialogs.CustomAlertDialog
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,6 +27,7 @@ class ManageListingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivityManageListingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -111,14 +114,16 @@ class ManageListingActivity : AppCompatActivity() {
     }
 
     private fun showDelistConfirmationDialog() {
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Delist Ticket?")
-            .setMessage("Are you sure you want to remove this ticket from the marketplace? It will no longer be visible to buyers but will remain in your history.")
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Yes, Delist") { _, _ ->
+        CustomAlertDialog.show(
+            context = this,
+            title = "Delist Ticket?",
+            message = "Are you sure you want to remove this ticket from the marketplace? It will no longer be visible to buyers.",
+            positiveButtonText = "Yes, Delist",
+            onPositiveClick = {
+                // The action to perform when "Yes, Delist" is tapped
                 viewModel.delistTicket(ticket!!.id, currentUserId)
             }
-            .show()
+        )
     }
 
     private fun observeViewModel() {
@@ -138,11 +143,14 @@ class ManageListingActivity : AppCompatActivity() {
                         // Fallback to the generic error message if parsing fails
                         state.message
                     }
-                    MaterialAlertDialogBuilder(this)
-                        .setTitle("Update Failed")
-                        .setMessage(errorMessage)
-                        .setPositiveButton("OK", null)
-                        .show()
+                    CustomAlertDialog.show(
+                        context = this,
+                        title = "Update Failed",
+                        message = errorMessage ?: "An unknown error occurred. Please try again.",
+                        positiveButtonText = "OK",
+                        onPositiveClick = { /* No action needed */ },
+                        negativeButtonText = null // This will hide the cancel button
+                    )
                 }
                 else -> {
                     // This handles the case where the state is `null` or `NetworkState.Loading`

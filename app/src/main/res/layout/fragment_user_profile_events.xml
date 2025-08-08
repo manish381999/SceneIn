@@ -1,58 +1,62 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/colorBackground">
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    tools:context=".profile.persentation.screen.UserProfileEventsFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvEvent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Empty State Layout -->
-    <LinearLayout
-        android:id="@+id/emptyStateLayout"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_marginTop="@dimen/dp_50_dsa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvEvent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_event"
+            tools:itemCount="3"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No events found"
-            android:textColor="@color/textPrimary"
-            android:textSize="@dimen/_14ssp"
-            android:fontFamily="@font/poppins_medium"
-            android:layout_marginBottom="12dp" />
+            android:layout_gravity="center"
+            android:visibility="gone"/>
 
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/btnCreateEvent"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Create Event"-->
-<!--            android:textColor="@color/textOnPrimary"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:background="@drawable/bg_button"-->
-<!--            android:textSize="@dimen/_12ssp"-->
-<!--            app:icon="@drawable/ic_create_event"-->
-<!--            app:iconGravity="start"-->
-<!--            app:iconTint="@color/white"-->
-<!--            android:fontFamily="@font/poppins"-->
-<!--            app:backgroundTint="@null"-->
-<!--            app:cornerRadius="8dp" />-->
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/emptyStateLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_event"
+                app:tint="@color/gray400"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="No Events Yet"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="Events this user hosts or attends will appear here."
+                android:textColor="@color/textSecondary" />
+
+        </LinearLayout>
+    </FrameLayout>

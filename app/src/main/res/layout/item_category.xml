@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp"
-    android:orientation="vertical">
+    android:gravity="center"
+    android:padding="4dp">
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
+    <TextView
+        android:id="@+id/tvCategoryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:singleLine="false"
-        app:chipSpacing="8dp" />
+        android:background="@drawable/bg_category_unselected"
+        android:gravity="center"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="16dp"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+        android:textColor="@color/textPrimary"
+        tools:text="Gaming" />
+
 </LinearLayout>

@@ -71,7 +71,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    
+
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
@@ -99,8 +99,6 @@ dependencies {
     implementation ("com.google.android.gms:play-services-location:21.3.0")
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
 
-    // == NEW DEPENDENCIES REQUIRED FOR THE CHAT SYSTEM ==
-    // ================================================================
 
     // 1. LocalBroadcastManager (for real-time in-app communication)
     implementation ("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
@@ -108,10 +106,6 @@ dependencies {
     // 2. Image Compression Library
     implementation ("id.zelory:compressor:3.0.1")
 
-    // 3. Video Compression Library
-    val media3Version = "1.3.1" // Define the version within the dependencies block for clarity if needed
-    implementation("androidx.media3:media3-transformer:$media3Version")
-    implementation("androidx.media3:media3-exoplayer:$media3Version")
 
     // For pinch-to-zoom in the full-screen viewer
     implementation ("com.github.chrisbanes:PhotoView:2.3.0")
@@ -124,7 +118,10 @@ dependencies {
     implementation("com.razorpay:checkout:1.6.41")
     implementation("com.google.mlkit:text-recognition:16.0.1")
 
-    implementation("androidx.security:security-crypto:1.0.0")
+    //BlurTransformation
+    implementation("jp.wasabeef:glide-transformations:4.3.0")
+
+
 
 
 

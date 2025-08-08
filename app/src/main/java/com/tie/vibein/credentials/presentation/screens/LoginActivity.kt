@@ -19,6 +19,7 @@ import com.tie.vibein.credentials.data.repository.AuthRepository
 import com.tie.vibein.credentials.presentation.view_model.AuthViewModel
 import com.tie.vibein.credentials.presentation.view_model.AuthViewModelFactory
 import com.tie.vibein.databinding.ActivityLoginBinding
+import com.tie.vibein.utils.EdgeToEdgeUtils
 import com.tie.vibein.utils.NetworkState
 
 class LoginActivity : AppCompatActivity() {
@@ -32,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         setContentView(binding.root)
 
         initComponents()

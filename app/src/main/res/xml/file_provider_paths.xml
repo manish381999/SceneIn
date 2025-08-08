@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- This grants access to the app's standard files directory -->
+    <files-path
+        name="my_files"
+        path="." />
+
+    <!--
+      THIS IS THE DEFINITIVE FIX:
+      This grants permission for the FileProvider to create links for files
+      stored in your application's temporary cache directory, which is
+      where the camera photos are being saved.
+    -->
+    <cache-path
+        name="my_cache"
+        path="." />
+
+</paths>

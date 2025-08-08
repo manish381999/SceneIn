@@ -1,34 +1,48 @@
-package com.tie.vibein.credentials.presentation.screens // Corrected package name based on file path
+package com.tie.vibein.credentials.presentation.screens
 
+import android.Manifest
 import android.app.Activity
-import android.content.ContentValues.TAG
 import android.content.Intent
-import android.net.Uri // --- ADD THIS IMPORT ---
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.BaseActivity
+import com.tie.vibein.R
 import com.tie.vibein.createEvent.persentation.view_model.CreateEventViewModel
 import com.tie.vibein.credentials.data.models.VerifyOtpResponse
 import com.tie.vibein.databinding.ActivityOnboardingBinding
-import com.tie.vibein.utils.FileUtils
 import com.tie.vibein.credentials.data.repository.AuthRepository
 import com.tie.vibein.credentials.presentation.adapter.CategoryAdapter
 import com.tie.vibein.credentials.presentation.view_model.AuthViewModel
 import com.tie.vibein.credentials.presentation.view_model.AuthViewModelFactory
+import com.tie.vibein.utils.EdgeToEdgeUtils
+import com.tie.vibein.utils.FileUtils
 import com.tie.vibein.utils.NetworkState
+import com.tie.vibein.utils.EditPhotoBottomSheet
+import com.tie.vibein.utils.dialogs.CustomAlertDialog
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 class OnboardingActivity : AppCompatActivity() {
 
@@ -36,16 +50,57 @@ class OnboardingActivity : AppCompatActivity() {
     private val eventViewModel: CreateEventViewModel by viewModels()
     private lateinit var authViewModel: AuthViewModel
 
-    // --- MODIFICATION 1: Store the URI, not the path string ---
     private var selectedImageUri: Uri? = null
+    private var cameraImageUri: Uri? = null
+
     private var selectedCategoryIdsString: String = ""
+    private var isUsernameAvailable = true
+    private val handler = Handler(Looper.getMainLooper())
+    private var usernameCheckRunnable: Runnable? = null
+    private lateinit var currentUserId: String
+
+    private val pickMediaLauncher = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) { launchNativeCropper(uri) }
+    }
+
+    private val takePhotoLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) { cameraImageUri?.let { launchNativeCropper(it) } }
+    }
+
+    private val cropResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { croppedUri ->
+                selectedImageUri = croppedUri
+                Glide.with(this)
+                    .load(selectedImageUri)
+                    .placeholder(R.drawable.ic_profile_placeholder)
+                    .into(binding.ivProfile)
+            }
+        }
+    }
+
+    // --- THIS IS THE CRITICAL MISSING LAUNCHER for Camera Permission ---
+    private val requestCameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission was granted, now we can safely launch the camera.
+            launchCamera()
+        } else {
+            // Permission was denied. Inform the user.
+            Toast.makeText(this, "Camera permission is required to take a new photo.", Toast.LENGTH_LONG).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        authViewModel = ViewModelProvider(this, AuthViewModelFactory(AuthRepository()))[AuthViewModel::class.java]
+        currentUserId = SP.getString(this, SP.USER_ID) ?: ""
+        if (currentUserId.isEmpty()) { finish(); return }
+
+        val factory = AuthViewModelFactory(AuthRepository())
+        authViewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
 
         setupListeners()
         setupObservers()
@@ -53,80 +108,119 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        binding.rvInterested.layoutManager = LinearLayoutManager(this)
-        binding.ivEdit.setOnClickListener { openGallery() }
+        binding.rvInterested.layoutManager = GridLayoutManager(this, 3)
+        binding.ivEdit.setOnClickListener { showEditPhotoBottomSheet() }
         binding.btnSubmit.setOnClickListener { validateAndSubmit() }
+
+        // The username TextWatcher is complete and correct.
+        binding.etUserName.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                usernameCheckRunnable?.let { handler.removeCallbacks(it) }
+                usernameCheckRunnable = Runnable {
+                    val username = s.toString().trim()
+                    if (username.length >= 3) { authViewModel.checkUsername(username, currentUserId) }
+                    else {
+                        binding.usernameStatusIcon.isVisible = false
+                        binding.usernameStatusProgress.isVisible = false
+                        isUsernameAvailable = false
+                        binding.tvUsernameStatusMessage.text = ""
+                        authViewModel.clearUsernameCheckState()
+                    }
+                }
+                handler.postDelayed(usernameCheckRunnable!!, 500)
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { binding.etUserName.error = null }
+        })
+
         addTextWatcher(binding.etFullName)
-        addTextWatcher(binding.etUserName)
         addTextWatcher(binding.etEmail)
-        addTextWatcher(binding.etEventDescription)
+        addTextWatcher(binding.etAboutYou)
     }
 
     private fun setupObservers() {
         eventViewModel.categoryState.observe(this) { state ->
-            when (state) {
-                is NetworkState.Loading -> {}
-                is NetworkState.Success -> {
-                    state.data.let { response ->
-                        binding.rvInterested.adapter = CategoryAdapter(this, response.data) { selectedIds ->
-                            selectedCategoryIdsString = selectedIds.joinToString(",")
-                        }
-                    }
+            if (state is NetworkState.Success) {
+                binding.rvInterested.adapter = CategoryAdapter(
+                    context = this,
+                    categories = state.data.data,
+                    initialSelectedIds = mutableListOf(), // or pass in actual selected IDs
+                ) { selectedIds ->
+                    selectedCategoryIdsString = selectedIds.joinToString(",")
                 }
-                is NetworkState.Error -> {
-                    Toast.makeText(this, "Failed to load categories", Toast.LENGTH_SHORT).show()
-                }
+            } else if (state is NetworkState.Error) {
+                Toast.makeText(this, "Failed to load categories: ${state.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        authViewModel.usernameCheckState.observe(this) { state ->
+            if (state == null) {
+                binding.usernameStatusIcon.isVisible = false
+                binding.usernameStatusProgress.isVisible = false
+                binding.tvUsernameStatusMessage.text = ""
+                return@observe
+            }
+
+            binding.usernameStatusProgress.isVisible = state is NetworkState.Loading
+            binding.usernameStatusIcon.isVisible = state !is NetworkState.Loading
+            binding.tvUsernameStatusMessage.isVisible = state !is NetworkState.Loading
+
+            if (state is NetworkState.Success) {
+                val response = state.data
+                isUsernameAvailable = response.available
+                val iconRes = if (isUsernameAvailable) R.drawable.ic_check_circle else R.drawable.ic_error
+                val colorRes = if (isUsernameAvailable) R.color.colorSuccess else R.color.colorError
+                binding.usernameStatusIcon.setImageResource(iconRes)
+                binding.usernameStatusIcon.setColorFilter(ContextCompat.getColor(this, colorRes))
+                binding.tvUsernameStatusMessage.text = response.message
+                binding.tvUsernameStatusMessage.setTextColor(ContextCompat.getColor(this, colorRes))
+            } else if (state is NetworkState.Error) {
+                isUsernameAvailable = false
+                binding.usernameStatusIcon.setImageResource(R.drawable.ic_error)
+                binding.usernameStatusIcon.setColorFilter(ContextCompat.getColor(this, R.color.colorError))
+                binding.tvUsernameStatusMessage.text = state.message
+                binding.tvUsernameStatusMessage.setTextColor(ContextCompat.getColor(this, R.color.colorError))
             }
         }
 
         authViewModel.updateUserState.observe(this) { state ->
+            val isLoading = state is NetworkState.Loading
+            binding.progressBar.isVisible = isLoading
+            binding.btnSubmit.text = if (isLoading) "" else "Get Started"
+            binding.btnSubmit.isEnabled = !isLoading
             when (state) {
-                is NetworkState.Loading -> {
-                    Toast.makeText(this, "Updating profile...", Toast.LENGTH_SHORT).show()
-                }
                 is NetworkState.Success -> {
-                    Toast.makeText(this, "Profile updated!", Toast.LENGTH_SHORT).show()
-                    saveUserDataToPreferences(state.data)
+                    Toast.makeText(this, "Profile created successfully!", Toast.LENGTH_SHORT).show()
+                    saveUserDataAndFinish(state.data)
                 }
-                is NetworkState.Error -> {
-                    Toast.makeText(this, "Error: ${state.message}", Toast.LENGTH_LONG).show()
-                }
+                is NetworkState.Error -> Toast.makeText(this, "Error: ${state.message}", Toast.LENGTH_LONG).show()
+                else -> {}
+            }
+        }
+
+        authViewModel.removePicState.observe(this) { state ->
+            // You can show a loading indicator here if you want
+            if (state is NetworkState.Success) {
+                // When successful, update SharedPreferences and the UI.
+                SP.saveString(this, SP.USER_PROFILE_PIC, null) // Remove the pic from local storage
+                binding.ivProfile.setImageResource(R.drawable.ic_profile_placeholder) // Reset the UI
+                Toast.makeText(this, state.data, Toast.LENGTH_SHORT).show()
+                // Also update the main user data if needed or trigger a refresh in ProfileFragment
+            } else if (state is NetworkState.Error) {
+                Toast.makeText(this, "Error: ${state.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun saveUserDataToPreferences(response: VerifyOtpResponse) {
-        val user = response.user
-        user?.let {
-            SP.saveString(this, SP.USER_ID, it.user_id)
-            SP.saveString(this, SP.USER_MOBILE, user.mobile_number)
-            SP.saveString(this, SP.FULL_NAME, user.name ?: "")
-            SP.saveString(this, SP.USER_NAME, it.user_name ?: "")
-            SP.saveString(this, SP.USER_EMAIL, it.email_id ?: "")
-            SP.saveString(this, SP.USER_PROFILE_PIC, it.profile_pic ?: "")
-            SP.saveString(this, SP.USER_ABOUT_YOU, user.about_you ?: "")
-            SP.saveString(this, SP.USER_COUNTRY_CODE, it.country_code ?: "")
-            SP.saveString(this, SP.USER_COUNTRY_SHORT_NAME, it.country_short_name ?: "")
-            SP.saveBoolean(this, SP.USER_IS_VERIFIED, it.is_verified)
-            SP.saveString(this, SP.USER_STATUS, it.status)
-            SP.saveString(this, SP.USER_DELETED, it.deleted)
-            SP.saveString(this, SP.USER_CREATED_AT, it.created_at)
-            SP.saveInterestNames(this, SP.USER_INTEREST_NAMES, it.interest_names)
+    private fun saveUserDataAndFinish(response: VerifyOtpResponse) {
+        response.user?.let { user ->
+
             SP.saveString(this, SP.LOGIN_STATUS, SP.SP_TRUE)
-
-            SP.saveBoolean(this, SP.IS_PAYOUT_VERIFIED, user.payout_method_verified)
-            Log.d(TAG, "Saved IS_PAYOUT_VERIFIED: ${user.payout_method_verified}")
-
-            // Save the display-friendly string provided by the server
-            // Use a fallback message just in case
-            val displayInfo = user.payout_info_display ?: "No payout method has been added."
-            SP.saveString(this, SP.PAYOUT_INFO_DISPLAY, displayInfo)
-            Log.d(TAG, "Saved PAYOUT_INFO_DISPLAY: $displayInfo")
-
-            Log.d("UserDataSaved", "All user data saved. Moving to BaseActivity.")
-            val intent = Intent(this, BaseActivity::class.java)
+            val intent = Intent(this, BaseActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
             startActivity(intent)
-            finish() // Finish OnboardingActivity so user can't go back
+            finish()
         }
     }
 
@@ -134,75 +228,117 @@ class OnboardingActivity : AppCompatActivity() {
         val fullName = binding.etFullName.text.toString().trim()
         val userName = binding.etUserName.text.toString().trim()
         val email = binding.etEmail.text.toString().trim()
-        val about = binding.etEventDescription.text.toString().trim()
+        val about = binding.etAboutYou.text.toString().trim()
         var isValid = true
 
-        if (fullName.isEmpty()) {
-            binding.etFullName.error = "Full Name is required"
-            isValid = false
-        }
-        if (userName.isEmpty()) {
-            binding.etUserName.error = "Username is required"
-            isValid = false
-        }
-        if (email.isEmpty()) {
-            binding.etEmail.error = "Email is required"
-            isValid = false
-        }
-        if (about.isEmpty()) {
-            binding.etEventDescription.error = "Tell us about yourself"
-            isValid = false
-        }
-        if (selectedImageUri == null) {
-            Toast.makeText(this, "Please select a profile picture", Toast.LENGTH_SHORT).show()
-            isValid = false
+        if (fullName.isEmpty()) { binding.etFullName.error = "Full Name is required"; isValid = false }
+        if (userName.isEmpty()) { binding.etUserName.error = "Username is required"; isValid = false }
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) { binding.etEmail.error = "A valid email is required"; isValid = false }
+        if (about.isEmpty()) { binding.etAboutYou.error = "Please tell us about yourself"; isValid = false }
+        if (selectedCategoryIdsString.isEmpty()) { Toast.makeText(this, "Please select at least one interest", Toast.LENGTH_SHORT).show(); isValid = false }
+
+        if (authViewModel.usernameCheckState.value is NetworkState.Loading) {
+            Toast.makeText(this, "Verifying username, please wait...", Toast.LENGTH_SHORT).show(); isValid = false
+        } else if (!isUsernameAvailable) {
+            binding.etUserName.error = "This username is not available"; isValid = false
         }
 
         if (!isValid) return
 
-        submitProfile(fullName, userName, email, about)
-    }
-
-    private fun submitProfile(fullName: String, userName: String, email: String, about: String) {
-        val userId = SP.getString(this, SP.USER_ID) ?: ""
-
-        // --- MODIFICATION 3: Create the MultipartBody.Part directly from the stored URI ---
         val profilePicPart: MultipartBody.Part? = selectedImageUri?.let { uri ->
-            // "profile_pic" is the name your server API expects.
             FileUtils.getMultipartBodyPartFromUri(this, uri, "profile_pic")
         }
 
         authViewModel.updateUser(
-            userId = userId.toRequestBody(),
-            name = fullName.toRequestBody(),
-            userName = userName.toRequestBody(),
-            emailId = email.toRequestBody(),
-            aboutYou = about.toRequestBody(),
-            interest = selectedCategoryIdsString.toRequestBody(),
-            profilePic = profilePicPart // Pass the newly created part
+            userId = currentUserId.toRequestBody("text/plain".toMediaType()),
+            name = fullName.toRequestBody("text/plain".toMediaType()),
+            userName = userName.toRequestBody("text/plain".toMediaType()),
+            emailId = email.toRequestBody("text/plain".toMediaType()),
+            aboutYou = about.toRequestBody("text/plain".toMediaType()),
+            interest = selectedCategoryIdsString.toRequestBody("text/plain".toMediaType()),
+            profilePic = profilePicPart
         )
     }
 
-    private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        galleryResultLauncher.launch(intent)
+    private fun showEditPhotoBottomSheet() {
+        val bottomSheet = EditPhotoBottomSheet.newInstance()
+        bottomSheet.onCameraClick = {
+            // --- THIS IS THE DEFINITIVE FIX: Check for permission BEFORE launching camera ---
+            checkCameraPermissionAndLaunch()
+        }
+        bottomSheet.onGalleryClick = {
+            pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+        bottomSheet.onRemoveClick = {
+            CustomAlertDialog.show(
+                context = this,
+                title = "Remove Photo?",
+                message = "Are you sure you want to remove your profile photo?",
+                positiveButtonText = "Remove",
+                onPositiveClick = {
+                    // This now calls the correct ViewModel function
+                    authViewModel.removeProfilePic(currentUserId)
+                }
+            )
+        }
+        bottomSheet.show(supportFragmentManager, "EditPhotoBottomSheet")
     }
 
-    // --- MODIFICATION 2: The launcher now just saves the URI and updates the UI ---
-    private val galleryResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val uri = result.data?.data
-            uri?.let {
-                selectedImageUri = it // Simply store the URI
-                binding.ivProfile.setImageURI(it) // Update the image view
-            } ?: Toast.makeText(this, "Failed to get image", Toast.LENGTH_SHORT).show()
+    private fun checkCameraPermissionAndLaunch() {
+        when {
+            ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
+                launchCamera()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                // --- THIS IS THE FIX ---
+                CustomAlertDialog.show(
+                    context = this,
+                    title = "Permission Needed",
+                    message = "To take a new profile picture, SceneIn needs access to your camera.",
+                    positiveButtonText = "OK",
+                    onPositiveClick = {
+                        // This code runs when the user taps "OK"
+                        requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    }
+                )
+                // --- END OF FIX ---
+            }
+            else -> {
+                requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
         }
     }
 
-    private fun addTextWatcher(editText: android.widget.EditText) {
+    /** This helper function is ONLY called after permission has been granted. */
+    private fun launchCamera() {
+        cameraImageUri = createImageUri()
+        if (cameraImageUri != null) {
+            takePhotoLauncher.launch(cameraImageUri!!)
+        } else {
+            Toast.makeText(this, "Could not create a file for the photo.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun launchNativeCropper(uri: Uri) {
+        val intent = Intent(this, CropActivity::class.java).apply {
+            putExtra(CropActivity.EXTRA_IMAGE_URI, uri.toString())
+        }
+        cropResultLauncher.launch(intent)
+    }
+
+    private fun createImageUri(): Uri? {
+        return try {
+            val file = File(cacheDir, "camera_photo_${System.currentTimeMillis()}.jpg")
+            val authority = "${applicationContext.packageName}.provider"
+            FileProvider.getUriForFile(this, authority, file)
+        } catch (e: Exception) {
+            Log.e("OnboardingActivity", "Error creating image URI for camera", e)
+            null
+        }
+    }
+
+
+    private fun addTextWatcher(editText: EditText) {
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) { if (!s.isNullOrEmpty()) editText.error = null }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -210,5 +346,4 @@ class OnboardingActivity : AppCompatActivity() {
         })
     }
 
-    private fun String.toRequestBody(): RequestBody = this.toRequestBody("text/plain".toMediaType())
 }

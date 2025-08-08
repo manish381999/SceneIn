@@ -16,6 +16,7 @@ import com.tie.vibein.R
 import com.tie.vibein.databinding.ActivityTicketDetailBinding
 import com.tie.vibein.tickets.data.models.Ticket
 import com.tie.vibein.tickets.presentation.viewmodel.TicketViewModel
+import com.tie.vibein.utils.EdgeToEdgeUtils
 import com.tie.vibein.utils.NetworkState
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -38,6 +39,7 @@ class TicketDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivityTicketDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

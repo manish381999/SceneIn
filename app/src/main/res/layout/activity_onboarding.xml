@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:scrollbars="none"
     android:background="@color/colorBackground">
 
@@ -17,7 +18,7 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome to VibeIn"
+            android:text="Welcome to SceneIn"
             android:gravity="center_vertical"
             android:fontFamily="@font/poppins_bold"
             android:textSize="@dimen/_22ssp"
@@ -57,7 +58,6 @@
                     android:layout_width="@dimen/_120sdp"
                     android:layout_height="@dimen/_120sdp"
                     android:src="@drawable/ic_profile_placeholder"
-                    android:scaleType="centerCrop"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -130,20 +130,50 @@
                         android:textSize="@dimen/_12sdp"
                         />
 
-                    <EditText
-                        android:id="@+id/etUserName"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_5_dsa"
-                        android:background="@drawable/bg_input"
-                        android:hint="Enter UserName"
-                        android:fontFamily="@font/poppins"
-                        android:inputType="text"
-                        android:padding="@dimen/_10sdp"
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_Name" />
+                        android:layout_marginTop="4dp">
+                        <EditText
+                            android:id="@+id/etUserName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_input"
+                            android:padding="12dp"
+                            android:hint="Your unique username"
+                            android:inputType="text"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/usernameStatusIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="12dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:visibility="gone"
+                            tools:visibility="visible"/>
+                        <ProgressBar
+                            android:id="@+id/usernameStatusProgress"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="12dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/tvUsernameStatusMessage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        tools:text="This username is available!"/>
+
 
                     <TextView
                         android:id="@+id/tv_email"
@@ -155,6 +185,8 @@
                         android:textColor="@color/textPrimary"
                         android:textSize="@dimen/_12sdp"
                         />
+
+
 
                     <EditText
                         android:id="@+id/etEmail"
@@ -183,7 +215,7 @@
                         />
 
                     <EditText
-                        android:id="@+id/etEventDescription"
+                        android:id="@+id/etAboutYou"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_100sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -216,6 +248,8 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         />
 
+
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSubmit"
                         android:layout_width="wrap_content"
@@ -231,6 +265,14 @@
                         android:layout_marginBottom="@dimen/dp_5_dsa"
                         android:layout_gravity="center_horizontal"
                         app:layout_constraintTop_toBottomOf="@id/rvInterested" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="@color/white"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 

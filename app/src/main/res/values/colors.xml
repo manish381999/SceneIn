@@ -62,5 +62,7 @@
     <color name="chat_bubble_received">@color/colorSurfaceVariant</color> <!-- A clear, neutral background. -->
     <color name="chat_timestamp">@color/textSecondary</color>
 
+    <color name="unread_background_color">#E9F2FF</color> <!-- A very light, subtle blue -->
+
 
 </resources>

@@ -9,6 +9,7 @@ import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
 import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.R // Make sure you have your R file imported
+import com.tie.vibein.utils.EdgeToEdgeUtils
 import org.json.JSONObject
 
 /**
@@ -21,6 +22,7 @@ class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         startPayment()
     }
 

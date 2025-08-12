@@ -20,6 +20,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.firebase.messaging.FirebaseMessaging
 import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.BaseActivity
 import com.tie.vibein.R
@@ -28,6 +29,7 @@ import com.tie.vibein.credentials.data.repository.AuthRepository
 import com.tie.vibein.credentials.presentation.view_model.AuthViewModel
 import com.tie.vibein.credentials.presentation.view_model.AuthViewModelFactory
 import com.tie.vibein.databinding.ActivityOtpVerificationBinding
+import com.tie.vibein.utils.DeviceUtils
 import com.tie.vibein.utils.EdgeToEdgeUtils
 import com.tie.vibein.utils.NetworkState
 import java.util.regex.Pattern
@@ -185,6 +187,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     private fun observeViewModel() {
         // Observer for the OTP verification result
         viewModel.verifyState.observe(this) { networkState ->
+            // --- This observer now has updated logic to handle the auth_token ---
             when (networkState) {
                 is NetworkState.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -192,10 +195,16 @@ class OtpVerificationActivity : AppCompatActivity() {
                 }
                 is NetworkState.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    val user = networkState.data?.user
-                    if (user != null) {
-                        saveUserData(user)
-                        Toast.makeText(this, "OTP Verified Successfully", Toast.LENGTH_SHORT).show()
+                    val response = networkState.data
+                    val user = response?.user
+                    val authToken = response?.authToken
+
+                    if (user != null && !authToken.isNullOrEmpty()) {
+                        // SUCCESS! We have a user and an auth token.
+                        SP.saveString(this, SP.AUTH_TOKEN, authToken)
+                        saveUserData(user) // Save the rest of the user data
+                        Toast.makeText(this, response.message, Toast.LENGTH_SHORT).show()
+
                         val nextIntent = if (user.name.isNullOrEmpty()) {
                             Intent(this, OnboardingActivity::class.java)
                         } else {
@@ -206,8 +215,9 @@ class OtpVerificationActivity : AppCompatActivity() {
                         startActivity(nextIntent)
                         finish()
                     } else {
+                        // This case handles a server success but with missing data.
                         binding.btnContinue.isEnabled = true
-                        Toast.makeText(this, "Verification successful, but user data not found.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, response?.message ?: "An unknown error occurred.", Toast.LENGTH_LONG).show()
                     }
                 }
                 is NetworkState.Error -> {
@@ -242,36 +252,58 @@ class OtpVerificationActivity : AppCompatActivity() {
 
 
     private fun saveUserData(user: UserData) {
-        SP.saveString(this, SP.USER_ID, user.user_id)
-        SP.saveString(this, SP.USER_MOBILE, user.mobile_number)
+        SP.saveString(this, SP.USER_ID, user.userId)
+        SP.saveString(this, SP.USER_MOBILE, user.mobileNumber)
         SP.saveString(this, SP.FULL_NAME, user.name)
-        SP.saveString(this, SP.USER_NAME, user.user_name)
-        SP.saveString(this, SP.USER_EMAIL, user.email_id)
-        SP.saveString(this, SP.USER_PROFILE_PIC, user.profile_pic)
-        SP.saveString(this, SP.USER_ABOUT_YOU, user.about_you)
-        SP.saveString(this, SP.USER_COUNTRY_CODE, user.country_code)
-        SP.saveString(this, SP.USER_COUNTRY_SHORT_NAME, user.country_short_name)
-        SP.saveString(this, SP.USER_IS_VERIFIED, user.is_verified.toString())
+        SP.saveString(this, SP.USER_NAME, user.userName)
+        SP.saveString(this, SP.USER_EMAIL, user.emailId)
+        SP.saveString(this, SP.USER_PROFILE_PIC, user.profilePic)
+        SP.saveString(this, SP.USER_ABOUT_YOU, user.aboutYou)
+        SP.saveString(this, SP.USER_COUNTRY_CODE, user.countryCode)
+        SP.saveString(this, SP.USER_COUNTRY_SHORT_NAME, user.countryShortName)
+        SP.saveString(this, SP.USER_IS_VERIFIED, user.isVerified.toString())
         SP.saveString(this, SP.USER_STATUS, user.status)
         SP.saveString(this, SP.USER_DELETED, user.deleted)
-        SP.saveString(this, SP.USER_CREATED_AT, user.created_at)
-        SP.saveInterestNames(this, SP.USER_INTEREST_NAMES, user.interest_names)
+        SP.saveString(this, SP.USER_CREATED_AT, user.createdAt)
+        SP.saveInterestNames(this, SP.USER_INTEREST_NAMES, user.interestNames)
 
 
-
-        SP.saveBoolean(this, SP.IS_PAYOUT_VERIFIED, user.payout_method_verified)
-        Log.d(TAG, "Saved IS_PAYOUT_VERIFIED: ${user.payout_method_verified}")
+        SP.saveBoolean(this, SP.IS_PAYOUT_VERIFIED, user.payoutMethodVerified)
+        Log.d(TAG, "Saved IS_PAYOUT_VERIFIED: ${user.payoutMethodVerified}")
 
         // Save the display-friendly string provided by the server
         // Use a fallback message just in case
-        val displayInfo = user.payout_info_display ?: "No payout method has been added."
+        val displayInfo = user.payoutInfoDisplay ?: "No payout method has been added."
         SP.saveString(this, SP.PAYOUT_INFO_DISPLAY, displayInfo)
         Log.d(TAG, "Saved PAYOUT_INFO_DISPLAY: $displayInfo")
 
     }
 
     private fun verifyOtp(mobile: String, otp: String) {
-        viewModel.verifyOtp(mobile, otp)
+        binding.progressBar.visibility = View.VISIBLE // Show loading
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("FCM_TOKEN", "Fetching FCM token failed, proceeding without it.", task.exception)
+                // If FCM fails, we still try to log in, but send a null token.
+                sendVerificationRequest(mobile, otp, null)
+                return@addOnCompleteListener
+            }
+            val fcmToken = task.result
+            Log.d("FCM_TOKEN", "Got latest FCM token for verification: $fcmToken")
+            sendVerificationRequest(mobile, otp, fcmToken)
+        }
+    }
+    private fun sendVerificationRequest(mobile: String, otp: String, fcmToken: String?) {
+        // Gather the device details into a simple map for transport.
+        val deviceDetails = mapOf(
+            "device_id" to DeviceUtils.getDeviceId(this),
+            "device_model" to DeviceUtils.getDeviceModel(),
+            "os_version" to DeviceUtils.getOsVersion(),
+            "app_version" to DeviceUtils.getAppVersion()
+        )
+        // Call the ViewModel with the clear, explicit parameters.
+        viewModel.verifyOtp(mobile, otp, fcmToken, deviceDetails)
     }
 
     private fun showOtpNotification(otp: String) {

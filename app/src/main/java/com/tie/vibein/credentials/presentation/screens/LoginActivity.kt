@@ -57,15 +57,15 @@ class LoginActivity : AppCompatActivity() {
                 viewModel.loginWithOtp(mobile, countryCode, countryShortName)
 
                 // ✅ Get FCM Token and send it
-                FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val token = task.result
-                        Log.d("FCM", "Token: $token")
-                        viewModel.sendFcmToken(mobile, token)
-                    } else {
-                        Log.e("FCM", "Fetching FCM token failed", task.exception)
-                    }
-                }
+//                FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        val token = task.result
+//                        Log.d("FCM", "Token: $token")
+//                        viewModel.sendFcmToken(mobile, token)
+//                    } else {
+//                        Log.e("FCM", "Fetching FCM token failed", task.exception)
+//                    }
+//                }
             }
         }
     }

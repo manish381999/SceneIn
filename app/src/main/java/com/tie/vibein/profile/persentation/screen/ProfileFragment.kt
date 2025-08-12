@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -22,11 +21,11 @@ import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.R
 import com.tie.vibein.databinding.FragmentProfileBinding
 import com.tie.vibein.profile.data.models.MyProfileData
-import com.tie.vibein.profile.data.models.PublicProfileData
 import com.tie.vibein.profile.data.models.StatItem
 import com.tie.vibein.profile.persentation.adapter.InterestAdapter
 import com.tie.vibein.profile.persentation.adapter.ProfileViewPagerAdapter
 import com.tie.vibein.profile.persentation.view_model.ProfileViewModel
+import com.tie.vibein.settings.persentation.screen.SettingsActivity
 import com.tie.vibein.utils.NetworkState
 
 class ProfileFragment : Fragment() {
@@ -187,6 +186,10 @@ class ProfileFragment : Fragment() {
                     StatItem(user.totalTicketsBought.toString(), "Tickets Bought")
                 ))
             }
+        }
+
+        binding.ivSetting.setOnClickListener {
+            startActivity(Intent(requireContext(), SettingsActivity::class.java))
         }
     }
 

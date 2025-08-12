@@ -11,6 +11,7 @@ object SP {
     const val SP_TRUE = "SP_TRUE"
     const val SP_FALSE = "SP_FALSE"
     const val USER_ID = "USER_ID"
+    const val AUTH_TOKEN = "AUTH_TOKEN"
     const val USER_MOBILE = "USER_MOBILE"
     const val FULL_NAME = "FULL_NAME"
     const val USER_NAME = "USER_NAME"
@@ -33,10 +34,14 @@ object SP {
     const val CACHED_ADDRESS_LINE = "CACHED_ADDRESS_LINE"
     const val CACHED_STATE = "CACHED_STATE"
     const val CACHED_SUBLOCALITY = "CACHED_SUBLOCALITY"
+    const val PREF_KEY_THEME = "PREF_KEY_THEME"
 
     // --- New constants for the ticket system ---
     const val IS_PAYOUT_VERIFIED = "is_payout_verified"
     const val PAYOUT_INFO_DISPLAY = "payout_info_display"
+
+    const val NOTIFICATIONS_PAUSED = "notifications_paused"
+    const val ACCOUNT_IS_PRIVATE = "account_is_private"
 
     // --- END OF NEW CONSTANTS ---
 

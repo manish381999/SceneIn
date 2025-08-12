@@ -9,6 +9,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Field
+import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -28,7 +29,12 @@ interface ApiService {
     @POST("api_v1/verify_otp.php")
     suspend fun verifyOtp(
         @Field("mobile_number") mobileNumber: String,
-        @Field("otp") otp: String
+        @Field("otp") otp: String,
+        @Field("device_id") deviceId: String,
+        @Field("device_model") deviceModel: String,
+        @Field("os_version") osVersion: String,
+        @Field("app_version") appVersion: String,
+        @Field("fcm_token") fcmToken: String?
     ): Response<VerifyOtpResponse>
 
     @Multipart

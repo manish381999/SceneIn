@@ -14,9 +14,7 @@ import com.tie.vibein.utils.NetworkState
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
+
 
 enum class ChatFilter {
     ALL, REQUESTS, UNREAD
@@ -34,6 +32,7 @@ class ChatViewModel : ViewModel() {
 
     private val _chatHistoryState = MutableLiveData<NetworkState<List<Message>>>()
     val chatHistoryState: LiveData<NetworkState<List<Message>>> = _chatHistoryState
+
 
     private val _sendMessageState = MutableLiveData<NetworkState<SendMessageResponse>>()
     val sendMessageState: LiveData<NetworkState<SendMessageResponse>> = _sendMessageState

@@ -8,12 +8,14 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.tie.vibein.databinding.ActivityBaseBinding
 import com.tie.vibein.utils.EdgeToEdgeUtils
+import com.tie.vibein.utils.ThemeManager
 
 class BaseActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBaseBinding
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeManager.applyTheme(this)
         super.onCreate(savedInstanceState)
         EdgeToEdgeUtils.setUpEdgeToEdge(this) // Correctly sets up edge-to-edge
         binding = ActivityBaseBinding.inflate(layoutInflater)

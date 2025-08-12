@@ -52,18 +52,24 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         }
     }
 
-    fun verifyOtp(mobile: String, otp: String) {
+    fun verifyOtp(
+        mobile: String,
+        otp: String,
+        fcmToken: String?,
+        deviceDetails: Map<String, String>
+    ) {
         _verifyState.value = NetworkState.Loading
         viewModelScope.launch {
-            try {
-                val response = repository.verifyOtp(mobile, otp)
+            _verifyState.value = try {
+                val response = repository.verifyOtp(mobile, otp, fcmToken, deviceDetails)
                 if (response.isSuccessful && response.body() != null) {
-                    _verifyState.value = NetworkState.Success(response.body()!!)
+                    NetworkState.Success(response.body()!!)
                 } else {
-                    _verifyState.value = NetworkState.Error(response.message())
+                    val errorMsg = JSONObject(response.errorBody()!!.string()).getString("message")
+                    NetworkState.Error(errorMsg)
                 }
             } catch (e: Exception) {
-                _verifyState.value = NetworkState.Error(e.localizedMessage ?: "Unknown error")
+                NetworkState.Error(e.message ?: "An unknown error occurred.")
             }
         }
     }

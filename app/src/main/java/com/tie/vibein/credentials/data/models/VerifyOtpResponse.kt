@@ -1,28 +1,71 @@
 package com.tie.vibein.credentials.data.models
 
+import com.google.gson.annotations.SerializedName
+
+// The top-level response wrapper. It now includes the 'auth_token'.
 data class VerifyOtpResponse(
-    val status: String,
-    val message: String,
-    val user: UserData? = null
+    @SerializedName("status") val status: String,
+    @SerializedName("message") val message: String,
+    @SerializedName("auth_token") val authToken: String? = null, // The critical session token
+    @SerializedName("user") val user: UserData? = null
 )
 
+// The definitive UserData class. The field names and data types now
+// perfectly match the JSON response from the final backend script.
 data class UserData(
-    val user_id: String, // Changed to String to match the response format
-    val mobile_number: String,
+    @SerializedName("user_id")
+    val userId: String,
+
+    @SerializedName("mobile_number")
+    val mobileNumber: String,
+
+    @SerializedName("name")
     val name: String?,
-    val user_name: String?,
-    val email_id: String?,
-    val profile_pic: String?, // Full URL included
-    val about_you: String?,
-    val country_code: String?,
-    val country_short_name: String?,
-    val is_verified: Boolean, // Changed to String to match "true" in quotes
-    val status: String, // Already a string in response
-    val deleted: String, // Already a string in response
-    val created_at: String,
-    val fcm_token: String?, // New field
-    val payout_method_type: String?, // Nullable as it's null in response
-    val payout_info_display: String?, // Nullable as it's null in response
-    val payout_method_verified: Boolean,
-    val interest_names: List<String> // List of strings
+
+    @SerializedName("user_name")
+    val userName: String?,
+
+    @SerializedName("email_id")
+    val emailId: String?,
+
+    @SerializedName("profile_pic")
+    val profilePic: String?,
+
+    @SerializedName("about_you")
+    val aboutYou: String?,
+
+    @SerializedName("country_code")
+    val countryCode: String?,
+
+    @SerializedName("country_short_name")
+    val countryShortName: String?,
+
+    @SerializedName("is_verified")
+    val isVerified: Boolean,
+
+    @SerializedName("status")
+    val status: String,
+
+    @SerializedName("deleted")
+    val deleted: String,
+
+    @SerializedName("created_at")
+    val createdAt: String,
+
+    @SerializedName("fcm_token")
+    val fcmToken: String?,
+
+    @SerializedName("payout_method_type")
+    val payoutMethodType: String?,
+
+    // Note: payout_details_encrypted is correctly NOT sent to the client
+
+    @SerializedName("payout_method_verified")
+    val payoutMethodVerified: Boolean,
+
+    @SerializedName("payout_info_display")
+    val payoutInfoDisplay: String?,
+
+    @SerializedName("interest_names")
+    val interestNames: List<String>
 )

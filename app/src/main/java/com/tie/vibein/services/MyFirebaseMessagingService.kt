@@ -36,18 +36,27 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.e(TAG, "New FCM Token: $token")
+        Log.d(TAG, "FCM Token Refreshed: $token")
+        // Just save the new token locally. It will be synced with the server on the next login.
         SP.saveString(this, SP.FCM_TEMP_TOKEN, token)
-        val userId = SP.getString(this, SP.USER_ID)
-        if (!userId.isNullOrEmpty()) {
-            val fcmManager = FcmTokenManager(AuthRepository())
-            fcmManager.updateFcmToken(userId, token)
-        }
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         Log.d(TAG, "--- New FCM Message Received ---")
+
+        val areNotificationsPaused = SP.getBoolean(this, SP.NOTIFICATIONS_PAUSED, false)
+        if (areNotificationsPaused) {
+            // If notifications are paused, we stop right here.
+            Log.i(TAG, "Notifications are paused by the user. Ignoring this push.")
+            // Exception: We should still process delivery reports for chat messages,
+            // as this is a background task that doesn't disturb the user.
+            if (remoteMessage.data["notification_type"] == "new_message") {
+                remoteMessage.data["message_id"]?.let { scheduleDeliveryReport(listOf(it)) }
+            }
+            return // Stop further processing.
+        }
+
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Data Payload: ${remoteMessage.data}")
             handleDataPayload(remoteMessage.data)

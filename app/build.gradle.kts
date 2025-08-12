@@ -38,10 +38,8 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-
-    buildFeatures {
-        viewBinding =true
+        buildConfig = true
+        viewBinding = true
     }
 }
 
@@ -63,6 +61,8 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.androidx.animation.core.android)
     implementation(libs.androidx.constraintlayout.core)
+    implementation(libs.transport.api)
+    implementation(libs.transport.api)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,8 +70,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
@@ -120,6 +118,8 @@ dependencies {
 
     //BlurTransformation
     implementation("jp.wasabeef:glide-transformations:4.3.0")
+
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 
 
 

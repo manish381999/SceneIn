@@ -16,8 +16,21 @@ class AuthRepository {
     }
 
 
-    suspend fun verifyOtp(mobile: String, otp: String): Response<VerifyOtpResponse> {
-        return api.verifyOtp(mobile, otp)
+    suspend fun verifyOtp(
+        mobile: String,
+        otp: String,
+        fcmToken: String?,
+        deviceDetails: Map<String, String>
+    ): Response<VerifyOtpResponse> {
+        return api.verifyOtp(
+            mobileNumber = mobile,
+            otp = otp,
+            deviceId = deviceDetails["device_id"]!!,
+            deviceModel = deviceDetails["device_model"]!!,
+            osVersion = deviceDetails["os_version"]!!,
+            appVersion = deviceDetails["app_version"]!!,
+            fcmToken = fcmToken
+        )
     }
 
     suspend fun updateUser(

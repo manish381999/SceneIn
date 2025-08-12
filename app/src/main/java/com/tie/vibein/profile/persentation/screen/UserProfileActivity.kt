@@ -11,7 +11,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -29,6 +28,7 @@ import com.tie.vibein.profile.data.models.StatItem
 import com.tie.vibein.profile.persentation.adapter.InterestAdapter
 import com.tie.vibein.profile.persentation.adapter.UserProfileViewPagerAdapter
 import com.tie.vibein.profile.persentation.view_model.ProfileViewModel
+import com.tie.vibein.settings.persentation.screen.SettingsActivity
 import com.tie.vibein.utils.EdgeToEdgeUtils
 import com.tie.vibein.utils.NetworkState
 
@@ -279,8 +279,7 @@ class UserProfileActivity : AppCompatActivity() {
 
 
         binding.ivSetting.setOnClickListener {
-            // TODO: Implement navigation to your SettingsActivity
-            Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
     }
 

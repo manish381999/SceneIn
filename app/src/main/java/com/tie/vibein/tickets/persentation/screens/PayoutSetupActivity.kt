@@ -11,7 +11,6 @@ import com.google.android.material.tabs.TabLayout
 import com.tie.dreamsquad.utils.SP
 import com.tie.vibein.databinding.ActivityPayoutSetupBinding
 import com.tie.vibein.tickets.presentation.viewmodel.TicketViewModel
-import com.tie.vibein.utils.EdgeToEdgeUtils
 import com.tie.vibein.utils.NetworkState
 import org.json.JSONObject
 
@@ -22,11 +21,11 @@ class PayoutSetupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivityPayoutSetupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupToolbar()
+        populateCurrentMethod() // New function to show existing data
         setupTabs()
         setupClickListener()
         observeViewModel()
@@ -34,6 +33,11 @@ class PayoutSetupActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener { finish() }
+    }
+
+    private fun populateCurrentMethod() {
+        val currentInfo = SP.getString(this, SP.PAYOUT_INFO_DISPLAY, "No payout method saved.")
+        binding.tvCurrentPayoutInfo.text = currentInfo
     }
 
     private fun setupTabs() {
@@ -58,10 +62,16 @@ class PayoutSetupActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Clear previous errors
+            binding.layoutUpiId.error = null
+            binding.layoutAccountHolderName.error = null
+            binding.layoutAccountNumber.error = null
+            binding.layoutIfscCode.error = null
+
             if (currentMethod == "upi") {
                 val vpa = binding.etUpiId.text.toString().trim()
-                if (!vpa.contains("@")) {
-                    binding.etUpiId.error = "Please enter a valid UPI ID"
+                if (!vpa.contains("@") || vpa.length < 5) {
+                    binding.layoutUpiId.error = "Please enter a valid UPI ID"
                     return@setOnClickListener
                 }
                 viewModel.verifyUpiPayout(userId, vpa)
@@ -69,11 +79,15 @@ class PayoutSetupActivity : AppCompatActivity() {
                 val name = binding.etAccountHolderName.text.toString().trim()
                 val ifsc = binding.etIfscCode.text.toString().trim()
                 val account = binding.etAccountNumber.text.toString().trim()
-                if (name.isBlank() || ifsc.isBlank() || account.isBlank()) {
-                    Toast.makeText(this, "All bank details are required.", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
+
+                var isValid = true
+                if (name.isBlank()) { binding.layoutAccountHolderName.error = "Required"; isValid = false }
+                if (account.isBlank()) { binding.layoutAccountNumber.error = "Required"; isValid = false }
+                if (ifsc.length != 11) { binding.layoutIfscCode.error = "IFSC must be 11 characters"; isValid = false }
+
+                if (isValid) {
+                    viewModel.verifyBankPayout(userId, name, ifsc, account)
                 }
-                viewModel.verifyBankPayout(userId, name, ifsc, account)
             }
         }
     }
@@ -82,32 +96,28 @@ class PayoutSetupActivity : AppCompatActivity() {
         viewModel.verifyPayoutState.observe(this) { state ->
             binding.progressBar.isVisible = state is NetworkState.Loading
             binding.btnVerifyAndSave.isEnabled = state !is NetworkState.Loading
-            binding.btnVerifyAndSave.text = if (state is NetworkState.Loading) "" else "Verify & Save"
+            binding.btnVerifyAndSave.text = if (state is NetworkState.Loading) "" else "Verify & Save Method"
 
             when (state) {
                 is NetworkState.Success -> {
                     Toast.makeText(this, "Success: ${state.data.message}", Toast.LENGTH_LONG).show()
 
-                    // --- THIS IS THE DEFINITIVE, CORRECT LOGIC ---
-                    // 1. Save to SharedPreferences that the user is now verified.
+                    // --- The definitive logic for saving to SharedPreferences ---
                     SP.saveBoolean(this, SP.IS_PAYOUT_VERIFIED, true)
 
-                    // 2. Create and save a display-friendly, masked version of the payout info.
                     val maskedInfo = if (currentMethod == "upi") {
                         "UPI: ${binding.etUpiId.text}"
                     } else {
                         val accNum = binding.etAccountNumber.text.toString()
-                        "Bank: ****${accNum.takeLast(4)}"
+                        "Bank Account: ****${accNum.takeLast(4)}"
                     }
                     SP.saveString(this, SP.PAYOUT_INFO_DISPLAY, maskedInfo)
-                    // --- END OF CRITICAL LOGIC ---
 
-                    // Set the result to OK so SellTicketActivity knows to refresh its UI.
-                    setResult(Activity.RESULT_OK)
+                    setResult(Activity.RESULT_OK) // Signal to SellTicketActivity to refresh its UI
                     finish()
                 }
                 is NetworkState.Error -> {
-                    val errorMessage = try { JSONObject(state.message!!).getString("message") } catch(e: Exception) { state.message }
+                    val errorMessage = try { JSONObject(state.message).getString("message") } catch(e: Exception) { state.message }
                     Toast.makeText(this, "Error: $errorMessage", Toast.LENGTH_LONG).show()
                 }
                 else -> {}

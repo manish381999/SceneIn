@@ -53,7 +53,7 @@
                 android:orientation="vertical">
 
         <!-- Profile Picture -->
-                <de.hdodenhof.circleimageview.CircleImageView
+                <com.mikhaellopez.circularimageview.CircularImageView
                     android:id="@+id/ivProfile"
                     android:layout_width="@dimen/_120sdp"
                     android:layout_height="@dimen/_120sdp"

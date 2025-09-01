@@ -33,7 +33,7 @@
                 android:src="@drawable/ic_arrow_back_ios"
                 app:tint="@color/gray500" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/iv_toolbar_profile_pic"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

@@ -6,11 +6,6 @@
         <entry key="Android Vitals">
           <value>
             <InsightsFilterSettings>
-              <option name="connection">
-                <ConnectionSetting>
-                  <option name="appId" value="com.TiE.noty" />
-                </ConnectionSetting>
-              </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
               <option name="timeIntervalDays" value="SEVEN_DAYS" />
               <option name="visibilityType" value="ALL" />
@@ -22,10 +17,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.tie.vibein" />
-                  <option name="mobileSdkAppId" value="1:490910079201:android:1fca588427d6ed5f0a7fa0" />
-                  <option name="projectId" value="vibein-95243" />
-                  <option name="projectNumber" value="490910079201" />
+                  <option name="appId" value="com.scenein" />
+                  <option name="mobileSdkAppId" value="1:542774878819:android:0ac568876fc773cc4d4e56" />
+                  <option name="projectId" value="scenein-in" />
+                  <option name="projectNumber" value="542774878819" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

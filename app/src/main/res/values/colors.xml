@@ -13,6 +13,8 @@
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorOnSecondary">#FFFFFF</color>
 
+
+
     <!-- II. NEUTRAL FOUNDATION -->
     <!-- Background & Surface -->
     <color name="colorBackground">#F2F2F7</color>
@@ -64,5 +66,11 @@
 
     <color name="unread_background_color">#E9F2FF</color> <!-- A very light, subtle blue -->
 
+    <color name="colorSuccessBackground">#EAFBF1</color> <!-- Light green -->
+    <color name="colorWarningBackground">#FFF6E6</color> <!-- Light orange -->
+    <color name="colorErrorBackground">#FFEDF0</color>   <!-- Light red -->
+
+    <color name="shimmer_placeholder">#E0E0E0</color>
+    <color name="divider_color">#F0F0F0</color>
 
 </resources>

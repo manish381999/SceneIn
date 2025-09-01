@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorSurface">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingBottom="@dimen/_16sdp">
+
+        <View
+            android:id="@+id/host_avatar_placeholder"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:background="@color/shimmer_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/host_name_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_14sdp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:background="@color/shimmer_placeholder"
+            app:layout_constraintBottom_toBottomOf="@id/host_avatar_placeholder"
+            app:layout_constraintStart_toEndOf="@id/host_avatar_placeholder"
+            app:layout_constraintTop_toTopOf="@id/host_avatar_placeholder"
+            app:layout_constraintWidth_percent="0.4" />
+
+        <View
+            android:id="@+id/image_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:background="@color/shimmer_placeholder"
+            app:layout_constraintDimensionRatio="4:3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/host_avatar_placeholder" />
+
+        <View
+            android:id="@+id/line1_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_24sdp"
+            android:background="@color/shimmer_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_placeholder"
+            app:layout_constraintWidth_percent="0.7" />
+
+        <View
+            android:id="@+id/line2_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:background="@color/shimmer_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line1_placeholder"
+            app:layout_constraintWidth_percent="0.9" />
+
+        <View
+            android:id="@+id/line3_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@color/shimmer_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line2_placeholder"
+            app:layout_constraintWidth_percent="0.5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/divider_color" />
+
+</LinearLayout>

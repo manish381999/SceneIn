@@ -109,7 +109,7 @@
             android:layout_height="0dp"
             >
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/ivProfile"
                 android:layout_width="@dimen/_90sdp"
                 android:layout_height="@dimen/_90sdp"

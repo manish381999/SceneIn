@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- A light, friendly green. You can use a color from your colors.xml -->
+    <solid android:color="@color/colorSuccessBackground" />
+
+</shape>

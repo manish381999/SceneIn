@@ -15,6 +15,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:elevation="@dimen/_2sdp" >
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/toolbar_back_arrow"
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
+            android:layout_gravity="start"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:background="@drawable/bg_circle_transparent"
+            android:src="@drawable/ic_arrow_back_ios" />
+
 
         <TextView
             android:id="@+id/tvUserName"
@@ -45,7 +54,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:shimmer_auto_start="true"
-        app:shimmer_duration="1500">
+        app:shimmer_duration="1500"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,7 +118,7 @@
             android:layout_height="0dp"
             >
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/ivProfile"
                 android:layout_width="@dimen/_90sdp"
                 android:layout_height="@dimen/_90sdp"

@@ -27,9 +27,30 @@
         android:usesCleartextTraffic="false"
         tools:targetApi="31">
         <activity
+            android:name=".settings.persentation.screen.BookmarksActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VibeIn" />
+        <activity
+            android:name=".discover.presentation.screens.LocationPickerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VibeIn" />
+        <activity
+            android:name=".createEvent.persentation.screens.CreateEventActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VibeIn"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".settings.persentation.screen.TicketTransactionDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VibeIn" />
+        <activity
+            android:name=".settings.persentation.screen.TicketTransactionHistoryActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VibeIn" />
+        <activity
             android:name=".settings.persentation.screen.SettingsActivity"
             android:exported="false"
-            android:theme="@style/Theme.VibeIn"/>
+            android:theme="@style/Theme.VibeIn" />
         <activity
             android:name=".profile.persentation.screen.ProfilePicturePreviewActivity"
             android:exported="false"
@@ -43,11 +64,11 @@
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".notifications.presentation.screens.ConnectionRequestsActivity"
+            android:name=".notification.presentation.screens.ConnectionRequestsActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".notifications.presentation.screens.NotificationsActivity"
+            android:name=".notification.presentation.screens.NotificationsActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
@@ -99,7 +120,8 @@
         <activity
             android:name=".BaseActivity"
             android:exported="false"
-            android:theme="@style/Theme.VibeIn" />
+            android:theme="@style/Theme.VibeIn"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".credentials.presentation.screens.OtpVerificationActivity"
             android:exported="false"
@@ -135,6 +157,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${PLACES_API_KEY}" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -145,8 +170,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
         </provider>
-
-
     </application>
 
 </manifest>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_home"
-        android:title="Home" />
+        android:id="@+id/discoverFragment"
+        android:icon="@drawable/ic_discover"
+        android:title="Discover" />
 
     <item
         android:id="@+id/ticketFragment"
@@ -11,10 +11,9 @@
         android:title="Ticket" />
 
     <item
-        android:id="@+id/createEventFragment"
-        android:icon="@drawable/ic_create_event"
-        android:title="Create Event" />
-
+        android:id="@+id/createMenuItem"
+        android:icon="@drawable/ic_create"
+        android:title="Create" />
     <item
         android:id="@+id/chatFragment"
         android:icon="@drawable/ic_chat"
@@ -22,6 +21,6 @@
 
     <item
         android:id="@+id/profileFragment"
-        android:icon="@drawable/ic_profile"
+        android:icon="@drawable/ic_account_circle"
         android:title="Profile" />
 </menu>

@@ -60,5 +60,14 @@
     <color name="unread_background_color">#1A2533</color>
 
 
+    <!-- NEW: Semantic Background Colors -->
+    <color name="colorSuccessBackground">#194D3B</color> <!-- Dark green -->
+    <color name="colorWarningBackground">#4D3B19</color> <!-- Dark orange -->
+    <color name="colorErrorBackground">#5C1A1A</color>   <!-- Dark red -->
+
+    <color name="shimmer_placeholder">#333333</color>
+
+    <color name="divider_color">#2A2A2A</color>
+
 
 </resources>

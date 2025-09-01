@@ -12,8 +12,8 @@
 
     <ImageView
         android:id="@+id/logoImage"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:src="@drawable/app_logo"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/_20sdp"

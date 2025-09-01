@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
-
-
-
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mToolBar"
@@ -25,8 +23,8 @@
             android:layout_gravity="start"
             android:layout_marginEnd="@dimen/_8sdp"
             android:background="@drawable/bg_circle_transparent"
-            android:src="@drawable/ic_arrow_back"
-            />
+            android:src="@drawable/ic_arrow_back_ios"
+            android:tint="@color/gray200"/>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -34,10 +32,10 @@
         android:id="@+id/shimmerLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:shimmer_auto_start="true"
         app:shimmer_duration="1500">
 
@@ -46,43 +44,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="@dimen/dp_15_dsa">
-
-            <!-- Repeat a few placeholder views -->
+            <!-- Your shimmer placeholder views -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_100_dsa"
                 android:layout_marginBottom="@dimen/dp_10_dsa"
-                android:background="@drawable/shimmer_placeholder"/>
+                android:background="@drawable/shimmer_placeholder" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_100_dsa"
                 android:layout_marginBottom="@dimen/dp_10_dsa"
-                android:background="@drawable/shimmer_placeholder"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
-                android:background="@drawable/shimmer_placeholder"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
-                android:background="@drawable/shimmer_placeholder"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
-                android:background="@drawable/shimmer_placeholder"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
-                android:background="@drawable/shimmer_placeholder"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
-                android:background="@drawable/shimmer_placeholder"/>
+                android:background="@drawable/shimmer_placeholder" />
         </LinearLayout>
     </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -90,17 +62,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-       app:layout_constraintBottom_toBottomOf="parent">
-
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Background Image -->
             <ImageView
                 android:id="@+id/ivEventCoverImage"
                 android:layout_width="match_parent"
@@ -111,57 +81,51 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Bottom sheet card -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp_20_dsa"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:background="@android:color/white"
-                app:cardElevation="@dimen/dp_3_dsa"
                 android:layout_marginHorizontal="@dimen/dp_20_dsa"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:cardCornerRadius="@dimen/dp_24_dsa"
                 android:layout_marginTop="@dimen/dp_50_minus_dsa"
-                app:layout_constraintTop_toBottomOf="@id/ivEventCoverImage"
+                android:layout_marginBottom="@dimen/dp_20_dsa"
+                android:background="@android:color/white"
+                app:cardCornerRadius="@dimen/dp_24_dsa"
+                app:cardElevation="@dimen/dp_3_dsa"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-               >
-
+                app:layout_constraintTop_toBottomOf="@id/ivEventCoverImage">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_white_rounded_top"
                     android:orientation="vertical"
-                    android:padding="@dimen/dp_16_dsa"
-                    android:background="@drawable/bg_white_rounded_top">
+                    android:padding="@dimen/dp_16_dsa">
 
-                    <!-- Category Chip -->
                     <TextView
                         android:id="@+id/tvEventCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_transparent_button"
                         android:backgroundTint="@color/gray400"
+                        android:fontFamily="@font/poppins"
                         android:paddingHorizontal="@dimen/dp_12_dsa"
                         android:paddingVertical="@dimen/dp_4_dsa"
-                        android:text="Sports"
                         android:textColor="@color/textPrimary"
-                        android:fontFamily="@font/poppins"
-                        android:textSize="@dimen/sp_12_dsa" />
+                        android:textSize="@dimen/sp_12_dsa"
+                        tools:text="Sports" />
 
-                    <!-- Title -->
                     <TextView
                         android:id="@+id/tvEventName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_8_dsa"
-                        android:text="Morning Beach Volleyball"
+                        android:fontFamily="@font/poppins_bold"
                         android:textColor="@color/textPrimary"
                         android:textSize="@dimen/sp_18_dsa"
-                        android:fontFamily="@font/poppins_bold" />
+                        tools:text="Morning Beach Volleyball" />
 
-                    <!-- Date & Time -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -174,154 +138,141 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.3"
                             android:orientation="vertical">
-
                             <ImageView
                                 android:layout_width="@dimen/dp_42_dsa"
                                 android:layout_height="@dimen/dp_42_dsa"
-                                android:src="@drawable/ic_calendar"
-                                android:padding="@dimen/dp_10_dsa"
                                 android:background="@drawable/bg_light_purpule"
+                                android:padding="@dimen/dp_10_dsa"
+                                android:src="@drawable/ic_calendar"
                                 app:tint="@color/colorPrimary" />
                         </LinearLayout>
 
-
-
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_weight="1.7"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center_vertical">
-
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1.7"
+                            android:orientation="vertical">
                             <TextView
                                 android:id="@+id/tvEventDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="May 15, 2023"
-                                android:textSize="@dimen/sp_14_dsa"
                                 android:fontFamily="@font/poppins"
-                                android:textColor="@color/textPrimary"/>
-
+                                android:textColor="@color/textPrimary"
+                                android:textSize="@dimen/sp_14_dsa"
+                                tools:text="May 15, 2023" />
                             <TextView
                                 android:id="@+id/tvEventTime"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="6:00 AM - 11:00 AM"
-                                android:textSize="@dimen/sp_14_dsa"
                                 android:fontFamily="@font/poppins"
-                                android:textColor="@color/textSecondary"/>
+                                android:textColor="@color/textSecondary"
+                                android:textSize="@dimen/sp_14_dsa"
+                                tools:text="6:00 AM - 11:00 AM" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Location -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_12_dsa"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.3"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="@dimen/dp_42_dsa"
-                                android:layout_height="@dimen/dp_42_dsa"
-                                android:src="@drawable/ic_location"
-                                android:padding="@dimen/dp_10_dsa"
-                                android:background="@drawable/bg_light_purpule"
-                                app:tint="@color/colorPrimary" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1.7"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center_vertical">
-
-
-                            <TextView
-                                android:id="@+id/tvEventVenue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Marina Beach"
-                                android:textSize="@dimen/sp_14_dsa"
-                                android:fontFamily="@font/poppins"
-                                android:textColor="@color/textPrimary"/>
-
-                            <TextView
-                                android:id="@+id/tvEventMode"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="In-Person Event"
-                                android:textSize="@dimen/sp_14_dsa"
-                                android:fontFamily="@font/poppins"
-                                android:textColor="@color/textSecondary"/>
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- Participants -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_12_dsa"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.3"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="@dimen/dp_42_dsa"
-                                android:layout_height="@dimen/dp_42_dsa"
-                                android:src="@drawable/ic_group"
-                                android:padding="@dimen/dp_10_dsa"
-                                android:background="@drawable/bg_light_purpule"
-                                app:tint="@color/colorPrimary" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1.7"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center_vertical">
-
+                            android:orientation="horizontal"
+                            android:weightSum="2">
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:weightSum="2"
-                                android:orientation="horizontal">
-
+                                android:layout_weight="0.3"
+                                android:orientation="vertical">
+                                <ImageView
+                                    android:layout_width="@dimen/dp_42_dsa"
+                                    android:layout_height="@dimen/dp_42_dsa"
+                                    android:background="@drawable/bg_light_purpule"
+                                    android:padding="@dimen/dp_10_dsa"
+                                    android:src="@drawable/ic_location"
+                                    app:tint="@color/colorPrimary" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1.7"
+                                android:orientation="vertical">
                                 <TextView
-                                    android:id="@+id/tvEventSize"
-                                    android:layout_width="0dp"
-                                    android:layout_weight="1.6"
+                                    android:id="@+id/tvEventVenue"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/poppins"
                                     android:textColor="@color/textPrimary"
                                     android:textSize="@dimen/sp_14_dsa"
-                                    android:text="18/24 participants" />
+                                    tools:text="Marina Beach" />
+                                <TextView
+                                    android:id="@+id/tvEventMode"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins"
+                                    android:textColor="@color/textSecondary"
+                                    android:textSize="@dimen/sp_14_dsa"
+                                    tools:text="In-Person Event" />
+                            </LinearLayout>
+                        </LinearLayout>
 
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_12_dsa"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:layout_width="@dimen/dp_42_dsa"
+                                android:layout_height="@dimen/dp_42_dsa"
+                                android:background="@drawable/bg_light_purpule"
+                                android:padding="@dimen/dp_10_dsa"
+                                android:src="@drawable/ic_group"
+                                app:tint="@color/colorPrimary" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1.7"
+                            android:orientation="vertical">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+                                <TextView
+                                    android:id="@+id/tvEventSize"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:fontFamily="@font/poppins"
+                                    android:textColor="@color/textPrimary"
+                                    android:textSize="@dimen/sp_14_dsa"
+                                    tools:text="18/24 participants" />
                                 <TextView
                                     android:id="@+id/tvEventFillPercentage"
                                     android:layout_width="0dp"
-                                    android:layout_weight="0.4"
                                     android:layout_height="wrap_content"
-                                    android:text="75% full"
-                                    android:textColor="@color/colorPrimary"
+                                    android:layout_weight="0.4"
                                     android:fontFamily="@font/poppins"
-                                    android:textSize="@dimen/sp_14_dsa" />
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="@dimen/sp_14_dsa"
+                                    tools:text="75% full" />
                             </LinearLayout>
-
                             <ProgressBar
                                 android:id="@+id/progressBar"
                                 style="@android:style/Widget.ProgressBar.Horizontal"
@@ -330,65 +281,51 @@
                                 android:layout_marginTop="@dimen/dp_4_dsa"
                                 android:progress="75"
                                 android:progressDrawable="@drawable/progress_bar_purple" />
-
                         </LinearLayout>
-
-
                     </LinearLayout>
 
-
-                    <!-- Free & Age -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_12_dsa"
                         android:orientation="horizontal"
                         android:weightSum="2">
-
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.3"
                             android:orientation="vertical">
-
                             <ImageView
                                 android:layout_width="@dimen/dp_42_dsa"
                                 android:layout_height="@dimen/dp_42_dsa"
-                                android:src="@drawable/ic_ticket"
-                                android:padding="@dimen/dp_10_dsa"
                                 android:background="@drawable/bg_light_purpule"
+                                android:padding="@dimen/dp_10_dsa"
+                                android:src="@drawable/ic_ticket"
                                 app:tint="@color/colorPrimary" />
                         </LinearLayout>
-
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_weight="1.7"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center_vertical">
-
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1.7"
+                            android:orientation="vertical">
                             <TextView
                                 android:id="@+id/tvEventType"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Free"
                                 android:fontFamily="@font/poppins"
                                 android:textColor="@color/textPrimary"
-                                android:textSize="@dimen/sp_14_dsa" />
-
+                                android:textSize="@dimen/sp_14_dsa"
+                                tools:text="Free" />
                             <TextView
                                 android:id="@+id/tvEventTicketPrice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Free Entry"
                                 android:fontFamily="@font/poppins"
                                 android:textColor="@color/textPrimary"
-                                android:textSize="@dimen/sp_14_dsa" />
-
-
+                                android:textSize="@dimen/sp_14_dsa"
+                                tools:text="Free Entry" />
                         </LinearLayout>
-
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -397,214 +334,219 @@
                         android:layout_marginTop="@dimen/dp_12_dsa"
                         android:orientation="horizontal"
                         android:weightSum="2">
-
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.3"
                             android:orientation="vertical">
-
                             <ImageView
                                 android:layout_width="@dimen/dp_42_dsa"
                                 android:layout_height="@dimen/dp_42_dsa"
-                                android:src="@drawable/ic_age"
-                                android:padding="@dimen/dp_10_dsa"
                                 android:background="@drawable/bg_light_purpule"
+                                android:padding="@dimen/dp_10_dsa"
+                                android:src="@drawable/ic_age"
                                 app:tint="@color/colorPrimary" />
                         </LinearLayout>
-
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_weight="1.7"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center_vertical">
-
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1.7"
+                            android:orientation="vertical">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Age Restriction"
-                                android:textSize="@dimen/sp_14_dsa"
                                 android:fontFamily="@font/poppins"
-                                android:textColor="@color/textPrimary"/>
-
+                                android:text="Age Restriction"
+                                android:textColor="@color/textPrimary"
+                                android:textSize="@dimen/sp_14_dsa" />
                             <TextView
                                 android:id="@+id/tvAgeRestriction"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="18+"
-                                android:textSize="@dimen/sp_14_dsa"
                                 android:fontFamily="@font/poppins"
-                                android:textColor="@color/textSecondary"/>
-
+                                android:textColor="@color/textSecondary"
+                                android:textSize="@dimen/sp_14_dsa"
+                                tools:text="18+" />
                         </LinearLayout>
-
                     </LinearLayout>
 
-                    <!-- Join Button -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnJoinEvent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_16_dsa"
-                        app:backgroundTint="@null"
                         android:background="@drawable/bg_button_join"
-                        android:text="Join This Event"
                         android:fontFamily="@font/poppins"
+                        android:text="Join This Event"
+                        android:textAllCaps="false"
                         android:textColor="@color/textOnPrimary"
                         android:textSize="@dimen/sp_16_dsa"
-                        android:textAllCaps="false"/>
+                        app:backgroundTint="@null" />
 
-
-
-                    <!-- Organizer -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_20_dsa"
-                        android:text="Organized by"
-                        android:textSize="@dimen/sp_14_dsa"
                         android:fontFamily="@font/poppins_semibold"
-                        android:textColor="@color/textSecondary"/>
-
+                        android:text="Organized by"
+                        android:textColor="@color/textSecondary"
+                        android:textSize="@dimen/sp_14_dsa" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_8_dsa"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
                         <com.mikhaellopez.circularimageview.CircularImageView
                             android:id="@+id/ivEventHostProfilePic"
                             android:layout_width="@dimen/dp_50_dsa"
                             android:layout_height="@dimen/dp_50_dsa"
                             android:src="@drawable/ic_profile_placeholder" />
-
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp_8_dsa"
                             android:layout_weight="1"
                             android:orientation="vertical">
-
                             <TextView
                                 android:id="@+id/tvEventHostName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="David Chen"
-                                android:textSize="@dimen/sp_14_dsa"
                                 android:fontFamily="@font/poppins_medium"
-                                android:textColor="@color/textPrimary"/>
-
+                                android:textColor="@color/textPrimary"
+                                android:textSize="@dimen/sp_14_dsa"
+                                tools:text="David Chen" />
                             <TextView
                                 android:id="@+id/tvEventHostID"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="davidc@"
-                                android:textSize="@dimen/sp_12_dsa"
                                 android:fontFamily="@font/poppins"
-                                android:textColor="@color/textSecondary"/>
+                                android:textColor="@color/textSecondary"
+                                android:textSize="@dimen/sp_12_dsa"
+                                tools:text="davidc@" />
                         </LinearLayout>
-
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_view_host_profile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="View Profile"
-                            android:textSize="@dimen/sp_12_dsa"
-                            android:fontFamily="@font/poppins"
-                            app:backgroundTint="@null"
-                            android:textAllCaps="false"
-                            android:layout_marginBottom="@dimen/dp_2_dsa"
                             android:layout_marginTop="@dimen/dp_2_dsa"
-                            android:background="@drawable/bg_button_join"/>
+                            android:layout_marginBottom="@dimen/dp_2_dsa"
+                            android:background="@drawable/bg_button_join"
+                            android:fontFamily="@font/poppins"
+                            android:text="View Profile"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/sp_12_dsa"
+                            app:backgroundTint="@null" />
                     </LinearLayout>
 
-                    <!-- About -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_16_dsa"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="About this event"
-                      android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/textPrimary"
-                        android:textSize="@dimen/sp_16_dsa"/>
-
+                        android:textSize="@dimen/sp_16_dsa" />
                     <TextView
                         android:id="@+id/tvEventDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_4_dsa"
-                        android:text="Join us for a fun morning of beach volleyball! All skill levels are welcome. We'll have nets set up and extra volleyballs available. Come make friends and enjoy the sunshine!"
-                        android:textSize="@dimen/sp_14_dsa"
                         android:fontFamily="@font/poppins"
-                        android:textColor="@color/textPrimary"/>
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/sp_14_dsa"
+                        tools:text="Join us for a fun morning of beach volleyball!" />
 
-                    <!-- Attendees -->
                     <TextView
                         android:id="@+id/tvAttendees"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_16_dsa"
-                        android:text="Attendees"
                         android:fontFamily="@font/poppins_semibold"
+                        android:text="Attendees"
                         android:textColor="@color/textPrimary"
                         android:textSize="@dimen/sp_16_dsa" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
-                        <!-- Use Glide or Coil to load real images -->
                         <com.mikhaellopez.circularimageview.CircularImageView
                             android:id="@+id/ivParticipant1"
                             android:layout_width="@dimen/dp_40_dsa"
                             android:layout_height="@dimen/dp_40_dsa"
                             android:src="@drawable/ic_profile_placeholder" />
-
                         <com.mikhaellopez.circularimageview.CircularImageView
                             android:id="@+id/ivParticipant2"
                             android:layout_width="@dimen/dp_40_dsa"
                             android:layout_height="@dimen/dp_40_dsa"
                             android:layout_marginStart="@dimen/dp_10_minus_dsa"
                             android:src="@drawable/ic_profile_placeholder" />
-
                         <com.mikhaellopez.circularimageview.CircularImageView
                             android:id="@+id/ivParticipant3"
                             android:layout_width="@dimen/dp_40_dsa"
                             android:layout_height="@dimen/dp_40_dsa"
                             android:layout_marginStart="@dimen/dp_10_minus_dsa"
                             android:src="@drawable/ic_profile_placeholder" />
-
                         <TextView
                             android:id="@+id/tvParticipantCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="+15"
-                            android:textSize="14sp" />
-
+                            android:textSize="14sp"
+                            tools:text="+15" />
                         <TextView
                             android:id="@+id/tvSeeAll"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="end"
                             android:layout_weight="1"
                             android:gravity="end"
                             android:text="See all"
                             android:textColor="@color/colorPrimary" />
                     </LinearLayout>
-                </LinearLayout>
 
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/map_card_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_150sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        app:layout_constraintTop_toBottomOf="@id/cardContainer"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:visibility="gone"
+                        app:cardCornerRadius="@dimen/_12sdp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/gray200"
+                        app:strokeWidth="1dp"
+                        tools:visibility="visible">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <androidx.fragment.app.FragmentContainerView
+                                android:id="@+id/map"
+                                android:name="com.google.android.gms.maps.SupportMapFragment"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnNavigate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|end"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:textAllCaps="false"
+                                android:background="@drawable/bg_button_join"
+                                android:text="Navigate"
+                                app:icon="@drawable/ic_navigation" />
+                        </FrameLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

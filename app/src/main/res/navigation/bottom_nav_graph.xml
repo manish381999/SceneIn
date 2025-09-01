@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/discoverFragment">
 
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.tie.vibein.discover.presentation.screens.DiscoverFragment"
+        android:id="@+id/discoverFragment"
+        android:name="com.scenein.discover.presentation.screens.DiscoverFragment"
         >
 
         <action
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/ticketFragment"
-        android:name="com.tie.vibein.tickets.persentation.screens.TicketFragment"
+        android:name="com.scenein.tickets.persentation.screens.TicketFragment"
        >
 
         <action
@@ -28,8 +28,8 @@
 
     <fragment
         android:id="@+id/createEventFragment"
-        android:name="com.tie.vibein.createEvent.persentation.screens.CreateEventFragment"
-        tools:layout="@layout/fragment_create_event" >
+        android:name="com.scenein.createEvent.persentation.screens.CreateEventHostFragment"
+        tools:layout="@layout/fragment_create_event_host" >
 
         <action
             android:id="@+id/action_createFragment_to_chatFragment"
@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.tie.vibein.chat.persentation.screens.ChatFragment"
+        android:name="com.scenein.chat.persentation.screens.ChatFragment"
         tools:layout="@layout/fragment_chat" >
 
         <action
@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.tie.vibein.profile.persentation.screen.ProfileFragment"
+        android:name="com.scenein.profile.persentation.screen.ProfileFragment"
         tools:layout="@layout/fragment_profile" >
 
 

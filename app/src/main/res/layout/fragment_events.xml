@@ -59,7 +59,7 @@
       android:textAllCaps="false"
       android:background="@drawable/bg_button"
       android:textSize="@dimen/_12ssp"
-      app:icon="@drawable/ic_create_event"
+      app:icon="@drawable/ic_create"
       app:iconGravity="start"
       app:iconTint="@color/white"
       android:fontFamily="@font/poppins"

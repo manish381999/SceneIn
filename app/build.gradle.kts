@@ -7,17 +7,24 @@ plugins {
 }
 
 android {
-    namespace = "com.tie.vibein"
+    namespace = "com.scenein"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.tie.vibein"
+        applicationId = "com.scenein"
         minSdk = 26
         targetSdk = 36
         versionCode = 2
         versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // This makes the key available to your Kotlin code
+        buildConfigField("String", "PLACES_API_KEY", "\"${findProperty("PLACES_API_KEY")}\"")
+
+        // --- THIS IS THE CORRECTED LINE FOR KOTLIN ---
+        // This makes the key available to your AndroidManifest.xml
+        manifestPlaceholders["PLACES_API_KEY"] = findProperty("PLACES_API_KEY") as String? ?: ""
     }
 
     buildTypes {
@@ -72,7 +79,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("com.google.android.gms:play-services-auth:21.3.0")
+    implementation("com.google.android.gms:play-services-auth:21.4.0")
 
     implementation ("com.intuit.ssp:ssp-android:1.1.1")
     implementation ("com.intuit.sdp:sdp-android:1.1.1")
@@ -88,7 +95,6 @@ dependencies {
 
     implementation ("androidx.navigation:navigation-fragment-ktx:2.9.2")
     implementation ("androidx.navigation:navigation-ui-ktx:2.9.2")
-    implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.mikhaellopez:circularimageview:4.3.1")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     implementation("androidx.core:core-ktx:1.16.0")
@@ -119,7 +125,13 @@ dependencies {
     //BlurTransformation
     implementation("jp.wasabeef:glide-transformations:4.3.0")
 
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("androidx.work:work-runtime-ktx:2.10.3")
+
+    implementation("com.google.android.libraries.places:places:4.4.1")
+
+    implementation("io.coil-kt:coil:2.6.0") // Add Coil for image loading
+    implementation("io.coil-kt:coil-svg:2.6.0") // Add SVG support for Coil
+
 
 
 

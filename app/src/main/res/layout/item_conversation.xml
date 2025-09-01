@@ -12,7 +12,7 @@
     android:focusable="true"
     android:background="?attr/selectableItemBackground">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/iv_profile_pic"
         android:layout_width="56dp"
         android:layout_height="56dp"

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!--
+    The fill color is a light, muted version of your 'colorWarning'.
+    For Light Theme, this could be a light orange/yellow.
+    For Dark Theme, this should be a dark, muted orange/yellow.
+    Using a new color name allows for this flexibility.
+    -->
+    <solid android:color="@color/colorWarningBackground" />
+
+</shape>

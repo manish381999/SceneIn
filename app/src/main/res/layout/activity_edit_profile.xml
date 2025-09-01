@@ -46,7 +46,7 @@
                 android:padding="16dp">
 
                 <!-- Profile Picture Section -->
-                <de.hdodenhof.circleimageview.CircleImageView
+                <com.mikhaellopez.circularimageview.CircularImageView
                     android:id="@+id/ivProfile"
                     android:layout_width="120dp"
                     android:layout_height="120dp"

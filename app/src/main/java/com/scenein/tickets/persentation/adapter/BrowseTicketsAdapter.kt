@@ -1,0 +1,69 @@
+package com.scenein.tickets.persentation.adapter
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.scenein.R
+import com.scenein.databinding.ItemTicketCardBinding
+import com.scenein.tickets.data.models.Ticket
+import java.text.SimpleDateFormat
+import java.util.Locale
+
+class BrowseTicketsAdapter(private val onTicketClick: (Ticket) -> Unit) :
+    ListAdapter<Ticket, BrowseTicketsAdapter.TicketViewHolder>(TicketDiffCallback()) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketViewHolder {
+        val binding = ItemTicketCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return TicketViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: TicketViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    inner class TicketViewHolder(private val binding: ItemTicketCardBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            itemView.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) onTicketClick(getItem(adapterPosition))
+            }
+        }
+
+        fun bind(ticket: Ticket) {
+            binding.tvEventName.text = ticket.eventName
+            binding.tvEventVenue.text = ticket.eventVenue
+            binding.tvSellerName.text = "Listed by ${ticket.sellerName ?: "VibeIn User"}"
+            binding.tvSellingPrice.text = "₹${ticket.sellingPrice.substringBefore(".")}"
+            binding.tvEventCategory.text = ticket.category_name?.uppercase() ?: "EVENT"
+
+            try {
+                val inputDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)
+                val outputDateFormat = SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault())
+                val date = inputDateFormat.parse(ticket.eventDate)
+                val formattedDate = date?.let { outputDateFormat.format(it) } ?: ticket.eventDate
+
+                val inputTimeFormat = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
+                val outputTimeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+                val time = inputTimeFormat.parse(ticket.eventTime)
+                val formattedTime = time?.let { outputTimeFormat.format(it) } ?: ""
+
+                binding.tvEventDate.text = "$formattedDate  •  $formattedTime"
+            } catch (e: Exception) {
+                binding.tvEventDate.text = ticket.eventDate
+            }
+
+            Glide.with(itemView.context)
+                .load(ticket.sellerProfilePic)
+                .placeholder(R.drawable.ic_profile_placeholder)
+                .error(R.drawable.ic_profile_placeholder)
+                .into(binding.ivSellerProfilePic)
+        }
+    }
+}
+
+class TicketDiffCallback : DiffUtil.ItemCallback<Ticket>() {
+    override fun areItemsTheSame(oldItem: Ticket, newItem: Ticket) = oldItem.id == newItem.id
+    override fun areContentsTheSame(oldItem: Ticket, newItem: Ticket) = oldItem == newItem
+}

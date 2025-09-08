@@ -22,6 +22,7 @@ import com.scenein.tickets.persentation.screens.PayoutSetupActivity
 import com.scenein.utils.NetworkState
 import com.scenein.utils.ThemeManager
 import com.scenein.utils.CustomAlertDialog
+import com.scenein.utils.EdgeToEdgeUtils
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -32,6 +33,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

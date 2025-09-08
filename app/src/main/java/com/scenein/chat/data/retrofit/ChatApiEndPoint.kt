@@ -38,4 +38,7 @@ interface ChatApiEndPoint {
 
     @POST("api_v1/mark_read.php")
     suspend fun markMessagesAsRead(@Body body: MarkAsDeliveredRequest): Response<Unit>
+
+
+
 }

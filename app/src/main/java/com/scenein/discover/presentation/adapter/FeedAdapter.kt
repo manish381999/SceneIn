@@ -88,7 +88,7 @@ class FeedAdapter(
         private val context: Context = itemView.context
 
         fun bind(event: EventSummary, userLocation: Location?) {
-            // Bind standard info
+            // --- Bind Standard Info ---
             binding.tvEventName.text = event.eventName
             binding.tvCategory.text = event.categoryName
             binding.tvEventDateTime.text = formatDateTime(event.eventDate, event.startTime)
@@ -98,7 +98,7 @@ class FeedAdapter(
                 .placeholder(R.drawable.ic_placeholder)
                 .into(binding.imageBanner)
 
-            // Bind distance info
+            // --- Bind Distance ---
             binding.tvEventDistance.visibility = View.GONE
             val eventLat = event.latitude?.toDoubleOrNull()
             val eventLon = event.longitude?.toDoubleOrNull()
@@ -113,7 +113,7 @@ class FeedAdapter(
                 binding.tvEventDistance.visibility = View.VISIBLE
             }
 
-            // Bind host details
+            // --- Bind Host Details ---
             if (event.hostDetails != null) {
                 binding.ivHostProfilePic.visibility = View.VISIBLE
                 binding.tvHostUseName.visibility = View.VISIBLE
@@ -127,65 +127,64 @@ class FeedAdapter(
                 binding.tvHostUseName.visibility = View.GONE
             }
 
-            // Bind participant preview
+            // --- Bind Participant Preview ---
             if (event.participantsPreview.isNotEmpty()) {
                 binding.participantsContainer.visibility = View.VISIBLE
                 val participantImageViews = listOf(binding.ivParticipant1, binding.ivParticipant2, binding.ivParticipant3)
 
                 event.participantsPreview.forEachIndexed { index, participant ->
                     if (index < participantImageViews.size) {
-                        val imageView = participantImageViews[index]
-                        imageView.visibility = View.VISIBLE
+                        participantImageViews[index].visibility = View.VISIBLE
                         Glide.with(context)
                             .load(participant.profilePic)
                             .placeholder(R.drawable.ic_profile_placeholder)
-                            .into(imageView)
+                            .into(participantImageViews[index])
                     }
                 }
-
                 for (i in event.participantsPreview.size until participantImageViews.size) {
                     participantImageViews[i].visibility = View.GONE
                 }
 
+                // Set summary correctly
                 binding.tvParticipantsSummary.text = when {
                     event.joinedParticipants == 1 -> "1 person has joined"
                     event.joinedParticipants > 1 -> "${event.joinedParticipants} have joined"
                     else -> ""
                 }
+
             } else {
+                // Reset properly when no participants
                 binding.participantsContainer.visibility = View.GONE
+                binding.tvParticipantsSummary.text = ""   // <-- Important line
             }
 
-            // Handle Host vs. Guest UI State
+            // --- THIS IS THE CORRECTED LOGIC ---
             val isHost = event.hostId == currentUserId
             if (isHost) {
-                // If user is the host, hide the entire action bar
+                // If user is the host, show the "Host" chip and hide the action bar
+                binding.tvHostChip.visibility = View.VISIBLE
                 binding.actionBarContainer.visibility = View.GONE
             } else {
-                // If user is a guest, show the action bar and configure the Join button
+                // If user is a guest, hide the "Host" chip and show the action bar
+                binding.tvHostChip.visibility = View.GONE
                 binding.actionBarContainer.visibility = View.VISIBLE
 
+                // Configure the Join button state
                 val isEventFull = event.isFull && !event.hasJoined
-
-                // Set the text for the button
                 binding.btnJoin.text = when {
                     isEventFull -> "Full"
                     event.hasJoined -> "Joined"
                     else -> "Join"
                 }
                 binding.btnJoin.isEnabled = !isEventFull
-
-                // --- NEW LOGIC: Use the selected state for styling ---
-                // The selectors will automatically handle the background and text color.
                 binding.btnJoin.isSelected = event.hasJoined
 
-                // If the event is full, manually set the disabled style
                 if(isEventFull) {
                     binding.btnJoin.background.setTint(ContextCompat.getColor(context, R.color.fullButtonColor))
                     binding.btnJoin.setTextColor(ContextCompat.getColor(context, R.color.gray500))
                 }
 
-                // Set listeners for all actions
+                // Set action listeners
                 binding.btnJoin.setOnClickListener {
                     if (event.hasJoined) {
                         onUnjoinClicked(event.id, adapterPosition)
@@ -193,16 +192,9 @@ class FeedAdapter(
                         onJoinClicked(event.id, adapterPosition)
                     }
                 }
-
                 binding.ivActionShare.setOnClickListener {
-                    Toast.makeText(context, "Share coming soon!", Toast.LENGTH_SHORT).show()
+                    // Your share logic here
                 }
-                if (event.hasBookmarked) {
-                    binding.ivActionBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-                } else {
-                    binding.ivActionBookmark.setImageResource(R.drawable.ic_bookmark_outline)
-                }
-
                 binding.ivActionBookmark.setOnClickListener {
                     if (event.hasBookmarked) {
                         onRemoveBookmarkClicked(event.id)
@@ -220,14 +212,21 @@ class FeedAdapter(
         private fun formatDateTime(dateStr: String?, timeStr: String?): String {
             if (dateStr == null || timeStr == null) return "Date not specified"
             return try {
-                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                val date = inputFormat.parse(dateStr)
+                // Combine date + time into one string
+                val input = "$dateStr $timeStr"
+
+                // Parse with both date and time
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                val dateTime = inputFormat.parse(input)
+
+                // Output format with weekday, month, day, and 12-hour time
                 val outputFormat = SimpleDateFormat("EEE, MMM d • hh:mm a", Locale.getDefault())
-                outputFormat.format(date!!)
+                outputFormat.format(dateTime!!)
             } catch (e: Exception) {
                 "$dateStr • $timeStr"
             }
         }
+
     }
 
     class ConnectionsViewHolder(

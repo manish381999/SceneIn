@@ -6,6 +6,6 @@
     <solid android:color="?attr/colorPrimary" />
 
     <!-- A high radius creates the "pill" shape -->
-    <corners android:radius="24dp" />
+    <corners android:radius="@dimen/_12sdp" />
 
 </shape>

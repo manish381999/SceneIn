@@ -31,6 +31,10 @@ class SuggestedConnectionsAdapter(
             onConnectClick: (SuggestedConnection) -> Unit,
             onProfileClick: (SuggestedConnection) -> Unit
         ) {
+            // ✅ Force white background for the MaterialCardView
+            binding.root.setCardBackgroundColor(
+                itemView.context.getColor(R.color.colorSurface)
+            )
             binding.tvName.text = connection.name
             binding.tvMutualInterests.text = "${connection.mutualInterestsCount} mutual interests"
             Glide.with(itemView.context)
@@ -52,6 +56,7 @@ class SuggestedConnectionsAdapter(
                     binding.btnConnect.isEnabled = true
                 }
             }
+
 
             binding.btnConnect.setOnClickListener {
                 onConnectClick(connection)

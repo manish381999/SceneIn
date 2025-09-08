@@ -15,6 +15,7 @@ import com.scenein.discover.presentation.adapter.FeedAdapter
 import com.scenein.discover.presentation.screens.EventDetailActivity
 import com.scenein.profile.persentation.screen.UserProfileActivity
 import com.scenein.settings.persentation.view_model.SettingsViewModel
+import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
 import com.scenein.utils.SP
 
@@ -33,6 +34,7 @@ class BookmarksActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivityBookmarksBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

@@ -11,6 +11,7 @@ import com.scenein.databinding.ActivityTicketTransactionHistoryBinding
 import com.scenein.settings.persentation.adapter.TicketTransactionHistoryAdapter
 
 import com.scenein.settings.persentation.view_model.SettingsViewModel
+import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
 
 class TicketTransactionHistoryActivity : AppCompatActivity() {
@@ -21,6 +22,7 @@ class TicketTransactionHistoryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivityTicketTransactionHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

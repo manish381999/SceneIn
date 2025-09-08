@@ -51,7 +51,7 @@ class DiscoverRepository {
                     // --- THIS IS THE CORRECTED LINE ---
                     // We now correctly provide the title and the list of connections.
                     feedItems.add(FeedItem.Connections(
-                        title = "People You May Know",
+                        title = "Suggested for you",
                         connections = connectionList
                     ))
                 }

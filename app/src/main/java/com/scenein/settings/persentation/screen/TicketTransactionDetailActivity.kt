@@ -12,6 +12,7 @@ import com.scenein.R
 import com.scenein.databinding.ActivityTicketTransactionDetailBinding
 import com.scenein.settings.data.models.TransactionDetail
 import com.scenein.settings.persentation.view_model.SettingsViewModel
+import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -24,6 +25,7 @@ class TicketTransactionDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EdgeToEdgeUtils.setUpEdgeToEdge(this)
         binding = ActivityTicketTransactionDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

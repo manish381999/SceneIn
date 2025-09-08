@@ -7,18 +7,19 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginHorizontal="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         android:fontFamily="@font/poppins_semibold"
         android:textColor="@color/textPrimary"
-        android:textSize="@dimen/_14ssp"
-        android:text="People you may know" />
+        android:textSize="@dimen/_12ssp"
+        android:text="Suggested for you" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvConnections"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:clipToPadding="false"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/_16sdp" />
+       />
 </LinearLayout>

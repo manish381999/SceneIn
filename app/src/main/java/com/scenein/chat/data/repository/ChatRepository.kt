@@ -20,4 +20,6 @@ class ChatRepository {
         val request = MarkAsDeliveredRequest(messageIds)
         api.markMessagesAsRead(request)
     }
+
+
 }

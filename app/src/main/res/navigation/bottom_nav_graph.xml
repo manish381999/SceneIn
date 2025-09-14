@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/ticketFragment"
-        android:name="com.scenein.tickets.persentation.screens.TicketFragment"
+        android:name="com.scenein.tickets.presentation.screens.TicketFragment"
        >
 
         <action
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/createEventFragment"
-        android:name="com.scenein.createEvent.persentation.screens.CreateEventHostFragment"
+        android:name="com.scenein.createEvent.presentation.screens.CreateEventHostFragment"
         tools:layout="@layout/fragment_create_event_host" >
 
         <action
@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.scenein.chat.persentation.screens.ChatFragment"
+        android:name="com.scenein.chat.presentation.screens.ChatFragment"
         tools:layout="@layout/fragment_chat" >
 
         <action
@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.scenein.profile.persentation.screen.ProfileFragment"
+        android:name="com.scenein.profile.presentation.screen.ProfileFragment"
         tools:layout="@layout/fragment_profile" >
 
 

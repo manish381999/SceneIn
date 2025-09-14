@@ -22,9 +22,9 @@ import com.google.firebase.messaging.RemoteMessage
 import com.scenein.utils.SP
 import com.scenein.BaseActivity
 import com.scenein.R
-import com.scenein.chat.persentation.screens.ChatActivity
+import com.scenein.chat.presentation.screens.ChatActivity
 import com.scenein.discover.presentation.screens.EventDetailActivity
-import com.scenein.profile.persentation.screen.UserProfileActivity
+import com.scenein.profile.presentation.screen.UserProfileActivity
 import com.scenein.utils.DeliveryReportWorker
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {

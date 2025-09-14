@@ -5,14 +5,14 @@
     android:id="@+id/userInfoContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="12dp"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:paddingHorizontal="@dimen/_12sdp"
+    android:paddingVertical="@dimen/_12sdp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivProfilePic"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
@@ -22,53 +22,57 @@
         android:id="@+id/tvUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-        android:textStyle="bold"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:fontFamily="@font/poppins_semibold"
         android:textColor="@color/textPrimary"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintEnd_toStartOf="@+id/btnConfirm"
         app:layout_constraintStart_toEndOf="@id/ivProfilePic"
         app:layout_constraintTop_toTopOf="@id/ivProfilePic"
-        app:layout_constraintEnd_toStartOf="@id/btnConfirm"
-        android:layout_marginEnd="12dp"
         tools:text="gunjan_jain99" />
 
     <TextView
         android:id="@+id/tvFullName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:fontFamily="@font/poppins"
         android:textColor="@color/textSecondary"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintEnd_toEndOf="@id/tvUserName"
         app:layout_constraintStart_toStartOf="@id/tvUserName"
         app:layout_constraintTop_toBottomOf="@id/tvUserName"
-        app:layout_constraintEnd_toEndOf="@id/tvUserName"
         tools:text="gunjan 🌸" />
 
-    <!-- Using AppCompatButton for more direct styling control -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnConfirm"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:minWidth="90dp"
-        android:text="Confirm"
+        android:layout_height="@dimen/_32sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
         android:background="@drawable/bg_button_primary"
-        android:textColor="@color/white"
+        android:fontFamily="@font/poppins_semibold"
+        android:minWidth="@dimen/_70sdp"
+        android:text="Confirm"
         android:textAllCaps="false"
-        android:layout_marginEnd="8dp"
+        android:textColor="@color/textOnPrimary"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivProfilePic"
         app:layout_constraintEnd_toStartOf="@+id/btnDelete"
-        app:layout_constraintTop_toTopOf="@+id/ivProfilePic"
-        app:layout_constraintBottom_toBottomOf="@+id/ivProfilePic"/>
+        app:layout_constraintTop_toTopOf="@+id/ivProfilePic" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnDelete"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:minWidth="90dp"
-        android:text="Delete"
+        android:layout_height="@dimen/_32sdp"
         android:background="@drawable/bg_button_secondary"
-        android:textColor="@color/textPrimary"
+        android:fontFamily="@font/poppins_semibold"
+        android:minWidth="@dimen/_70sdp"
+        android:text="Delete"
         android:textAllCaps="false"
+        android:textColor="@color/textPrimary"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivProfilePic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ivProfilePic"
-        app:layout_constraintBottom_toBottomOf="@+id/ivProfilePic"/>
+        app:layout_constraintTop_toTopOf="@+id/ivProfilePic" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

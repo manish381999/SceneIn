@@ -3,17 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="24dp"
-    android:paddingBottom="16dp"
-    android:paddingHorizontal="16dp">
+    android:paddingTop="@dimen/_20sdp"
+    android:paddingBottom="@dimen/_14sdp"
+    android:paddingHorizontal="@dimen/_16sdp">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogout"
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_36sdp"
         android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/poppins_semibold"
         android:text="Log Out"
-        android:textColor="@color/colorError" />
+        android:textColor="@color/colorError"
+        android:textSize="@dimen/_11ssp" />
 
 </LinearLayout>

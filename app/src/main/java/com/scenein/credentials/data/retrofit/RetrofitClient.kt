@@ -14,7 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "https://dreamsquad.fun/"
+    private const val BASE_URL = "https://api.scenein.in/api/v1/"
 
     @Volatile
     private var retrofit: Retrofit? = null

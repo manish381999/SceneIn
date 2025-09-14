@@ -4,45 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="8dp"
-    android:paddingTop="4dp"
-    android:paddingEnd="8dp"
-    android:paddingBottom="4dp">
+    android:paddingStart="@dimen/_8sdp"
+    android:paddingTop="@dimen/_4sdp"
+    android:paddingEnd="@dimen/_8sdp"
+    android:paddingBottom="@dimen/_4sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/text_bubble_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_chat_bubble_received"
-        android:paddingStart="12dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="6dp"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_6sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="310dp"
+        app:layout_constraintWidth_max="@dimen/_250sdp"
         app:layout_constraintHorizontal_bias="0.0">
 
         <TextView
             android:id="@+id/tv_message_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
             android:textColor="@color/textPrimary"
-            android:textSize="15sp"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintHorizontal_bias="0.0"
             tools:text="This is a received message that might wrap to a few lines." />
 
         <TextView
             android:id="@+id/tv_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:fontFamily="@font/poppins"
             android:textColor="@color/chat_timestamp"
-            android:textSize="11sp"
+            android:textSize="@dimen/_9ssp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_message_body"
@@ -54,30 +56,31 @@
         android:id="@+id/media_bubble_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:background="@drawable/bg_chat_bubble_received"
-        android:padding="4dp"
+        android:padding="@dimen/_4sdp"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_media__grid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintWidth_max="300dp" />
+            app:layout_constraintWidth_max="@dimen/_240sdp" />
 
         <TextView
             android:id="@+id/tv_media_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:fontFamily="@font/poppins"
             android:textColor="@color/chat_timestamp"
-            android:textSize="11sp"
+            android:textSize="@dimen/_9ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_media__grid"
             tools:text="11:46 AM" />

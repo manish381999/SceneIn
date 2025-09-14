@@ -4,65 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
+    android:layout_marginHorizontal="@dimen/_10sdp"
+    android:layout_marginVertical="@dimen/_8sdp"
+    app:cardCornerRadius="@dimen/_12sdp"
+    app:cardElevation="@dimen/_2sdp"
     app:strokeWidth="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:background="@drawable/bg_event">
+        android:background="@drawable/bg_event"
+        android:padding="@dimen/_12sdp">
 
-        <!-- Circular Icon with Background (Success/Error) -->
         <FrameLayout
             android:id="@+id/iconContainer"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
             android:background="@drawable/bg_icon_success"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
                 android:id="@+id/ivTransactionType"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_arrow_downward"
                 app:tint="@color/colorSuccess" />
         </FrameLayout>
 
-        <!-- Transaction Title and Subtitle -->
         <TextView
             android:id="@+id/tvTransactionTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-            android:textStyle="bold"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/textPrimary"
+            android:textSize="@dimen/_11ssp"
+            app:layout_constraintEnd_toStartOf="@id/tvTransactionAmount"
             app:layout_constraintStart_toEndOf="@id/iconContainer"
             app:layout_constraintTop_toTopOf="@id/iconContainer"
-            app:layout_constraintEnd_toStartOf="@id/tvTransactionAmount"
             tools:text="Payment Received" />
 
         <TextView
             android:id="@+id/tvTransactionSubtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:fontFamily="@font/poppins"
             android:textColor="@color/textSecondary"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constraintEnd_toEndOf="@id/tvTransactionTitle"
             app:layout_constraintStart_toStartOf="@id/tvTransactionTitle"
             app:layout_constraintTop_toBottomOf="@id/tvTransactionTitle"
-            app:layout_constraintEnd_toEndOf="@id/tvTransactionTitle"
             tools:text="From: Manish Kumar Singh" />
 
-        <!-- Amount -->
         <TextView
             android:id="@+id/tvTransactionAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-            android:textStyle="bold"
+            android:fontFamily="@font/poppins_semibold"
+            android:textSize="@dimen/_11ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvTransactionTitle"
             tools:text="+ ₹900"
@@ -71,35 +73,36 @@
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_12sdp"
             android:background="@color/gray100"
-            app:layout_constraintTop_toBottomOf="@id/iconContainer"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/iconContainer" />
 
-        <!-- Event Name and Date -->
         <TextView
             android:id="@+id/tvEventName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:fontFamily="@font/poppins"
             android:textColor="@color/textSecondary"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="@dimen/_10ssp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
             tools:text="For: Chennai Super Kings VS Royal Challengers Bangalore" />
 
         <TextView
             android:id="@+id/tvTransactionDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:fontFamily="@font/poppins"
             android:textColor="@color/textSecondary"
-            app:layout_constraintTop_toBottomOf="@id/tvEventName"
+            android:textSize="@dimen/_9ssp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvEventName"
             tools:text="11 Jul 2025" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="@dimen/_24sdp">
+
+    <TextView
+        style="@style/TextAppearance.Material3.HeadlineMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text="What are you interested in?"
+        android:textSize="@dimen/_18ssp" />
+
+    <TextView
+        style="@style/TextAppearance.Material3.BodyLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:fontFamily="@font/poppins"
+        android:text="Select at least one to continue."
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="@dimen/_12ssp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvInterested"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:layout_weight="1"
+        tools:itemCount="9"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:listitem="@layout/item_category"
+        tools:spanCount="3" />
+
+</LinearLayout>

@@ -2,10 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_chat_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/chat_background"
-    tools:context=".chat.persentation.screens.ChatActivity">
+    android:fitsSystemWindows="false"
+    tools:context=".chat.presentation.screens.ChatActivity">
+
+    <View
+        android:id="@+id/fake_status_bar_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/chat_toolbar_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -13,8 +24,8 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/chat_toolbar_color"
         app:contentInsetStart="0dp"
-        app:elevation="4dp"
-        app:layout_constraintTop_toTopOf="parent">
+        app:elevation="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@id/fake_status_bar_background">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,35 +39,34 @@
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Back"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
+                android:paddingStart="@dimen/_8sdp"
+                android:paddingEnd="@dimen/_8sdp"
                 android:src="@drawable/ic_arrow_back_ios"
                 app:tint="@color/gray500" />
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/iv_toolbar_profile_pic"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
                 tools:src="@drawable/ic_profile_placeholder" />
 
             <TextView
                 android:id="@+id/tv_toolbar_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="@dimen/_8sdp"
                 android:layout_weight="1"
                 android:ellipsize="end"
-                android:maxLines="1"
                 android:fontFamily="@font/poppins_semibold"
+                android:maxLines="1"
                 android:textColor="@color/textPrimary"
-                android:textStyle="bold"
-                android:textSize="@dimen/_14ssp"
+                android:textSize="@dimen/_13ssp"
                 tools:text="Gunjan Jain" />
 
             <ImageButton
                 android:id="@+id/iv_audio_call"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Audio Call"
                 android:src="@drawable/ic_audio_call"
@@ -64,13 +74,13 @@
 
             <ImageButton
                 android:id="@+id/iv_video_call"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="4dp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginEnd="@dimen/_4sdp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Video Call"
                 android:src="@drawable/ic_video_call"
-                app:tint="@color/gray500"  />
+                app:tint="@color/gray500" />
         </LinearLayout>
 
     </com.google.android.material.appbar.MaterialToolbar>
@@ -80,7 +90,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:paddingBottom="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/message_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,14 +97,40 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:listitem="@layout/item_chat_message_sent" />
 
+    <View
+        android:id="@+id/fake_nav_bar_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/chat_toolbar_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_new_messages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="New messages"
+        android:visibility="gone"
+        app:cornerRadius="20dp"
+        app:icon="@drawable/ic_arrow_downward"
+        app:iconGravity="textStart"
+        app:layout_constraintBottom_toTopOf="@id/message_input_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
     <LinearLayout
         android:id="@+id/message_input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
+        android:background="@color/gray100"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingHorizontal="@dimen/_8sdp"
+        android:paddingVertical="@dimen/_8sdp"
+        app:layout_constraintBottom_toTopOf="@id/fake_nav_bar_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -104,10 +139,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:cardBackgroundColor="@color/colorSurface"
-            app:cardCornerRadius="24dp"
+            app:cardBackgroundColor="@color/gray200"
+            app:cardCornerRadius="@dimen/_24sdp"
             android:layout_marginBottom="@dimen/dp_1_dsa"
-            app:cardElevation="1dp">
+            android:layout_marginTop="@dimen/dp_1_dsa"
+            app:cardElevation="@dimen/_1sdp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -117,8 +153,8 @@
 
                 <ImageButton
                     android:id="@+id/btn_add_attachment"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Add attachment"
                     android:src="@drawable/ic_add_attachment"
@@ -130,21 +166,22 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
+                    android:fontFamily="@font/poppins"
                     android:hint="Message..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLines="5"
-                    android:minHeight="48dp"
-                    android:paddingTop="12dp"
-                    android:paddingEnd="12dp"
-                    android:paddingBottom="12dp"
-                    android:fontFamily="@font/poppins"
+                    android:minHeight="@dimen/_40sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingEnd="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp"
                     android:textColor="@color/textPrimary"
-                    android:textColorHint="?attr/colorOnSurfaceVariant" />
+                    android:textColorHint="?attr/colorOnSurfaceVariant"
+                    android:textSize="@dimen/_12ssp" />
 
                 <ImageButton
                     android:id="@+id/btn_open_camera"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Open camera"
                     android:src="@drawable/ic_camera"
@@ -156,11 +193,11 @@
             android:id="@+id/btn_send_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/_8sdp"
             android:contentDescription="Send Message"
             android:src="@drawable/ic_send"
             app:backgroundTint="?attr/colorSecondary"
-            app:elevation="2dp"
+            app:elevation="@dimen/_2sdp"
             app:tint="@android:color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,62 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
-    tools:context=".profile.persentation.screen.UserProfileEventsFragment">
+    tools:context=".profile.presentation.screen.UserProfileEventsFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEvent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_event" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvEvent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:padding="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_event"
-            tools:itemCount="3"/>
+    <LinearLayout
+        android:id="@+id/emptyStateLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
+        <ImageView
+            android:layout_width="@dimen/_72sdp"
+            android:layout_height="@dimen/_72sdp"
+            android:src="@drawable/ic_event"
+            app:tint="@color/gray400" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:layout_marginTop="@dimen/_16sdp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="No Events Yet"
+            android:textColor="@color/textPrimary"
+            android:textSize="@dimen/_14ssp" />
 
-        <LinearLayout
-            android:id="@+id/emptyStateLayout"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:fontFamily="@font/poppins"
             android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="visible">
+            android:text="Events this user hosts or attends will appear here."
+            android:textColor="@color/textSecondary"
+            android:textSize="@dimen/_10ssp" />
 
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_event"
-                app:tint="@color/gray400"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="No Events Yet"
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:gravity="center"
-                android:text="Events this user hosts or attends will appear here."
-                android:textColor="@color/textSecondary" />
-
-        </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
+</FrameLayout>

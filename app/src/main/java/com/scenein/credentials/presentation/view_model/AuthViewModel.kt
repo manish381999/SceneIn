@@ -9,14 +9,18 @@ import com.scenein.credentials.data.models.LoginOtpResponse
 import com.scenein.credentials.data.models.UsernameCheckResponse
 import com.scenein.credentials.data.models.VerifyOtpResponse
 import com.scenein.credentials.data.repository.AuthRepository
+import com.scenein.tickets.data.models.GenericApiResponse
 import com.scenein.utils.NetworkState
-
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.json.JSONObject
 
-class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
+class AuthViewModel : ViewModel() {
+
+    private val repository = AuthRepository()
+
+    var isUsernameAvailable: Boolean = false
+        private set
 
     private val _loginState = MutableLiveData<NetworkState<LoginOtpResponse>>()
     val loginState: LiveData<NetworkState<LoginOtpResponse>> = _loginState
@@ -27,28 +31,20 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     private val _updateUserState = MutableLiveData<NetworkState<VerifyOtpResponse>>()
     val updateUserState: LiveData<NetworkState<VerifyOtpResponse>> = _updateUserState
 
-    private val _fcmTokenState = MutableLiveData<NetworkState<String>>()
-    val fcmTokenState: LiveData<NetworkState<String>> = _fcmTokenState
+    private val _usernameCheckState = MutableLiveData<NetworkState<UsernameCheckResponse>?>()
+    val usernameCheckState: LiveData<NetworkState<UsernameCheckResponse>?> get() = _usernameCheckState
 
-    private val _usernameCheckState = MutableLiveData<NetworkState<UsernameCheckResponse>>()
-    val usernameCheckState: LiveData<NetworkState<UsernameCheckResponse>> get() = _usernameCheckState
+    // --- FIX IS HERE ---
+    // Changed the LiveData type from NetworkState<ApiResponse> to NetworkState<GenericApiResponse>
+    private val _removePicState = MutableLiveData<NetworkState<GenericApiResponse>>()
+    val removePicState: LiveData<NetworkState<GenericApiResponse>> get() = _removePicState
 
-    private val _removePicState = MutableLiveData<NetworkState<String>>()
-    val removePicState: LiveData<NetworkState<String>> get() = _removePicState
 
     fun loginWithOtp(mobile: String, countryCode: String, countryShortName: String) {
         _loginState.value = NetworkState.Loading
         viewModelScope.launch {
-            try {
-                val response = repository.loginWithOtp(mobile, countryCode, countryShortName)
-                if (response.isSuccessful && response.body() != null) {
-                    _loginState.value = NetworkState.Success(response.body()!!)
-                } else {
-                    _loginState.value = NetworkState.Error(response.message())
-                }
-            } catch (e: Exception) {
-                _loginState.value = NetworkState.Error(e.localizedMessage ?: "Unknown error")
-            }
+            val result = repository.loginWithOtp(mobile, countryCode, countryShortName)
+            _loginState.postValue(result)
         }
     }
 
@@ -60,17 +56,8 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     ) {
         _verifyState.value = NetworkState.Loading
         viewModelScope.launch {
-            _verifyState.value = try {
-                val response = repository.verifyOtp(mobile, otp, fcmToken, deviceDetails)
-                if (response.isSuccessful && response.body() != null) {
-                    NetworkState.Success(response.body()!!)
-                } else {
-                    val errorMsg = JSONObject(response.errorBody()!!.string()).getString("message")
-                    NetworkState.Error(errorMsg)
-                }
-            } catch (e: Exception) {
-                NetworkState.Error(e.message ?: "An unknown error occurred.")
-            }
+            val result = repository.verifyOtp(mobile, otp, fcmToken, deviceDetails)
+            _verifyState.postValue(result)
         }
     }
 
@@ -84,60 +71,34 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     ) {
         _updateUserState.value = NetworkState.Loading
         viewModelScope.launch {
-            try {
-                val response = repository.updateUser(name, userName, emailId, aboutYou, interest, profilePic)
-                if (response.isSuccessful && response.body() != null) {
-                    _updateUserState.value = NetworkState.Success(response.body()!!)
-                } else {
-                    _updateUserState.value = NetworkState.Error(response.message())
-                }
-            } catch (e: Exception) {
-                _updateUserState.value = NetworkState.Error(e.localizedMessage ?: "Unknown error")
-            }
+            val result = repository.updateUser(name, userName, emailId, aboutYou, interest, profilePic)
+            _updateUserState.postValue(result)
         }
     }
 
     fun removeProfilePic() {
         _removePicState.value = NetworkState.Loading
         viewModelScope.launch {
-            try {
-                val response = repository.removeProfilePicture()
-                if (response.isSuccessful) {
-                    // We only need the message, so we extract it.
-                    _removePicState.postValue(NetworkState.Success(response.body()!!.message))
-                } else {
-                    val errorMsg = JSONObject(response.errorBody()!!.string()).getString("message")
-                    _removePicState.postValue(NetworkState.Error(errorMsg))
-                }
-            } catch (e: Exception) {
-                e.message?.let { _removePicState.postValue(NetworkState.Error(it)) }
-            }
+            val result = repository.removeProfilePicture()
+            _removePicState.postValue(result)
         }
     }
 
     fun checkUsername(userName: String) {
         _usernameCheckState.value = NetworkState.Loading
+        isUsernameAvailable = false
         viewModelScope.launch {
-            _usernameCheckState.value = try {
-                val response = repository.checkUsernameAvailability(userName)
-                if (response.isSuccessful) {
-                    NetworkState.Success(response.body()!!)
-                } else {
-                    NetworkState.Error(JSONObject(response.errorBody()!!.string()).getString("message"))
-                }
-            } catch (e: Exception) {
-                e.message?.let { NetworkState.Error(it) }
+            val result = repository.checkUsernameAvailability(userName)
+            if (result is NetworkState.Success) {
+                isUsernameAvailable = result.data.available
             }
+            _usernameCheckState.postValue(result)
         }
     }
 
-    // A function to reset the state so the check UI can be cleared.
     @SuppressLint("NullSafeMutableLiveData")
     fun clearUsernameCheckState() {
         _usernameCheckState.value = null
+        isUsernameAvailable = false
     }
-
-
-
-
 }

@@ -5,17 +5,17 @@
     android:id="@+id/connectionItemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="8dp"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:paddingHorizontal="@dimen/_12sdp"
+    android:paddingVertical="@dimen/_8sdp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivProfilePic"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
         tools:src="@tools:sample/avatars" />
 
@@ -23,51 +23,53 @@
         android:id="@+id/tvUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-        android:textStyle="bold"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:fontFamily="@font/poppins_semibold"
         android:textColor="@color/textPrimary"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintTop_toTopOf="@id/ivProfilePic"
+        android:textSize="@dimen/_11ssp"
         app:layout_constraintBottom_toTopOf="@id/tvFullName"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
         app:layout_constraintEnd_toStartOf="@+id/btnMainAction"
+        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintTop_toTopOf="@id/ivProfilePic"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="gunjan_jain99" />
 
     <TextView
         android:id="@+id/tvFullName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
         android:textColor="@color/textSecondary"
-        app:layout_constraintStart_toStartOf="@+id/tvUserName"
-        app:layout_constraintTop_toBottomOf="@+id/tvUserName"
+        android:textSize="@dimen/_10ssp"
         app:layout_constraintBottom_toBottomOf="@id/ivProfilePic"
         app:layout_constraintEnd_toEndOf="@+id/tvUserName"
+        app:layout_constraintStart_toStartOf="@+id/tvUserName"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserName"
         tools:text="gunjan 🌸" />
 
-    <!-- This button will smartly change between "Requested" and "Following" etc. -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnMainAction"
         style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="40dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="@dimen/_36sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ivOptions"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Requested" />
 
     <ImageView
         android:id="@+id/ivOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_more_vert"
-        app:tint="@color/textSecondary"
-        android:padding="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/_8sdp"
+        android:src="@drawable/ic_more_vert"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:tint="@color/textSecondary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

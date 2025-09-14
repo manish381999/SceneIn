@@ -1,34 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/colorSurface"
-    tools:context=".profile.persentation.screen.ConnectionsFragment">
+    android:background="@color/colorBackground"
+    tools:context=".profile.presentation.screen.ConnectionsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvConnections"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_connection"
-        tools:itemCount="5"/>
+        tools:itemCount="5"
+        tools:listitem="@layout/item_connection" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
-    <TextView
+
+
+    <LinearLayout
         android:id="@+id/tvEmptyMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="You haven't made any connections yet."
-        android:visibility="gone"/>
+        android:layout_gravity="top|center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/dp_24_dsa"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_group_"
+            app:tint="@color/gray400"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="No Connections Yet"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="Start connecting with people to see them here."
+            android:textColor="@color/textSecondary" />
+
+    </LinearLayout>
 </FrameLayout>

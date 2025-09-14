@@ -12,14 +12,21 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
         app:elevation="0dp">
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             style="@style/Widget.Material3.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back_ios"
-            app:title="Manage Payout Method" />
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray100"/>
+            app:title="Manage Payout Method"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.App.ToolbarTitle.Compact" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/gray100" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -31,138 +38,162 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/_12sdp">
 
-            <!-- 1. Current Method Display -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
                 android:text="CURRENT PAYOUT METHOD"
-                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"/>
+                android:textColor="@color/textSecondary"
+                android:textSize="@dimen/_9ssp" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/currentMethodCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/_8sdp"
                 app:cardElevation="0dp"
                 app:strokeColor="@color/gray200"
-                app:strokeWidth="1dp">
+                app:strokeWidth="@dimen/_1sdp">
+
                 <TextView
                     android:id="@+id/tvCurrentPayoutInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                    tools:text="UPI: ****@okhdfc"/>
+                    android:fontFamily="@font/poppins"
+                    android:minHeight="@dimen/_40sdp"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/_12sdp"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/_11ssp"
+                    tools:text="UPI: ****@okhdfc" />
             </com.google.android.material.card.MaterialCardView>
 
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray100" android:layout_marginVertical="24dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginVertical="@dimen/_20sdp"
+                android:background="@color/gray100" />
 
-            <!-- 2. Add / Change Method Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
                 android:text="ADD OR CHANGE METHOD"
-                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"/>
+                android:textColor="@color/textSecondary"
+                android:textSize="@dimen/_9ssp" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayoutPayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:background="@drawable/tab_background_selector"
-                app:tabMode="fixed"/>
+                app:tabMode="fixed" />
 
-            <!-- UPI Form -->
             <LinearLayout
                 android:id="@+id/upiFormContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="@dimen/_16sdp"
+                android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutUpiId"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:hint="Your UPI ID (e.g. name@okbank)">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etUpiId"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:textSize="@dimen/_11ssp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <!-- Bank Account Form -->
             <LinearLayout
                 android:id="@+id/bankFormContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
                 android:orientation="vertical"
-                android:visibility="gone"
-                android:layout_marginTop="16dp">
+                android:visibility="gone">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutAccountHolderName"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:hint="Account Holder Name">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etAccountHolderName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName|textCapWords" />
+                        android:fontFamily="@font/poppins"
+                        android:inputType="textPersonName|textCapWords"
+                        android:textSize="@dimen/_11ssp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutAccountNumber"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:hint="Account Number">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etAccountNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:fontFamily="@font/poppins"
+                        android:inputType="number"
+                        android:textSize="@dimen/_11ssp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutIfscCode"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:hint="IFSC Code"
                     app:counterEnabled="true"
                     app:counterMaxLength="11">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etIfscCode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
                         android:inputType="textCapCharacters"
-                        android:maxLength="11" />
+                        android:maxLength="11"
+                        android:textSize="@dimen/_11ssp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp">
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_24sdp">
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnVerifyAndSave"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="14dp"
-                    android:text="Verify &amp; Save Method" />
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Verify &amp; Save Method"
+                    android:textSize="@dimen/_11ssp" />
+
                 <ProgressBar
                     android:id="@+id/progressBar"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_gravity="center"
                     android:indeterminateTint="@color/white"
                     android:visibility="gone" />

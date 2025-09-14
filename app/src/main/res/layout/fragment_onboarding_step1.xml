@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/_24sdp">
+
+        <TextView
+            style="@style/TextAppearance.Material3.HeadlineMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Welcome to SceneIn"
+            android:textSize="@dimen/_18ssp" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.BodyLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:fontFamily="@font/poppins"
+            android:text="Let's start with the basics."
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_32sdp"
+            android:fontFamily="@font/poppins"
+            android:text="Full Name"
+            android:textSize="@dimen/_12ssp" />
+
+        <EditText
+            android:id="@+id/etFullName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@drawable/edit_text_background_selector"
+            android:fontFamily="@font/poppins"
+            android:hint="Enter your full name"
+            android:inputType="textPersonName|textCapWords"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:textSize="@dimen/_13ssp" />
+
+        <TextView
+            android:id="@+id/tvFullNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/colorError"
+            android:textSize="@dimen/_10ssp"
+            android:visibility="gone"
+            tools:text="Full name is required"
+            tools:visibility="visible" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:fontFamily="@font/poppins"
+            android:text="Username"
+            android:textSize="@dimen/_12ssp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@drawable/edit_text_background_selector">
+
+            <EditText
+                android:id="@+id/etUserName"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins"
+                android:hint="Choose a unique username"
+                android:inputType="text"
+                android:paddingHorizontal="@dimen/_12sdp"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/usernameStatusIcon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/usernameStatusIcon"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_check_circle"
+                tools:visibility="visible" />
+
+            <ProgressBar
+                android:id="@+id/usernameStatusProgress"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvUsernameStatusMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:fontFamily="@font/poppins"
+            android:textSize="@dimen/_10ssp"
+            tools:text="This username is available!" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:fontFamily="@font/poppins"
+            android:text="Email"
+            android:textSize="@dimen/_12ssp" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@drawable/edit_text_background_selector"
+            android:fontFamily="@font/poppins"
+            android:hint="Enter your email address"
+            android:inputType="textEmailAddress"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:textSize="@dimen/_13ssp" />
+
+        <TextView
+            android:id="@+id/tvEmailError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/colorError"
+            android:textSize="@dimen/_10ssp"
+            android:visibility="gone"
+            tools:text="Please enter a valid email"
+            tools:visibility="visible" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+</ScrollView>

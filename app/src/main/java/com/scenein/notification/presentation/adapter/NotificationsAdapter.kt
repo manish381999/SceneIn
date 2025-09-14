@@ -81,7 +81,8 @@ class NotificationsAdapter(
         private fun toRelativeTime(mysqlTimestamp: String?): String {
             if (mysqlTimestamp.isNullOrBlank()) return ""
             return try {
-                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                sdf.timeZone = TimeZone.getTimeZone("UTC") // important
                 val time = sdf.parse(mysqlTimestamp)?.time ?: return ""
                 val now = System.currentTimeMillis()
                 val diff = now - time
@@ -99,8 +100,12 @@ class NotificationsAdapter(
                         }
                     }
                 }
-            } catch (e: Exception) { "" }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                ""
+            }
         }
+
 
         // --- THIS IS THE NEW, SMARTER FORMATTING FUNCTION ---
         private fun formatNotificationBody(notification: Notification): SpannableStringBuilder {

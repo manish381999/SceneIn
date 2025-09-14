@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorSurface"
     android:fitsSystemWindows="true"
-    tools:context=".settings.persentation.screen.TicketTransactionHistoryActivity">
+    android:orientation="vertical"
+    tools:context=".settings.presentation.screen.TicketTransactionHistoryActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -21,12 +21,14 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back_ios"
-            app:title="Ticket Transactions" />
+            app:title="Ticket Transactions"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.App.ToolbarTitle.Compact" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray100"/>
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/gray100" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
@@ -43,7 +45,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingVertical="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_transaction_history" />
 
@@ -61,9 +62,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/poppins"
             android:text="You have no ticket transactions yet."
-            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:textColor="@color/textSecondary"
+            android:textSize="@dimen/_11ssp"
             android:visibility="gone" />
     </FrameLayout>
 </LinearLayout>

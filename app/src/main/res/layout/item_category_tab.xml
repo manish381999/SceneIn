@@ -1,35 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:minHeight="@dimen/_48sdp"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:paddingHorizontal="@dimen/_10sdp"
-    android:paddingTop="@dimen/_4sdp"
+    android:gravity="center"
+    android:paddingHorizontal="@dimen/_8sdp"
+    android:paddingVertical="@dimen/_8sdp"
     android:background="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/iv_category_icon"
         android:layout_width="@dimen/_18sdp"
-        android:layout_height="@dimen/_18sdp"
-        />
+        android:layout_height="@dimen/_18sdp" />
 
     <TextView
-    android:id="@+id/tv_category_name"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/_4sdp"
-    android:fontFamily="@font/poppins_medium"
-    android:textSize="@dimen/_8ssp"
-    tools:text="All Events"/>
+        android:id="@+id/tv_category_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:fontFamily="@font/poppins_medium"
+        android:textSize="@dimen/_10ssp"
+        tools:text="All Events"/>
 
     <View
         android:id="@+id/indicator"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_height="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:background="@color/textPrimary"
         android:visibility="invisible"/>
 

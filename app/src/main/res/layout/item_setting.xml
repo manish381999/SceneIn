@@ -4,53 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="14dp"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/_8sdp"
+    android:paddingVertical="@dimen/_8sdp">
 
-    <!-- Icon for the setting -->
     <ImageView
         android:id="@+id/ivIcon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:padding="@dimen/_4sdp"
+        android:background="@drawable/bg_light_purpule"
         android:importantForAccessibility="no"
-        app:tint="?attr/colorPrimary"
+        app:tint="@color/colorPrimary"
         tools:src="@drawable/ic_account_circle" />
 
-    <!-- Container for Title and Subtitle -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
         android:layout_weight="1"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:fontFamily="@font/poppins_semibold"
             android:textColor="@color/textPrimary"
+            android:textSize="@dimen/_11ssp"
             tools:text="Account Center" />
 
         <TextView
             android:id="@+id/tvSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:fontFamily="@font/poppins"
             android:textColor="@color/textSecondary"
+            android:textSize="@dimen/_10ssp"
             tools:text="Manage your account details and security" />
     </LinearLayout>
 
-    <!-- Forward arrow to indicate it's clickable -->
     <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/_18sdp"
+        android:layout_height="@dimen/_18sdp"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_arrow_forward_ios"
         app:tint="@color/gray400" />

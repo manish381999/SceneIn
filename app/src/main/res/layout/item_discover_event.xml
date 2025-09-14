@@ -219,9 +219,9 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:textAllCaps="false"
                 android:textSize="@dimen/_11ssp"
+                app:backgroundTint="@null"
                 android:textColor="@color/join_button_text_color_selector"
                 android:background="@drawable/bg_join_button_selector"
-                app:backgroundTint="@null"
                 app:cornerRadius="@dimen/_12sdp"
                 tools:text="Join"/>
 

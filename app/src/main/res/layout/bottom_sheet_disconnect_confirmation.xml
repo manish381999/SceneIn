@@ -4,45 +4,50 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp"
-   >
+    android:padding="@dimen/_20sdp">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/poppins_bold"
         android:text="Disconnect User"
-        android:textAppearance="?attr/textAppearanceHeadline6"
         android:textColor="?attr/colorOnSurface"
-        android:layout_gravity="center_horizontal"/>
+        android:textSize="@dimen/_15ssp" />
 
     <TextView
         android:id="@+id/tv_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:fontFamily="@font/poppins"
+        android:text="Are you sure you want to remove this user from your connections?"
         android:textAlignment="center"
-        android:textAppearance="?attr/textAppearanceBody1"
         android:textColor="?attr/colorOnSurface"
-        android:text="Are you sure you want to remove this user from your connections?"/>
+        android:textSize="@dimen/_11ssp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_confirm_disconnect"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="@font/poppins_semibold"
         android:text="Disconnect"
         android:textColor="?attr/colorOnError"
-        app:backgroundTint="?attr/colorError"/>
+        android:textSize="@dimen/_11ssp"
+        app:backgroundTint="?attr/colorError" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_cancel"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:fontFamily="@font/poppins_semibold"
         android:text="Cancel"
-        android:textColor="?attr/colorPrimary"/>
+        android:textColor="?attr/colorPrimary"
+        android:textSize="@dimen/_11ssp" />
 
 </LinearLayout>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context=".tickets.persentation.screens.SellTicketActivity">
+    tools:context=".tickets.presentation.screens.SellTicketActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back_ios"
-            app:title="List Your Ticket" />
+            app:title="List Your Ticket"
+            app:titleTextAppearance="@style/ToolbarTitleStyle"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
@@ -33,12 +34,12 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="24dp"
+            android:padding="@dimen/_24sdp"
             android:visibility="visible">
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/_64sdp"
+                android:layout_height="@dimen/_64sdp"
                 android:src="@drawable/ic_ticket"
                 app:tint="?attr/colorPrimary" />
 
@@ -46,24 +47,27 @@
                 android:id="@+id/tvUploadPrompt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/_12sdp"
                 android:text="Upload your ticket to begin AI analysis"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+                android:fontFamily="@font/poppins"
+                android:textSize="@dimen/_10ssp" />
 
             <ProgressBar
                 android:id="@+id/analysisProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:visibility="gone" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSelectFile"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Select Ticket File" />
+                android:layout_height="@dimen/_36sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:text="Select Ticket File"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="@dimen/_10ssp"/>
         </LinearLayout>
 
         <!-- Main Form -->
@@ -72,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="96dp"
+            android:paddingBottom="@dimen/_72sdp"
             android:visibility="gone"
             tools:visibility="visible">
 
@@ -80,101 +84,114 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="@dimen/_16sdp">
 
+                <!-- Section Title -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Confirm Event Details"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/poppins_bold"
+                    android:textSize="@dimen/_14ssp"/>
 
+                <!-- Label -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:text="Event Name"
-                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="@dimen/_10ssp"/>
 
+                <!-- Input -->
                 <EditText
                     android:id="@+id/etEventName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:background="@drawable/bg_input"
                     android:hint="e.g., Sunburn Festival Goa"
                     android:inputType="textCapWords"
-                    android:padding="16dp" />
+                    android:fontFamily="@font/poppins"
+                    android:textSize="@dimen/_10ssp"
+                    android:padding="@dimen/_12sdp" />
 
+                <!-- Venue -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:text="Venue / City"
-                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="@dimen/_10ssp"/>
 
                 <EditText
                     android:id="@+id/etEventVenue"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:background="@drawable/bg_input"
                     android:hint="e.g., Vagator, Goa"
                     android:inputType="textCapWords"
-                    android:padding="16dp" />
+                    android:fontFamily="@font/poppins"
+                    android:textSize="@dimen/_10ssp"
+                    android:padding="@dimen/_12sdp" />
 
+                <!-- Number of Tickets -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:text="Number of Tickets"
-                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="@dimen/_10ssp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnDecrementTickets"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="@dimen/_36sdp"
+                        android:layout_height="@dimen/_36sdp"
                         android:background="@drawable/bg_button"
                         app:icon="@drawable/ic_remove"
                         app:iconGravity="textStart"
-                        app:iconPadding="0dp"/>
+                        app:iconPadding="@dimen/dp_0_dsa"/>
 
                     <TextView
                         android:id="@+id/tvTicketCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                        android:textStyle="bold"
+                        android:layout_marginHorizontal="@dimen/_12sdp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:textSize="@dimen/_14ssp"
                         tools:text="1" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnIncrementTickets"
                         android:background="@drawable/bg_button"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="@dimen/_36sdp"
+                        android:layout_height="@dimen/_36sdp"
                         app:icon="@drawable/ic_add"
                         app:iconGravity="textStart"
-                        app:iconPadding="0dp"/>
+                        app:iconPadding="@dimen/dp_0_dsa"/>
                 </LinearLayout>
 
+                <!-- Date / Time Fields -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="@dimen/_8sdp"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
@@ -182,16 +199,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Event Date"
-                            android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+                            android:fontFamily="@font/poppins_semibold"
+                            android:textSize="@dimen/_10ssp"/>
 
                         <TextView
                             android:id="@+id/tvEventDate"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_height="@dimen/_36sdp"
+                            android:layout_marginTop="@dimen/_4sdp"
                             android:background="@drawable/bg_input"
-                            android:padding="16dp"
-                            android:textSize="16sp"
+                            android:padding="@dimen/_12sdp"
+                            android:fontFamily="@font/poppins"
+                            android:textSize="@dimen/_10ssp"
                             tools:text="28 Dec, 2024" />
                     </LinearLayout>
 
@@ -205,20 +224,23 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Event Time"
-                            android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+                            android:fontFamily="@font/poppins_semibold"
+                            android:textSize="@dimen/_10ssp"/>
 
                         <TextView
                             android:id="@+id/tvEventTime"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_height="@dimen/_36sdp"
+                            android:layout_marginTop="@dimen/_4sdp"
                             android:background="@drawable/bg_input"
-                            android:padding="16dp"
-                            android:textSize="16sp"
+                            android:padding="@dimen/_12sdp"
+                            android:fontFamily="@font/poppins"
+                            android:textSize="@dimen/_10ssp"
                             tools:text="04:00 PM" />
                     </LinearLayout>
                 </LinearLayout>
 
+                <!-- Dynamic Fields -->
                 <LinearLayout
                     android:id="@+id/dynamicFieldsContainer"
                     android:layout_width="match_parent"
@@ -230,74 +252,85 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="@dimen/_12sdp"
                         android:text="Ticket Type (e.g., VIP, General)"
-                        android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textSize="@dimen/_10ssp"/>
 
                     <EditText
                         android:id="@+id/etTicketType"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_height="@dimen/_36sdp"
+                        android:layout_marginTop="@dimen/_4sdp"
                         android:background="@drawable/bg_input"
                         android:hint="Optional"
                         android:inputType="textCapWords"
-                        android:padding="16dp" />
+                        android:fontFamily="@font/poppins"
+                        android:textSize="@dimen/_10ssp"
+                        android:padding="@dimen/_12sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="@dimen/_12sdp"
                         android:text="Seat Number"
-                        android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textSize="@dimen/_10ssp"/>
 
                     <EditText
                         android:id="@+id/etSeatNumber"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_height="@dimen/_36sdp"
+                        android:layout_marginTop="@dimen/_4sdp"
                         android:background="@drawable/bg_input"
                         android:hint="Optional"
                         android:inputType="text"
-                        android:padding="16dp" />
+                        android:fontFamily="@font/poppins"
+                        android:textSize="@dimen/_10ssp"
+                        android:padding="@dimen/_12sdp" />
                 </LinearLayout>
 
+                <!-- Pricing -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:text="Pricing"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/poppins_bold"
+                    android:textSize="@dimen/_14ssp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="@dimen/_8sdp"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Original Price (₹)" />
+                            android:text="Original Price (₹)"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:textSize="@dimen/_10ssp"/>
 
                         <EditText
                             android:id="@+id/etOriginalPrice"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_height="@dimen/_36sdp"
+                            android:layout_marginTop="@dimen/_4sdp"
                             android:background="@drawable/bg_input"
                             android:enabled="false"
                             android:hint="From ticket"
                             android:inputType="number"
-                            android:padding="16dp"
+                            android:fontFamily="@font/poppins"
+                            android:textSize="@dimen/_10ssp"
+                            android:padding="@dimen/_12sdp"
                             android:textColor="@color/textSecondary" />
                     </LinearLayout>
 
@@ -311,82 +344,92 @@
                             android:id="@+id/tvYourPriceLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Your Price (₹)" />
+                            android:text="Your Price (₹)"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:textSize="@dimen/_10ssp"/>
 
                         <EditText
                             android:id="@+id/etSellingPrice"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_height="@dimen/_36sdp"
+                            android:layout_marginTop="@dimen/_4sdp"
                             android:background="@drawable/bg_input"
                             android:hint="e.g., 4200"
                             android:inputType="number"
-                            android:padding="16dp" />
+                            android:fontFamily="@font/poppins"
+                            android:textSize="@dimen/_10ssp"
+                            android:padding="@dimen/_12sdp" />
                     </LinearLayout>
                 </LinearLayout>
 
+                <!-- Payout -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:text="Payout Method"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/poppins_bold"
+                    android:textSize="@dimen/_14ssp"/>
 
                 <LinearLayout
                     android:id="@+id/payoutInfoContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:background="@drawable/bg_event"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/_12sdp">
 
                     <TextView
                         android:id="@+id/tvPayoutMethodInfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:fontFamily="@font/poppins"
+                        android:textSize="@dimen/_10ssp"
                         tools:text="Your payout will be sent to:\nUPI: ****@okhdfc" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnChangePayout"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Change / Add Method" />
+                        android:layout_height="@dimen/_36sdp"
+                        android:text="Change / Add Method"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textSize="@dimen/_10ssp"/>
                 </LinearLayout>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
+        <!-- Bottom Button -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/bottomButtonContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:visibility="gone"
-            app:cardElevation="8dp"
+            app:cardElevation="@dimen/_8sdp"
             tools:visibility="visible">
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp">
+                android:padding="@dimen/_12sdp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnListTicket"
-                  android:background="@drawable/bg_button"
+                    android:background="@drawable/bg_button"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="14dp"
+                    android:layout_height="@dimen/_36sdp"
                     android:textAllCaps="false"
-                    android:text="List My Ticket" />
+                    android:text="List My Ticket"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="@dimen/_10ssp"/>
 
                 <ProgressBar
                     android:id="@+id/progressBar"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_gravity="center"
                     android:indeterminateTint="@color/white"
                     android:visibility="gone" />

@@ -1,48 +1,48 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/_155sdp"
-    android:minWidth="@dimen/_140sdp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/_150sdp"
     android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_8sdp"
     android:layout_marginEnd="@dimen/_8sdp"
-    android:layout_marginStart="@dimen/dp_8_dsa"
-    android:foreground="?attr/selectableItemBackground"
+    android:layout_marginBottom="@dimen/_8sdp"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="@dimen/_12sdp"
-    android:layout_marginBottom="@dimen/dp_2_dsa"
-   >
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="@dimen/_16sdp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_event"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="@dimen/_8sdp"
-        android:background="@drawable/bg_event">
+        android:padding="@dimen/_16sdp">
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/ivProfilePic"
-            android:layout_width="@dimen/_90sdp"
-            android:layout_height="@dimen/_90sdp"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
             android:src="@drawable/ic_profile_placeholder" />
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="Manish Kumar"
-            android:singleLine="true"
+            android:layout_marginTop="@dimen/_12sdp"
             android:ellipsize="end"
+            android:fontFamily="@font/poppins_semibold"
+            android:singleLine="true"
             android:textColor="@color/textPrimary"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="@dimen/_13ssp"
+            tools:text="Manish Kumar" />
 
         <TextView
             android:id="@+id/tvMutualInterests"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_4sdp"
             android:fontFamily="@font/poppins"
             android:text="3 mutual interests"
             android:textColor="@color/textSecondary"
@@ -51,10 +51,12 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnConnect"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_32sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:text="Connect"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_marginTop="@dimen/_12sdp"
             android:background="@drawable/bg_button_primary"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Connect"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>

@@ -3,7 +3,6 @@ package com.scenein.discover.presentation.screens
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -15,9 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
-import com.scenein.R
 import com.scenein.createEvent.data.models.Category
 import com.scenein.databinding.FragmentDiscoverBinding
 import com.scenein.discover.data.models.SuggestedConnection
@@ -25,10 +22,9 @@ import com.scenein.discover.presentation.adapter.CategoryAdapter
 import com.scenein.discover.presentation.adapter.FeedAdapter
 import com.scenein.discover.presentation.view_model.DiscoverViewModel
 import com.scenein.notification.presentation.screens.NotificationsActivity
-import com.scenein.profile.persentation.screen.UserProfileActivity
-import com.scenein.profile.persentation.view_model.ProfileViewModel
+import com.scenein.profile.presentation.screen.UserProfileActivity
+import com.scenein.profile.presentation.view_model.ProfileViewModel
 import com.scenein.utils.*
-import java.util.*
 
 class DiscoverFragment : Fragment() {
 

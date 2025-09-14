@@ -5,34 +5,34 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile.persentation.screen.ProfilePicturePreviewActivity">
+    tools:context=".profile.presentation.screen.ProfilePicturePreviewActivity">
 
     <ImageView
         android:id="@+id/ivBlurredBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="centerCrop"
         android:contentDescription="Blurred user background"
-        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#99000000"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/ivProfilePreview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:civ_border_color="@android:color/white"
-        app:civ_border_width="2dp"
+        app:civ_border_width="@dimen/_2sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,12 +45,12 @@
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:src="@drawable/ic_arrow_back_ios"
         android:contentDescription="Close"
+        android:padding="@dimen/_12sdp"
+        android:src="@drawable/ic_arrow_back_ios"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white"/>
+        app:tint="@color/white" />
 
     <LinearLayout
         android:id="@+id/bottomActions"
@@ -58,10 +58,10 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="@dimen/_12sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:id="@+id/actionConnect"
@@ -71,21 +71,24 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingVertical="8dp">
+            android:paddingVertical="@dimen/_8sdp">
+
             <ImageView
                 android:id="@+id/ivConnectIcon"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                tools:src="@drawable/ic_group"
-                app:tint="@android:color/white"/>
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                app:tint="@android:color/white"
+                tools:src="@drawable/ic_group" />
+
             <TextView
                 android:id="@+id/tvConnectLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                tools:text="Connect"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:fontFamily="@font/poppins"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"/>
+                android:textSize="@dimen/_10ssp"
+                tools:text="Connect" />
         </LinearLayout>
 
         <LinearLayout
@@ -96,19 +99,22 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingVertical="8dp">
+            android:paddingVertical="@dimen/_8sdp">
+
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
                 android:src="@drawable/ic_send"
-                app:tint="@android:color/white"/>
+                app:tint="@android:color/white" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:fontFamily="@font/poppins"
                 android:text="Share profile"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"/>
+                android:textSize="@dimen/_10ssp" />
         </LinearLayout>
 
         <LinearLayout
@@ -119,19 +125,22 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingVertical="8dp">
+            android:paddingVertical="@dimen/_8sdp">
+
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
                 android:src="@drawable/ic_ticket"
-                app:tint="@android:color/white"/>
+                app:tint="@android:color/white" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:fontFamily="@font/poppins"
                 android:text="Copy link"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"/>
+                android:textSize="@dimen/_10ssp" />
         </LinearLayout>
 
         <LinearLayout
@@ -142,19 +151,22 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingVertical="8dp">
+            android:paddingVertical="@dimen/_8sdp">
+
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
                 android:src="@drawable/ic_qr_code"
-                app:tint="@android:color/white"/>
+                app:tint="@android:color/white" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:fontFamily="@font/poppins"
                 android:text="QR code"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"/>
+                android:textSize="@dimen/_10ssp" />
         </LinearLayout>
     </LinearLayout>
 

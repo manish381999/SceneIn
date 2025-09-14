@@ -17,7 +17,7 @@ import retrofit2.http.Part
 
 interface ApiService {
     @FormUrlEncoded
-    @POST("api_v1/login_with_otp.php")
+    @POST("auth/login_with_otp")
     suspend fun loginWithOtp(
         @Field("mobile_number") mobileNumber: String,
         @Field("country_code") countryCode: String,
@@ -26,7 +26,7 @@ interface ApiService {
 
 
     @FormUrlEncoded
-    @POST("api_v1/verify_otp.php")
+    @POST("auth/verify_otp")
     suspend fun verifyOtp(
         @Field("mobile_number") mobileNumber: String,
         @Field("otp") otp: String,
@@ -38,7 +38,7 @@ interface ApiService {
     ): Response<VerifyOtpResponse>
 
     @Multipart
-    @POST("api_v1/update_user.php")
+    @POST("users/update_profile")
     suspend fun updateUser(
         @Part("name") name: RequestBody,
         @Part("user_name") userName: RequestBody,
@@ -48,11 +48,11 @@ interface ApiService {
         @Part profilePic: MultipartBody.Part? // nullable if user doesn't upload a new photo
     ): Response<VerifyOtpResponse>
 
-    @POST("api_v1/remove_profile_picture.php")
+    @POST("users/remove_profile_picture")
     suspend fun removeProfilePicture(): Response<GenericApiResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/check_username.php")
+    @POST("users/check_username")
     suspend fun checkUsernameAvailability(
         @Field("user_name") userName: String
     ): Response<UsernameCheckResponse>

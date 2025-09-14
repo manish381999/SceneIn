@@ -1,298 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:scrollbars="none"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    tools:context=".credentials.presentation.screens.OnboardingActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressIndicator"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:trackThickness="@dimen/_6sdp"
+        tools:progress="33" />
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Welcome to SceneIn"
-            android:gravity="center_vertical"
-            android:fontFamily="@font/poppins_bold"
-            android:textSize="@dimen/_22ssp"
-            android:textColor="@color/colorPrimary"
-            android:layout_marginTop="@dimen/dp_32_dsa" />
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_8sdp"
+        app:layout_constraintBottom_toTopOf="@+id/floating_action_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressIndicator" />
 
-        <!-- Subtitle -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Let's create your profile in one simple step"
-            android:textSize="@dimen/_12ssp"
-            android:textColor="@color/gray500"
-           />
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/floating_action_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        app:cardCornerRadius="@dimen/_16sdp"
+        app:cardElevation="@dimen/_8sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/dp_12_dsa"
-            android:layout_marginHorizontal="@dimen/dp_16_dsa"
-            android:layout_marginBottom="@dimen/dp_10_dsa"
-            android:layout_marginTop="@dimen/dp_10_dsa"
-            app:cardElevation="@dimen/dp_5_dsa">
+            android:background="@drawable/bg_bottom_nav"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:paddingVertical="@dimen/_8sdp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBack"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorSurface"
-                android:padding="@dimen/dp_12_dsa"
-                android:orientation="vertical">
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Back"
+                android:textSize="@dimen/_13ssp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
-        <!-- Profile Picture -->
-                <com.mikhaellopez.circularimageview.CircularImageView
-                    android:id="@+id/ivProfile"
-                    android:layout_width="@dimen/_120sdp"
-                    android:layout_height="@dimen/_120sdp"
-                    android:src="@drawable/ic_profile_placeholder"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:civ_border_width="2dp"
-                    app:civ_border_color="#D1B3FF"
-                    />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:minWidth="@dimen/_90sdp"
+                android:text="Next"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <ProgressBar
+                android:id="@+id/finalProgressBar"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/_2sdp"
+                android:indeterminateTint="@color/white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/btnNext"
+                app:layout_constraintEnd_toEndOf="@id/btnNext"
+                app:layout_constraintStart_toStartOf="@id/btnNext"
+                app:layout_constraintTop_toTopOf="@id/btnNext"
+                tools:visibility="visible" />
 
-                <ImageView
-                android:id="@+id/iv_edit"
-                android:layout_width="@dimen/_32sdp"
-                android:layout_height="@dimen/_32sdp"
-                android:layout_margin="4dp"
-                android:background="@drawable/bg_circle_white"
-                android:src="@drawable/ic_camera"
-                android:padding="@dimen/dp_6_dsa"
-                android:elevation="@dimen/dp_2"
-                app:layout_constraintTop_toTopOf="@+id/ivProfile"
-                app:layout_constraintEnd_toEndOf="@id/ivProfile"
-                app:layout_constraintBottom_toBottomOf="@id/ivProfile"
-                app:layout_constraintStart_toStartOf="@id/ivProfile"
-                app:layout_constraintVertical_bias="1.1"
-                app:layout_constraintHorizontal_bias="1.1"
-                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="@id/ivProfile"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="@dimen/dp_20_dsa"
-                    android:padding="@dimen/dp_16_dsa"
-                    app:layout_constraintEnd_toEndOf="parent">
+    </com.google.android.material.card.MaterialCardView>
 
-                    <TextView
-                        android:id="@+id/tv_Name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:fontFamily="@font/poppins"
-                        android:text="Full Name"
-                        android:textColor="@color/textPrimary"
-                        android:textSize="@dimen/_12sdp"
-                        />
-
-                    <EditText
-                        android:id="@+id/etFullName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_5_dsa"
-                        android:background="@drawable/bg_input"
-                        android:hint="Enter Full name"
-                        android:fontFamily="@font/poppins"
-                        android:inputType="text"
-                        android:padding="@dimen/_10sdp"
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_Name" />
-
-                    <TextView
-                        android:id="@+id/tv_username"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:fontFamily="@font/poppins"
-                        android:text="UserName"
-                        android:textColor="@color/textPrimary"
-                        android:textSize="@dimen/_12sdp"
-                        />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp">
-                        <EditText
-                            android:id="@+id/etUserName"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_input"
-                            android:padding="12dp"
-                            android:hint="Your unique username"
-                            android:inputType="text"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/usernameStatusIcon"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="12dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:visibility="gone"
-                            tools:visibility="visible"/>
-                        <ProgressBar
-                            android:id="@+id/usernameStatusProgress"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="12dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:visibility="gone"/>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <TextView
-                        android:id="@+id/tvUsernameStatusMessage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        tools:text="This username is available!"/>
-
-
-                    <TextView
-                        android:id="@+id/tv_email"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:fontFamily="@font/poppins"
-                        android:text="Email"
-                        android:textColor="@color/textPrimary"
-                        android:textSize="@dimen/_12sdp"
-                        />
-
-
-
-                    <EditText
-                        android:id="@+id/etEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_5_dsa"
-                        android:background="@drawable/bg_input"
-                        android:hint="Enter Email ID"
-                        android:fontFamily="@font/poppins"
-                        android:inputType="text"
-                        android:padding="@dimen/_10sdp"
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_Name" />
-
-                    <TextView
-                        android:id="@+id/tvAboutYou"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:fontFamily="@font/poppins"
-                        android:text="About You"
-                        android:textColor="@color/textPrimary"
-                        android:textSize="@dimen/_12sdp"
-                        />
-
-                    <EditText
-                        android:id="@+id/etAboutYou"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_100sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:background="@drawable/bg_input"
-                        android:fontFamily="@font/poppins"
-                        android:gravity="top"
-                        android:textSize="@dimen/_12ssp"
-                        android:hint="Share a little about yourself..."
-                        android:inputType="textMultiLine"
-                        android:padding="@dimen/_10sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvEventDescription" />
-
-                    <TextView
-                        android:id="@+id/tvInterested"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:fontFamily="@font/poppins"
-                        android:text="What are your interested in ?"
-                        android:textColor="@color/textPrimary"
-                        android:textSize="@dimen/_12sdp"
-                        />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvInterested"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        />
-
-
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSubmit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_38sdp"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:background="@drawable/bg_button"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Complete Profile"
-                        android:textAllCaps="false"
-                        android:textColor="@color/textOnPrimary"
-                        android:textSize="@dimen/_14ssp"
-                        app:backgroundTint="@null"
-                        android:layout_marginBottom="@dimen/dp_5_dsa"
-                        android:layout_gravity="center_horizontal"
-                        app:layout_constraintTop_toBottomOf="@id/rvInterested" />
-
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:indeterminateTint="@color/white"
-                        android:visibility="gone" />
-
-                </LinearLayout>
-
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Terms and Privacy -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="By creating an account, you agree to our Terms of Service and Privacy Policy"
-            android:textSize="12sp"
-            android:visibility="visible"
-            android:textColor="#999999"
-            android:gravity="center"
-            android:layout_marginBottom="@dimen/dp_24_dsa"
-            android:layout_marginTop="@dimen/dp_10_dsa"
-          />
-
-    </LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

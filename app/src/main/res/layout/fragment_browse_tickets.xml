@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackground"
-    tools:context=".tickets.persentation.screens.BrowseTicketsFragment">
+    tools:context=".tickets.presentation.screens.BrowseTicketsFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
@@ -16,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="80dp"
+            android:paddingBottom="@dimen/_8sdp"
             tools:listitem="@layout/item_ticket_card" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -27,15 +28,34 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
-    <TextView
+
+
+    <LinearLayout
         android:id="@+id/tvEmptyMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No tickets available right now. Check back soon!"
-        android:layout_gravity="center"
+        android:layout_gravity="top|center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        android:layout_marginTop="@dimen/dp_24_dsa"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_ticket"
+            app:tint="@color/gray400"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="No tickets available right now. Check back soon!"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+    </LinearLayout>
 
 </FrameLayout>

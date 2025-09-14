@@ -2,10 +2,14 @@ package com.scenein.utils
 
 import android.app.Activity
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
+import androidx.recyclerview.widget.RecyclerView
 
 object EdgeToEdgeUtils {
 
@@ -61,4 +65,32 @@ object EdgeToEdgeUtils {
         }
     }
 
+    fun setUpChatEdgeToEdge(
+        rootView: View,
+        recyclerView: RecyclerView,
+        fakeStatusBar: View, // Parameter for the top bar
+        fakeNavBar: View     // Parameter for the bottom bar
+    ) {
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+
+            // 1. Set the height of our fake bars to match the real system bars
+            fakeStatusBar.updateLayoutParams { height = systemBars.top }
+            fakeNavBar.updateLayoutParams { height = systemBars.bottom }
+
+            // 2. Pad the entire root view ONLY at the bottom to push content
+            // up when the keyboard appears. The top is handled by the fake bar.
+            rootView.updatePadding(bottom = imeInsets.bottom)
+
+            // 3. Scroll to the bottom when the keyboard opens
+            if (insets.isVisible(WindowInsetsCompat.Type.ime()) && recyclerView.adapter?.itemCount ?: 0 > 0) {
+                recyclerView.post {
+                    recyclerView.scrollToPosition(recyclerView.adapter!!.itemCount - 1)
+                }
+            }
+
+            WindowInsetsCompat.CONSUMED
+        }
+    }
 }

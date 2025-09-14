@@ -33,7 +33,7 @@
         android:fontFamily="@font/poppins_medium"
         android:gravity="center_vertical"
         android:padding="@dimen/_12sdp"
-        android:text="Create a New Event"
+        android:text="Create a Event"
         android:textColor="@color/textPrimary"
         android:textSize="@dimen/_14ssp"
         app:drawableStartCompat="@drawable/ic_create"

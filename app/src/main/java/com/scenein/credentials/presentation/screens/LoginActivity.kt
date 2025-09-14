@@ -3,6 +3,7 @@ package com.scenein.credentials.presentation.screens
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -13,60 +14,62 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.scenein.R
-import com.scenein.credentials.data.repository.AuthRepository
+// AuthRepository and AuthViewModelFactory imports are no longer needed here
 import com.scenein.credentials.presentation.view_model.AuthViewModel
-import com.scenein.credentials.presentation.view_model.AuthViewModelFactory
 import com.scenein.databinding.ActivityLoginBinding
 import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
-import kotlin.getValue
-
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
-    private val viewModel: AuthViewModel by viewModels {
-        AuthViewModelFactory(AuthRepository())
-    }
+    // --- UPDATED: ViewModel initialization no longer needs the factory ---
+    private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityLoginBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         EdgeToEdgeUtils.setUpEdgeToEdge(this)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initComponents()
         onClickListener()
         observeViewModel()
-    }
-
-    private fun initComponents() {
-        // Any other component initialization
     }
 
     private fun onClickListener() {
         setupPhoneInputWatcher()
 
         binding.btnContinue.setOnClickListener {
+            // Check if the button is enabled before proceeding
+            if (!binding.btnContinue.isEnabled) {
+                Toast.makeText(this, "Please enter a valid 10-digit mobile number.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val mobile = binding.etMobileNumber.text.toString().trim()
             val countryCode = binding.ccp.selectedCountryCodeWithPlus
             val countryShortName = binding.ccp.selectedCountryNameCode
 
-            if (mobile.length == 10) {
-                viewModel.loginWithOtp(mobile, countryCode, countryShortName)
+            viewModel.loginWithOtp(mobile, countryCode, countryShortName)
+        }
 
-                // ✅ Get FCM Token and send it
-//                FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        val token = task.result
-//                        Log.d("FCM", "Token: $token")
-//                        viewModel.sendFcmToken(mobile, token)
-//                    } else {
-//                        Log.e("FCM", "Fetching FCM token failed", task.exception)
-//                    }
-//                }
-            }
+        binding.tvTermsOfService.setOnClickListener {
+            openUrl("https://scenein.in/terms")
+        }
+
+        binding.tvPrivacyPolicy.setOnClickListener {
+            openUrl("https://scenein.in/privacy")
+        }
+    }
+
+    private fun openUrl(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        // This check ensures you have an app that can handle the URL (like a browser)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Could not open link", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -75,12 +78,9 @@ class LoginActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val input = s.toString().trim()
-
-                // ✅ SIMPLIFIED LOGIC:
-                // Just enable or disable the button. The `selector_button_background.xml`
-                // you created will handle all visual changes (color, etc.) automatically.
-                binding.btnContinue.isEnabled = (input.length == 10 && input.all { it.isDigit() })
+                val input = s.toString()
+                // The button is enabled only for a 10-digit number
+                binding.btnContinue.isEnabled = input.length == 10
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -91,10 +91,12 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginState.observe(this) { state ->
             when (state) {
                 is NetworkState.Loading -> {
+                    // You can show a progress bar here and disable the button
+                    binding.btnContinue.isEnabled = false
                     Toast.makeText(this, "Sending OTP...", Toast.LENGTH_SHORT).show()
                 }
-
                 is NetworkState.Success -> {
+                    binding.btnContinue.isEnabled = true // Re-enable on success
                     Log.d("API_RESPONSE", "Response: ${state.data}")
 
                     val mobile = binding.etMobileNumber.text.toString().trim()
@@ -106,38 +108,22 @@ class LoginActivity : AppCompatActivity() {
 
                     if (otp != null) {
                         showOtpNotification(otp)
-                        val intent = Intent(this, OtpVerificationActivity::class.java)
-                        intent.putExtra("mobile_number", mobile)
-                        intent.putExtra("country_code", countryCode)
-                        intent.putExtra("country_short_name", countryShortName)
+                        val intent = Intent(this, OtpVerificationActivity::class.java).apply {
+                            putExtra("mobile_number", mobile)
+                            putExtra("country_code", countryCode)
+                            putExtra("country_short_name", countryShortName)
+                        }
                         startActivity(intent)
                     } else {
-                        Toast.makeText(this, "Error: OTP not received", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Error: OTP not received in response", Toast.LENGTH_SHORT).show()
                     }
                 }
-
                 is NetworkState.Error -> {
-                    Toast.makeText(this, "Error: ${state.message}", Toast.LENGTH_SHORT).show()
+                    binding.btnContinue.isEnabled = true // Re-enable on error
+                    Toast.makeText(this, "Error: ${state.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }
-
-        viewModel.fcmTokenState.observe(this) { state ->
-            when (state) {
-                is NetworkState.Loading -> {
-                    Log.d("FCM", "Sending FCM token...")
-                }
-
-                is NetworkState.Success -> {
-                    Log.d("FCM", "Token sent: ${state.data}")
-                }
-
-                is NetworkState.Error -> {
-                    Log.e("FCM", "Failed to send FCM token: ${state.message ?: "No error message"}")
-                }
-            }
-        }
-
     }
 
     private fun showOtpNotification(otp: String) {

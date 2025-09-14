@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="?attr/colorSurface"
     android:fitsSystemWindows="true"
-   >
+    android:orientation="vertical"
+    tools:context=".notification.presentation.screens.NotificationsActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:navigationIcon="@drawable/ic_arrow_back_ios"
-        app:title="Connection Requests" />
+        app:title="Connection Requests"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/TextAppearance.App.ToolbarTitle.Compact" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -25,24 +27,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_connection_request"
-            tools:itemCount="3"/>
+            tools:itemCount="3"
+            tools:listitem="@layout/item_connection_request" />
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvEmptyMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/poppins"
+            android:padding="@dimen/_32sdp"
             android:text="When people ask to connect, you'll see their requests here."
             android:textAlignment="center"
-            android:padding="32dp"
-            android:visibility="gone"/>
+            android:textColor="@color/textSecondary"
+            android:textSize="@dimen/_11ssp"
+            android:visibility="gone" />
     </FrameLayout>
 </LinearLayout>

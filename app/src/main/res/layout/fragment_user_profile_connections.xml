@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/colorSurface"
-    tools:context=".profile.persentation.screen.UserProfileConnectionsFragment">
+    android:background="@color/colorBackground"
+    tools:context=".profile.presentation.screen.UserProfileConnectionsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvConnections"
@@ -13,24 +13,26 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_connection"
-        tools:itemCount="4"/>
+        tools:itemCount="4"
+        tools:listitem="@layout/item_connection" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
 
     <LinearLayout
         android:id="@+id/tvEmptyMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
+        android:layout_gravity="top|center_horizontal"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         android:visibility="gone"
+        android:layout_marginTop="@dimen/dp_24_dsa"
         tools:visibility="visible">
 
         <ImageView

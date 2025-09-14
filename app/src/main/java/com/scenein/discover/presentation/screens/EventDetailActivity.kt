@@ -22,12 +22,15 @@ import com.scenein.databinding.ActivityEventDetailBinding
 import com.scenein.discover.data.models.EventDetail
 import com.scenein.discover.data.models.ParticipantPreview
 import com.scenein.discover.presentation.view_model.DiscoverViewModel
-import com.scenein.profile.persentation.screen.UserProfileActivity
+import com.scenein.profile.presentation.screen.UserProfileActivity
+import com.scenein.utils.DateTimeUtils
 import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
 import com.scenein.utils.SP
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class EventDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -119,41 +122,43 @@ class EventDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     @SuppressLint("SetTextI18n")
     private fun bindEventDetails(event: EventDetail) {
-        binding.tvEventName.text = event.event_name
-        binding.tvEventDescription.text = event.event_description
+        binding.tvEventName.text = event.eventName
+        binding.tvEventDescription.text = event.eventDescription
         binding.tvEventVenue.text = event.venueLocation
-        binding.tvEventCategory.text = event.category_name
+        binding.tvEventCategory.text = event.categoryName
         binding.tvEventType.text = event.selectedEventType
         binding.tvEventTicketPrice.text = if (event.ticketPrice == "0") "Free Entry" else "₹${event.ticketPrice}"
         binding.tvEventMode.text = event.eventDeliveryMode
-        binding.tvEventDate.text = formatDate(event.event_date)
-        binding.tvEventTime.text = "${event.start_time} - ${event.end_time}"
-        binding.tvAgeRestriction.text = event.age_restriction
-        Glide.with(this).load(event.cover_image).placeholder(R.drawable.ic_placeholder).into(binding.ivEventCoverImage)
+
+        binding.tvEventDate.text = DateTimeUtils.formatEventDate(event.eventDate)
+        binding.tvEventTime.text = DateTimeUtils.formatEventTimeRange(event.startTime, event.endTime)
+        binding.tvAgeRestriction.text = event.ageRestriction
+
+        Glide.with(this).load(event.coverImage).placeholder(R.drawable.ic_placeholder).into(binding.ivEventCoverImage)
 
         val lat = event.latitude?.toDoubleOrNull()
         val lon = event.longitude?.toDoubleOrNull()
         if (lat != null && lon != null) {
             this.eventLatLng = LatLng(lat, lon)
-            this.eventAddressForNav = event.full_address ?: event.venueLocation
+            this.eventAddressForNav = event.fullAddress ?: event.venueLocation
             val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
             mapFragment.getMapAsync(this)
         }
 
-        val joined = event.joined_participants
-        val max = event.maximum_participants.toIntOrNull() ?: 0
+        val joined = event.joinedParticipants
+        val max = event.maximumParticipants.toIntOrNull() ?: 0
         binding.tvEventSize.text = "$joined/$max participants"
         val percentage = if (max > 0) (joined * 100) / max else 0
         binding.tvEventFillPercentage.text = "$percentage% full"
         binding.progressBar.progress = percentage
 
-        event.host_details?.let { host ->
-            binding.tvEventHostName.text = host.name ?: "VibeIn User"
+        event.hostDetails?.let { host ->
+            binding.tvEventHostName.text = host.name ?: "SceneIn User"
             binding.tvEventHostID.text = host.userName?.let { "@$it" } ?: ""
             Glide.with(this).load(host.profilePic).placeholder(R.drawable.ic_profile_placeholder).into(binding.ivEventHostProfilePic)
         }
 
-        updateParticipantUi(event.participants_preview, event.joined_participants)
+        updateParticipantUi(event.participantsPreview, event.joinedParticipants)
         updateJoinButtonUI(event)
     }
 
@@ -189,22 +194,18 @@ class EventDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun formatDate(inputDate: String?): String {
-        if (inputDate.isNullOrBlank()) return "Date not specified"
+    private fun formatUtcDateTime(dateTimeStr: String?, pattern: String): String {
+        if (dateTimeStr.isNullOrBlank()) return "N/A"
         return try {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)
-            val outputFormat = SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault())
-            inputFormat.parse(inputDate)?.let { outputFormat.format(it) } ?: inputDate
+            val instant = Instant.parse(dateTimeStr)
+            val userZoneId = ZoneId.systemDefault()
+            val formatter = DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
+            instant.atZone(userZoneId).format(formatter)
         } catch (e: Exception) {
-            try {
-                val oldInputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-                val outputFormat = SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault())
-                oldInputFormat.parse(inputDate)?.let { outputFormat.format(it) } ?: inputDate
-            } catch (e2: Exception) {
-                inputDate
-            }
+            dateTimeStr // Fallback to the raw string on error
         }
     }
+
 
     private fun setupClickListeners(event: EventDetail) {
         binding.toolbarBackArrow.setOnClickListener {  finishWithResult() }
@@ -224,14 +225,15 @@ class EventDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding.btnJoinEvent.setOnClickListener {
             val eid = event.id
-            if (!canInteractWithEvent(event.event_date)) {
-                Toast.makeText(this, "This event has already passed.", Toast.LENGTH_SHORT).show()
+            // Use the new function with the START time here as well.
+            if (!isEventJoinable(event.startTime)) {
+                Toast.makeText(this, "This event has already started.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if (event.has_joined) {
+            if (event.hasJoined) {
                 discoverViewModel.unjoinEvent(eid)
             } else {
-                if (event.is_full) {
+                if (event.isFull) {
                     Toast.makeText(this, "Sorry, this event is full.", Toast.LENGTH_SHORT).show()
                 } else {
                     discoverViewModel.joinEvent(eid)
@@ -240,22 +242,22 @@ class EventDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.btnViewHostProfile.setOnClickListener {
-            event.host_details?.userId?.toString()?.let { navigateToUserProfile(it) }
+            event.hostDetails?.userId?.toString()?.let { navigateToUserProfile(it) }
         }
 
         binding.ivParticipant1.setOnClickListener {
-            event.participants_preview.getOrNull(0)?.userId?.toString()?.let { navigateToUserProfile(it) }
+            event.participantsPreview.getOrNull(0)?.userId?.toString()?.let { navigateToUserProfile(it) }
         }
         binding.ivParticipant2.setOnClickListener {
-            event.participants_preview.getOrNull(1)?.userId?.toString()?.let { navigateToUserProfile(it) }
+            event.participantsPreview.getOrNull(1)?.userId?.toString()?.let { navigateToUserProfile(it) }
         }
         binding.ivParticipant3.setOnClickListener {
-            event.participants_preview.getOrNull(2)?.userId?.toString()?.let { navigateToUserProfile(it) }
+            event.participantsPreview.getOrNull(2)?.userId?.toString()?.let { navigateToUserProfile(it) }
         }
 
         binding.tvSeeAll.setOnClickListener {
             val eventId = event.id
-            val totalCount = event.joined_participants
+            val totalCount = event.joinedParticipants
             ParticipantsBottomSheetFragment.newInstance(eventId, totalCount).show(supportFragmentManager, "ParticipantsBottomSheet")
         }
     }
@@ -268,17 +270,19 @@ class EventDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun updateJoinButtonUI(event: EventDetail) {
-        val isFull = event.is_full && !event.has_joined
-        val hasPassed = !canInteractWithEvent(event.event_date)
+        val isFull = event.isFull && !event.hasJoined
+        // Use the new function with the event's START time.
+        // `hasStarted` is true if the event is no longer joinable.
+        val hasStarted = !isEventJoinable(event.startTime)
 
-        if (source == "profile" && event.user_id == currentUserId) {
+        if (source == "profile" && event.userId == currentUserId) {
             binding.btnJoinEvent.text = "You are the host"
             binding.btnJoinEvent.isEnabled = false
             binding.btnJoinEvent.setBackgroundResource(R.drawable.bg_button_full)
             return
         }
 
-        if ((source == "profile" || source == "discover") && event.user_id == currentUserId) {
+        if ((source == "profile" || source == "discover") && event.userId == currentUserId) {
             binding.btnJoinEvent.text = "You are the host"
             binding.btnJoinEvent.isEnabled = false
             binding.btnJoinEvent.setBackgroundResource(R.drawable.bg_button_full)
@@ -287,8 +291,9 @@ class EventDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         when {
-            hasPassed -> {
-                binding.btnJoinEvent.text = "Event Has Passed"
+            // The condition is now based on whether the event has started.
+            hasStarted -> {
+                binding.btnJoinEvent.text = "Event Has Started" // Or "Event In Progress"
                 binding.btnJoinEvent.isEnabled = false
                 binding.btnJoinEvent.setBackgroundResource(R.drawable.bg_button_full)
             }
@@ -297,7 +302,7 @@ class EventDetailActivity : AppCompatActivity(), OnMapReadyCallback {
                 binding.btnJoinEvent.isEnabled = false
                 binding.btnJoinEvent.setBackgroundResource(R.drawable.bg_button_full)
             }
-            event.has_joined -> {
+            event.hasJoined -> {
                 binding.btnJoinEvent.text = "Leave Event"
                 binding.btnJoinEvent.isEnabled = true
                 binding.btnJoinEvent.setBackgroundResource(R.drawable.bg_button_unjoin)
@@ -310,20 +315,18 @@ class EventDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun canInteractWithEvent(eventDate: String?): Boolean {
-        if (eventDate.isNullOrBlank()) return false
+    private fun isEventJoinable(startTimeStr: String?): Boolean {
+        if (startTimeStr.isNullOrBlank()) return false
         return try {
-            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)
-            sdf.isLenient = false
-            val eventDateParsed = sdf.parse(eventDate) ?: return false
-            val today = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
-            }.time
-            !eventDateParsed.before(today)
+            val eventStartInstant = Instant.parse(startTimeStr)
+            val now = Instant.now()
+            // The event is joinable only if the current moment is BEFORE the start time.
+            now.isBefore(eventStartInstant)
         } catch (e: Exception) {
             false
         }
     }
+
 
     private fun finishWithResult() {
         if (hasJoinStatusChanged && currentEvent != null) {

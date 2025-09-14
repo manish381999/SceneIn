@@ -16,34 +16,34 @@ interface DiscoverApiEndPoint {
 
 
     @FormUrlEncoded
-    @POST("api_v1/get_events_by_city.php")
+    @POST("events/by_city")
     suspend fun getEventsByCity(
         @Field("page") page: Int,
         @Field("category_id") categoryId: String? // Corrected to String
     ): Response<DiscoverApiResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/get_suggested_connections.php")
+    @POST("connections/suggestions")
     suspend fun getSuggestedConnections(
         @Field("page") page: Int
     ): Response<ConnectionsApiResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/update_user_location.php")
+    @POST("users/update_location")
     suspend fun updateUserLocation(
         @Field("city") city: String
     ): Response<ApiResponse>
 
 
     @FormUrlEncoded
-    @POST("api_v1/JoinEventController.php")
+    @POST("events/join_or_unjoin")
     suspend fun joinEvent(
         @Field("event_id") eventId: String,
         @Field("action") action: String // 'join'
     ): Response<ApiResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/JoinEventController.php")
+    @POST("events/join_or_unjoin")
     suspend fun unjoinEvent(
         @Field("event_id") eventId: String,
         @Field("action") action: String // 'unjoin'
@@ -51,13 +51,13 @@ interface DiscoverApiEndPoint {
 
 
     @FormUrlEncoded
-    @POST("api_v1/get_event_details_by_id.php")
+    @POST("events/details")
     suspend fun getEventDetailsById(
         @Field("event_id") eventId: String
     ): Response<EventDetailResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/get_event_participants.php")
+    @POST("events/get_participants")
     suspend fun getEventParticipants(
         @Field("event_id") eventId: String,
         @Field("page") page: Int
@@ -65,11 +65,11 @@ interface DiscoverApiEndPoint {
 
 
     @FormUrlEncoded
-    @POST("api_v1/add_bookmark.php")
+    @POST("bookmarks/add")
     suspend fun addBookmark(@Field("event_id") eventId: String): Response<ApiResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/remove_bookmark.php")
+    @POST("bookmarks/remove")
     suspend fun removeBookmark(@Field("event_id") eventId: String): Response<ApiResponse>
 
 

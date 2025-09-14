@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.scenein.createEvent.persentation.screens.CreateEventActivity
+import com.scenein.createEvent.presentation.screens.CreateEventActivity
 import com.scenein.databinding.BottomSheetCreateOptionsBinding
-import com.scenein.tickets.persentation.screens.SellTicketActivity
+import com.scenein.tickets.presentation.screens.SellTicketActivity
 
 class CreateOptionsBottomSheet : BottomSheetDialogFragment() {
 

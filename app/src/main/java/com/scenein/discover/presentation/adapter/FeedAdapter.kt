@@ -5,7 +5,6 @@ import android.location.Location
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +17,10 @@ import com.scenein.databinding.ItemSuggestedConnectionsBinding
 import com.scenein.discover.data.models.EventSummary
 import com.scenein.discover.data.models.FeedItem
 import com.scenein.discover.data.models.SuggestedConnection
-import java.text.SimpleDateFormat
+import com.scenein.utils.DateTimeUtils
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 private const val VIEW_TYPE_EVENT = 1
@@ -57,8 +59,8 @@ class FeedAdapter(
                 onEventClicked,
                 onJoinClicked,
                 onUnjoinClicked,
-                onAddBookmarkClicked,    // <-- Pass new listener
-                onRemoveBookmarkClicked  // <-- Pass new listener
+                onAddBookmarkClicked,
+                onRemoveBookmarkClicked
             )
             VIEW_TYPE_CONNECTIONS -> {
                 val binding = ItemSuggestedConnectionsBinding.inflate(inflater, parent, false)
@@ -91,7 +93,8 @@ class FeedAdapter(
             // --- Bind Standard Info ---
             binding.tvEventName.text = event.eventName
             binding.tvCategory.text = event.categoryName
-            binding.tvEventDateTime.text = formatDateTime(event.eventDate, event.startTime)
+            binding.tvEventDateTime.text =
+                DateTimeUtils.combineDateAndTime(event.eventDate, event.startTime)
             binding.tvEventVenue.text = event.venueLocation
             Glide.with(context)
                 .load(event.coverImage)
@@ -145,7 +148,6 @@ class FeedAdapter(
                     participantImageViews[i].visibility = View.GONE
                 }
 
-                // Set summary correctly
                 binding.tvParticipantsSummary.text = when {
                     event.joinedParticipants == 1 -> "1 person has joined"
                     event.joinedParticipants > 1 -> "${event.joinedParticipants} have joined"
@@ -153,38 +155,44 @@ class FeedAdapter(
                 }
 
             } else {
-                // Reset properly when no participants
                 binding.participantsContainer.visibility = View.GONE
-                binding.tvParticipantsSummary.text = ""   // <-- Important line
+                binding.tvParticipantsSummary.text = ""
             }
 
-            // --- THIS IS THE CORRECTED LOGIC ---
+            // --- Main Visibility Logic ---
             val isHost = event.hostId == currentUserId
             if (isHost) {
-                // If user is the host, show the "Host" chip and hide the action bar
                 binding.tvHostChip.visibility = View.VISIBLE
                 binding.actionBarContainer.visibility = View.GONE
             } else {
-                // If user is a guest, hide the "Host" chip and show the action bar
                 binding.tvHostChip.visibility = View.GONE
                 binding.actionBarContainer.visibility = View.VISIBLE
 
-                // Configure the Join button state
+                // ✅ FIXED: Consolidated button logic that handles all states correctly
                 val isEventFull = event.isFull && !event.hasJoined
-                binding.btnJoin.text = when {
-                    isEventFull -> "Full"
-                    event.hasJoined -> "Joined"
-                    else -> "Join"
-                }
-                binding.btnJoin.isEnabled = !isEventFull
-                binding.btnJoin.isSelected = event.hasJoined
 
-                if(isEventFull) {
-                    binding.btnJoin.background.setTint(ContextCompat.getColor(context, R.color.fullButtonColor))
-                    binding.btnJoin.setTextColor(ContextCompat.getColor(context, R.color.gray500))
+                when {
+                    isEventFull -> {
+                        binding.btnJoin.text = "Full"
+                        binding.btnJoin.isEnabled = false
+                        binding.btnJoin.isSelected = false
+                        binding.btnJoin.background.setTint(ContextCompat.getColor(context, R.color.fullButtonColor))
+                        binding.btnJoin.setTextColor(ContextCompat.getColor(context, R.color.gray500))
+                    }
+                    event.hasJoined -> {
+                        binding.btnJoin.text = "Joined"
+                        binding.btnJoin.isEnabled = true
+                        binding.btnJoin.isSelected = true
+                        binding.btnJoin.background.setTintList(null)
+                    }
+                    else -> {
+                        binding.btnJoin.text = "Join"
+                        binding.btnJoin.isEnabled = true
+                        binding.btnJoin.isSelected = false
+                        binding.btnJoin.background.setTintList(null)
+                    }
                 }
 
-                // Set action listeners
                 binding.btnJoin.setOnClickListener {
                     if (event.hasJoined) {
                         onUnjoinClicked(event.id, adapterPosition)
@@ -192,9 +200,19 @@ class FeedAdapter(
                         onJoinClicked(event.id, adapterPosition)
                     }
                 }
+
                 binding.ivActionShare.setOnClickListener {
                     // Your share logic here
                 }
+
+                // ✅ FIXED: Restored bookmark icon logic
+                val bookmarkIcon = if (event.hasBookmarked) {
+                    R.drawable.ic_bookmark_filled
+                } else {
+                    R.drawable.ic_bookmark_outline
+                }
+                binding.ivActionBookmark.setImageResource(bookmarkIcon)
+
                 binding.ivActionBookmark.setOnClickListener {
                     if (event.hasBookmarked) {
                         onRemoveBookmarkClicked(event.id)
@@ -206,24 +224,6 @@ class FeedAdapter(
 
             binding.contentContainer.setOnClickListener {
                 onEventClicked(event.id)
-            }
-        }
-
-        private fun formatDateTime(dateStr: String?, timeStr: String?): String {
-            if (dateStr == null || timeStr == null) return "Date not specified"
-            return try {
-                // Combine date + time into one string
-                val input = "$dateStr $timeStr"
-
-                // Parse with both date and time
-                val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                val dateTime = inputFormat.parse(input)
-
-                // Output format with weekday, month, day, and 12-hour time
-                val outputFormat = SimpleDateFormat("EEE, MMM d • hh:mm a", Locale.getDefault())
-                outputFormat.format(dateTime!!)
-            } catch (e: Exception) {
-                "$dateStr • $timeStr"
             }
         }
 
@@ -256,6 +256,7 @@ class FeedAdapter(
                 oldItem.javaClass == newItem.javaClass
             }
         }
+
         override fun areContentsTheSame(oldItem: FeedItem, newItem: FeedItem): Boolean {
             return oldItem == newItem
         }

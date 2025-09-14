@@ -8,27 +8,21 @@
     android:background="@color/colorBackground"
     tools:context=".credentials.presentation.screens.LoginActivity">
 
-
-
     <ImageView
         android:id="@+id/logoImage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_120sdp"
+        android:layout_marginTop="@dimen/_40sdp"
         android:src="@drawable/app_logo"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/_20sdp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- App Name -->
-
-
-    <!-- Subtitle -->
     <TextView
         android:id="@+id/taglineText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:fontFamily="@font/poppins_medium"
         android:text="Feel the vibe of events &amp; moments"
         android:textColor="@color/textPrimary"
@@ -37,12 +31,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logoImage" />
 
-
     <TextView
         android:id="@+id/login_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_marginTop="@dimen/_40sdp"
         android:fontFamily="@font/poppins_semibold"
         android:text="Log in or sign up"
         android:textColor="@color/textPrimary"
@@ -53,202 +46,120 @@
 
     <LinearLayout
         android:id="@+id/phoneContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        app:layout_constraintTop_toBottomOf="@id/login_signup"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_48sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
         android:background="@drawable/bg_input_themed"
-        android:padding="12dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_signup">
 
         <com.hbb20.CountryCodePicker
             android:id="@+id/ccp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            app:ccp_arrowColor="@color/textPrimary"
+            app:ccp_autoDetectCountry="false"
+            app:ccp_contentColor="@color/textPrimary"
             app:ccp_defaultNameCode="IN"
             app:ccp_showFlag="true"
-            app:ccp_contentColor="@color/textPrimary"
-            app:ccp_arrowColor="@color/textPrimary"
             app:ccp_showFullName="false"
             app:ccp_showNameCode="false"
-            app:ccp_showPhoneCode="true"
-            app:ccp_autoDetectCountry="false" />
+            app:ccp_showPhoneCode="true" />
 
         <EditText
             android:id="@+id/etMobileNumber"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/poppins"
+            android:hint="Enter phone number"
             android:inputType="phone"
             android:maxLength="10"
-            android:hint="Enter phone number"
             android:textColor="@color/textPrimary"
             android:textColorHint="@color/textSecondary"
-            android:background="@android:color/transparent"
-            android:textSize="16sp" />
+            android:textSize="@dimen/_13ssp" />
     </LinearLayout>
 
-
-    <!-- Continue Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_continue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_48sdp"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:background="@drawable/selector_button_background"
+        android:enabled="false"
+        android:fontFamily="@font/poppins_semibold"
         android:text="Continue"
         android:textAllCaps="false"
-       android:background="@drawable/selector_button_background"
-        app:backgroundTint="@null"
-        android:enabled="false"
         android:textSize="@dimen/_14ssp"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        app:layout_constraintTop_toBottomOf="@id/phoneContainer"
-        app:layout_constraintStart_toStartOf="parent"
+        app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/_24sdp"/>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="#474143"
-        android:layout_marginHorizontal="@dimen/_20sdp"
-        app:layout_constraintTop_toTopOf="@id/orDivider"
-        app:layout_constraintBottom_toBottomOf="@id/orDivider"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/orDivider"/>
+        app:layout_constraintTop_toBottomOf="@id/phoneContainer" />
 
-    <!-- OR Divider -->
-    <TextView
-        android:id="@+id/orDivider"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/footer_container"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="OR"
-        android:textColor="@color/textPrimary"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/btn_continue"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="@dimen/_24sdp"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintStart_toStartOf="parent">
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="#474143"
-        android:layout_marginHorizontal="@dimen/_20sdp"
-        app:layout_constraintTop_toTopOf="@id/orDivider"
-        app:layout_constraintBottom_toBottomOf="@id/orDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintStart_toEndOf="@id/orDivider"/>
-
-    <!-- Login with Zomato Card -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/googleCard"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50_dsa"
-        android:layout_marginTop="@dimen/_12sdp"
-        app:cardCornerRadius="@dimen/_14sdp"
-        app:cardElevation="@dimen/_4sdp"
-        app:layout_constraintTop_toBottomOf="@id/orDivider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:backgroundTint="@android:color/white">
+        <TextView
+            android:id="@+id/tv_agree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:text="By continuing, you agree to our"
+            android:textColor="@color/textSecondary"
+            android:textSize="@dimen/_10ssp" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/_8sdp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:src="@drawable/ic_google" />
+            android:layout_marginTop="@dimen/_4sdp"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tv_terms_of_service"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:text="Login with Google"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"
-                android:textSize="@dimen/_13ssp"
-               />
+                android:fontFamily="@font/poppins_medium"
+                android:text="Terms of Service"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_10ssp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_4sdp"
+                android:fontFamily="@font/poppins"
+                android:text="and"
+                android:textColor="@color/textSecondary"
+                android:textSize="@dimen/_10ssp" />
 
-
+            <TextView
+                android:id="@+id/tv_privacy_policy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Privacy Policy"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_10ssp" />
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Footer -->
-    <TextView
-        android:id="@+id/tv_agree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="By continuing, you agree to our"
-        android:textColor="@color/textSecondary"
-        android:textAlignment="center"
-        android:textSize="@dimen/_12ssp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="@dimen/_30sdp"/>
-
-
-    <TextView
-        android:id="@+id/tv_terms_of_service"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Terms of Service"
-        android:textColor="@color/textSecondary"
-        android:textAlignment="center"
-        android:textSize="@dimen/_12ssp"
-        app:layout_constraintEnd_toStartOf="@id/tv_privacy_policy"
-        app:layout_constraintTop_toBottomOf="@id/tv_agree"
-        android:layout_marginEnd="@dimen/_5sdp"
-        app:layout_constraintStart_toStartOf="@id/tv_agree"
-        />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/gray400"
-        app:layout_constraintTop_toBottomOf="@id/tv_terms_of_service"
-        app:layout_constraintStart_toStartOf="@id/tv_terms_of_service"
-        app:layout_constraintEnd_toEndOf="@id/tv_terms_of_service"
-        android:layout_marginTop="@dimen/_2sdp"/>
-
-    <TextView
-        android:id="@+id/tv_privacy_policy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Privacy Policy"
-        android:textColor="@color/textSecondary"
-        android:textAlignment="center"
-        android:textSize="@dimen/_12ssp"
-        android:layout_marginStart="@dimen/_5sdp"
-        app:layout_constraintTop_toBottomOf="@id/tv_agree"
-        app:layout_constraintStart_toEndOf="@id/tv_terms_of_service"
-        app:layout_constraintEnd_toEndOf="@id/tv_agree"
-        />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/gray400"
-        app:layout_constraintTop_toBottomOf="@id/tv_privacy_policy"
-        app:layout_constraintStart_toStartOf="@id/tv_privacy_policy"
-        app:layout_constraintEnd_toEndOf="@id/tv_privacy_policy"
-        android:layout_marginTop="@dimen/_2sdp"/>
-
-
-
-
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

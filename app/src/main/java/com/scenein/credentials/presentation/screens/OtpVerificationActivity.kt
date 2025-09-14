@@ -15,23 +15,21 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.firebase.messaging.FirebaseMessaging
-import com.scenein.utils.SP
 import com.scenein.BaseActivity
 import com.scenein.R
 import com.scenein.credentials.data.models.UserData
-import com.scenein.credentials.data.repository.AuthRepository
 import com.scenein.credentials.presentation.view_model.AuthViewModel
-import com.scenein.credentials.presentation.view_model.AuthViewModelFactory
 import com.scenein.databinding.ActivityOtpVerificationBinding
 import com.scenein.utils.DeviceUtils
 import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
+import com.scenein.utils.SP
 import java.util.regex.Pattern
 
 class OtpVerificationActivity : AppCompatActivity() {
@@ -42,7 +40,9 @@ class OtpVerificationActivity : AppCompatActivity() {
     private lateinit var countryShortName: String
 
     private var countDownTimer: CountDownTimer? = null
-    private lateinit var viewModel: AuthViewModel
+
+    // --- UPDATED: ViewModel initialization is now simpler and uses the KTX delegate ---
+    private val viewModel: AuthViewModel by viewModels()
 
     private val smsConsentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK && result.data != null) {
@@ -60,13 +60,22 @@ class OtpVerificationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         getIntentData()
-        setupViewModel()
+        // The call to setupViewModel() is no longer needed
         initComponents()
         setupOtpInputs()
         onClickListener()
         observeViewModel()
         startSmsListener()
     }
+
+    // --- REMOVED: The setupViewModel() function is no longer necessary ---
+    /*
+    private fun setupViewModel() {
+        val repository = AuthRepository()
+        val viewModelFactory = AuthViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[AuthViewModel::class.java]
+    }
+    */
 
     private fun startSmsListener() {
         SmsRetriever.getClient(this).startSmsUserConsent(null)
@@ -75,13 +84,14 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
     private fun extractOtpFromMessage(message: String) {
-        val pattern = Pattern.compile("(\\d{6})")
+        val pattern = Pattern.compile("(\\d{6})") // Standard 6-digit OTP
         val matcher = pattern.matcher(message)
         if (matcher.find()) {
             val otp = matcher.group(0)
             otp?.let {
                 Log.d("OTP_AUTOFILL", "OTP extracted: $it")
                 fillOtpFields(it)
+                // Automatically trigger verification after filling
                 verifyOtp(mobileNumber, it)
             }
         }
@@ -97,12 +107,6 @@ class OtpVerificationActivity : AppCompatActivity() {
         hideKeyboard()
     }
 
-    private fun setupViewModel() {
-        val repository = AuthRepository()
-        val viewModelFactory = AuthViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory)[AuthViewModel::class.java]
-    }
-
     private fun getIntentData() {
         mobileNumber = intent.getStringExtra("mobile_number") ?: ""
         countryCode = intent.getStringExtra("country_code") ?: ""
@@ -110,7 +114,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
     private fun initComponents() {
-        binding.tvSubtitle.text = "We have sent a verification code to $countryCode $mobileNumber"
+        binding.tvSubtitle.text = "We have sent a verification code to \n $countryCode $mobileNumber"
         binding.etOtp1.requestFocus()
         showKeyboard(binding.etOtp1)
         startResendTimer()
@@ -126,8 +130,8 @@ class OtpVerificationActivity : AppCompatActivity() {
                 checkOtpCompletion()
             }
             if (i > 0) {
-                editTexts[i].setOnKeyListener { _, keyCode, _ ->
-                    if (keyCode == KeyEvent.KEYCODE_DEL && editTexts[i].text.isEmpty()) {
+                editTexts[i].setOnKeyListener { _, keyCode, event ->
+                    if (keyCode == KeyEvent.KEYCODE_DEL && event.action == KeyEvent.ACTION_DOWN && editTexts[i].text.isEmpty()) {
                         editTexts[i - 1].requestFocus()
                         true
                     } else false
@@ -170,7 +174,6 @@ class OtpVerificationActivity : AppCompatActivity() {
         binding.btnSms.setOnClickListener {
             if (binding.btnSms.isEnabled) {
                 viewModel.loginWithOtp(mobileNumber, countryCode, countryShortName)
-                Toast.makeText(this, "OTP resent via SMS", Toast.LENGTH_SHORT).show()
                 startResendTimer()
             }
         }
@@ -185,9 +188,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        // Observer for the OTP verification result
         viewModel.verifyState.observe(this) { networkState ->
-            // --- This observer now has updated logic to handle the auth_token ---
             when (networkState) {
                 is NetworkState.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -196,13 +197,12 @@ class OtpVerificationActivity : AppCompatActivity() {
                 is NetworkState.Success -> {
                     binding.progressBar.visibility = View.GONE
                     val response = networkState.data
-                    val user = response?.user
-                    val authToken = response?.authToken
+                    val user = response.user
+                    val authToken = response.authToken
 
                     if (user != null && !authToken.isNullOrEmpty()) {
-                        // SUCCESS! We have a user and an auth token.
                         SP.saveString(this, SP.AUTH_TOKEN, authToken)
-                        saveUserData(user) // Save the rest of the user data
+                        saveUserData(user)
                         Toast.makeText(this, response.message, Toast.LENGTH_SHORT).show()
 
                         val nextIntent = if (user.name.isNullOrEmpty()) {
@@ -215,9 +215,8 @@ class OtpVerificationActivity : AppCompatActivity() {
                         startActivity(nextIntent)
                         finish()
                     } else {
-                        // This case handles a server success but with missing data.
                         binding.btnContinue.isEnabled = true
-                        Toast.makeText(this, response?.message ?: "An unknown error occurred.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, response.message ?: "An unknown error occurred.", Toast.LENGTH_LONG).show()
                     }
                 }
                 is NetworkState.Error -> {
@@ -228,7 +227,6 @@ class OtpVerificationActivity : AppCompatActivity() {
             }
         }
 
-        // ✅ NEW: Observer for the RESEND OTP request, to show the notification
         viewModel.loginState.observe(this) { state ->
             when(state) {
                 is NetworkState.Loading -> {
@@ -238,7 +236,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                     val otp = state.data.otp
                     if (otp != null) {
                         Toast.makeText(this, "OTP resent successfully.", Toast.LENGTH_SHORT).show()
-                        showOtpNotification(otp) // Show the notification with the new OTP
+                        showOtpNotification(otp)
                     } else {
                         Toast.makeText(this, "Error: New OTP not received", Toast.LENGTH_SHORT).show()
                     }
@@ -250,8 +248,8 @@ class OtpVerificationActivity : AppCompatActivity() {
         }
     }
 
-
     private fun saveUserData(user: UserData) {
+
         SP.saveString(this, SP.USER_ID, user.userId)
         SP.saveString(this, SP.USER_MOBILE, user.mobileNumber)
         SP.saveString(this, SP.FULL_NAME, user.name)
@@ -266,26 +264,17 @@ class OtpVerificationActivity : AppCompatActivity() {
         SP.saveString(this, SP.USER_DELETED, user.deleted)
         SP.saveString(this, SP.USER_CREATED_AT, user.createdAt)
         SP.saveInterestNames(this, SP.USER_INTEREST_NAMES, user.interestNames)
-
-
         SP.saveBoolean(this, SP.IS_PAYOUT_VERIFIED, user.payoutMethodVerified)
         Log.d(TAG, "Saved IS_PAYOUT_VERIFIED: ${user.payoutMethodVerified}")
-
-        // Save the display-friendly string provided by the server
-        // Use a fallback message just in case
         val displayInfo = user.payoutInfoDisplay ?: "No payout method has been added."
         SP.saveString(this, SP.PAYOUT_INFO_DISPLAY, displayInfo)
         Log.d(TAG, "Saved PAYOUT_INFO_DISPLAY: $displayInfo")
-
     }
 
     private fun verifyOtp(mobile: String, otp: String) {
-        binding.progressBar.visibility = View.VISIBLE // Show loading
-
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("FCM_TOKEN", "Fetching FCM token failed, proceeding without it.", task.exception)
-                // If FCM fails, we still try to log in, but send a null token.
                 sendVerificationRequest(mobile, otp, null)
                 return@addOnCompleteListener
             }
@@ -294,17 +283,14 @@ class OtpVerificationActivity : AppCompatActivity() {
             sendVerificationRequest(mobile, otp, fcmToken)
         }
     }
-    private fun sendVerificationRequest(mobile: String, otp: String, fcmToken: String?) {
-        Log.d("FCM_TOKEN", "Sending FCM token to server: $fcmToken")
 
-        // Gather the device details into a simple map for transport.
+    private fun sendVerificationRequest(mobile: String, otp: String, fcmToken: String?) {
         val deviceDetails = mapOf(
             "device_id" to DeviceUtils.getDeviceId(this),
             "device_model" to DeviceUtils.getDeviceModel(),
             "os_version" to DeviceUtils.getOsVersion(),
             "app_version" to DeviceUtils.getAppVersion()
         )
-        // Call the ViewModel with the clear, explicit parameters.
         viewModel.verifyOtp(mobile, otp, fcmToken, deviceDetails)
     }
 
@@ -332,7 +318,7 @@ class OtpVerificationActivity : AppCompatActivity() {
             .setAutoCancel(true)
             .build()
 
-        notificationManager.notify(102, notification) // Use a different ID to avoid conflicts
+        notificationManager.notify(102, notification)
     }
 
     private fun showKeyboard(editText: EditText) {

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--
-    VibeIn "Foundation" Palette - Light Theme
-    Strategy: Consistency, Clarity, and Familiarity. Inspired by proven UI principles.
-    -->
+
 
     <!-- I. PRIMARY BRAND COLOR -->
     <color name="colorPrimary">#007BFF</color>          <!-- A clean, modern, trustworthy VibeIn Blue. -->
@@ -17,7 +14,7 @@
 
     <!-- II. NEUTRAL FOUNDATION -->
     <!-- Background & Surface -->
-    <color name="colorBackground">#F2F2F7</color>
+    <color name="colorBackground">#FFFFFF</color>
     <!-- iOS-style light grey. Very clean. -->
     <color name="colorSurface">#FFFFFF</color>         <!-- Pure white for cards. -->
     <color name="colorSurfaceVariant">#EFEFF4</color>  <!-- The standard received chat bubble color. Like WhatsApp. -->
@@ -56,7 +53,7 @@
     <color name="joinButtonColor">@color/colorPrimary</color>
     <!-- We will use a dedicated green for 'unjoin' as it's a destructive-like action confirmation -->
     <color name="unjoinButtonColor">#34C759</color>
-    <color name="fullButtonColor">@color/gray300</color>
+    <color name="fullButtonColor">@color/gray200</color>
 
     <!-- Chat System (Following WhatsApp's established, proven model) -->
     <color name="chat_toolbar_color">@color/colorBackground</color> <!-- Use the light grey background for a seamless look. -->

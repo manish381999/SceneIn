@@ -2,24 +2,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginBottom="@dimen/_12sdp">
+    android:layout_marginBottom="@dimen/_16sdp">
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_14sdp"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:fontFamily="@font/poppins_semibold"
+        android:text="Suggested for you"
         android:textColor="@color/textPrimary"
-        android:textSize="@dimen/_12ssp"
-        android:text="Suggested for you" />
+        android:textSize="@dimen/_14ssp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvConnections"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:clipToPadding="false"
         android:orientation="horizontal"
-       />
+        />
+
 </LinearLayout>

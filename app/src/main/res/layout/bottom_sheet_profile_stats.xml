@@ -4,37 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@drawable/bg_bottom_sheet">
+    android:padding="@dimen/_16sdp">
 
-    <!-- Handle a` la Draggable Sheet -->
     <View
-        android:layout_width="40dp"
-        android:layout_height="4dp"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_4sdp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/_12sdp"
         android:background="@drawable/bg_pill" />
 
-    <!-- Title of the bottom sheet -->
     <TextView
         android:id="@+id/tvSheetTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="@dimen/_15ssp"
         tools:text="Event Activity" />
 
-    <!-- This RecyclerView will display the detailed stats -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvStats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxHeight="350dp"
+        android:maxHeight="@dimen/_300sdp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_profile_stat"
-        tools:itemCount="2"/>
+        tools:itemCount="2"
+        tools:listitem="@layout/item_profile_stat" />
 
 </LinearLayout>

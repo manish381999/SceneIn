@@ -5,52 +5,55 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="12dp"
-    android:background="@color/colorSurface">
+    android:background="@color/colorSurface"
+    android:paddingHorizontal="@dimen/_12sdp"
+    android:paddingVertical="@dimen/_12sdp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-        tools:src="@tools:sample/avatars"/>
+        tools:src="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tvBody"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:fontFamily="@font/poppins"
         android:textColor="@color/textPrimary"
+        android:textSize="@dimen/_11ssp"
         app:layout_constraintEnd_toStartOf="@+id/ivContentImage"
         app:layout_constraintStart_toEndOf="@+id/ivIcon"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivIcon"
         tools:text="Manish Kumar Singh has joined your event: Summer water park." />
 
     <TextView
         android:id="@+id/tvTimestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:fontFamily="@font/poppins"
         android:textColor="@color/textSecondary"
+        android:textSize="@dimen/_9ssp"
         app:layout_constraintStart_toStartOf="@+id/tvBody"
         app:layout_constraintTop_toBottomOf="@+id/tvBody"
         tools:text="21h" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivContentImage"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="@dimen/_48sdp"
+        android:layout_height="@dimen/_48sdp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        tools:visibility="visible"
-        tools:src="@tools:sample/backgrounds/scenic" />
+        tools:src="@tools:sample/backgrounds/scenic"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

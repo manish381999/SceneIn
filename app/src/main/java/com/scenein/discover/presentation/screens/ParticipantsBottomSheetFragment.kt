@@ -15,13 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.scenein.utils.SP
-import com.scenein.chat.persentation.screens.ChatActivity
+import com.scenein.chat.presentation.screens.ChatActivity
 import com.scenein.databinding.BottomSheetParticipantsBinding
 import com.scenein.discover.data.models.Participant
 import com.scenein.discover.presentation.adapter.ParticipantsAdapter
 import com.scenein.discover.presentation.view_model.DiscoverViewModel
-import com.scenein.profile.persentation.screen.UserProfileActivity
-import com.scenein.profile.persentation.view_model.ProfileViewModel
+import com.scenein.profile.presentation.screen.UserProfileActivity
+import com.scenein.profile.presentation.view_model.ProfileViewModel
 import com.scenein.utils.NetworkState
 
 import java.util.*

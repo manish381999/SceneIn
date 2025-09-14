@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorSurface"
     android:fitsSystemWindows="true"
-    tools:context=".profile.persentation.screen.EditProfileActivity">
+    tools:context=".profile.presentation.screen.EditProfileActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -20,11 +20,12 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back_ios"
-            app:title="Edit Profile" />
+            app:title="Edit Profile"
+            app:titleTextAppearance="@style/TextAppearance.App.ToolbarTitle.Compact" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/_1sdp"
             android:background="@color/gray100" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,22 +38,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="96dp">
+            android:paddingBottom="@dimen/_80sdp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="@dimen/_16sdp">
 
-                <!-- Profile Picture Section -->
                 <com.mikhaellopez.circularimageview.CircularImageView
                     android:id="@+id/ivProfile"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
+                    android:layout_width="@dimen/_90sdp"
+                    android:layout_height="@dimen/_90sdp"
                     android:layout_gravity="center_horizontal"
                     app:civ_border_color="#E0E0E0"
-                    app:civ_border_width="2dp"
+                    app:civ_border_width="@dimen/_2sdp"
                     tools:src="@drawable/ic_profile_placeholder" />
 
                 <TextView
@@ -60,63 +60,73 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
-                    android:padding="8dp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="@dimen/_8sdp"
                     android:text="Change profile photo"
                     android:textColor="?attr/colorPrimary"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/_11ssp" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:background="@color/gray100" />
 
-                <!-- Form Fields -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Full Name" />
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:fontFamily="@font/poppins"
+                    android:text="Full Name"
+                    android:textSize="@dimen/_11ssp" />
 
                 <EditText
                     android:id="@+id/etFullName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:background="@drawable/bg_input"
+                    android:fontFamily="@font/poppins"
                     android:hint="Your full name"
                     android:inputType="textPersonName|textCapWords"
-                    android:padding="12dp" />
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:textSize="@dimen/_11ssp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Username" />
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:fontFamily="@font/poppins"
+                    android:text="Username"
+                    android:textSize="@dimen/_11ssp" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp">
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@drawable/bg_input">
 
                     <EditText
                         android:id="@+id/etUserName"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_input"
+                        android:layout_height="0dp"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/poppins"
                         android:hint="Your unique username"
                         android:inputType="text"
-                        android:padding="12dp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:textSize="@dimen/_11ssp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/usernameStatusIcon"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/usernameStatusIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginEnd="12dp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -125,9 +135,9 @@
 
                     <ProgressBar
                         android:id="@+id/usernameStatusProgress"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginEnd="12dp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -138,56 +148,66 @@
                     android:id="@+id/tvUsernameStatusMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:fontFamily="@font/poppins"
+                    android:textSize="@dimen/_9ssp"
                     tools:text="This username is available!" />
 
-                <!-- THIS IS THE MISSING EMAIL FIELD -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Email" />
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:fontFamily="@font/poppins"
+                    android:text="Email"
+                    android:textSize="@dimen/_11ssp" />
 
                 <EditText
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:background="@drawable/bg_input"
+                    android:fontFamily="@font/poppins"
                     android:hint="Your email address"
                     android:inputType="textEmailAddress"
-                    android:padding="12dp" />
-                <!-- END OF MISSING EMAIL FIELD -->
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:textSize="@dimen/_11ssp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="About You" />
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:fontFamily="@font/poppins"
+                    android:text="About You"
+                    android:textSize="@dimen/_11ssp" />
 
                 <EditText
                     android:id="@+id/etAboutYou"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:background="@drawable/bg_input"
+                    android:fontFamily="@font/poppins"
                     android:gravity="top"
                     android:hint="Tell everyone about yourself..."
                     android:inputType="textMultiLine"
-                    android:padding="12dp" />
+                    android:padding="@dimen/_12sdp"
+                    android:textSize="@dimen/_11ssp" />
 
-                <!-- THIS IS THE MISSING INTERESTS SECTION -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Your Interests" />
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:fontFamily="@font/poppins"
+                    android:text="Your Interests"
+                    android:textSize="@dimen/_11ssp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvInterests"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp" />
-                <!-- END OF MISSING INTERESTS SECTION -->
+                    android:layout_marginTop="@dimen/_8sdp" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
@@ -197,20 +217,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="?attr/colorSurface"
-            android:elevation="8dp"
-            android:padding="16dp">
+            android:elevation="@dimen/_8sdp"
+            android:padding="@dimen/_12sdp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSaveChanges"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="14dp"
-                android:text="Save Changes" />
+                android:layout_height="@dimen/_40sdp"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Save Changes"
+                android:textSize="@dimen/_12ssp" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
                 android:indeterminateTint="@color/white"
                 android:visibility="gone" />

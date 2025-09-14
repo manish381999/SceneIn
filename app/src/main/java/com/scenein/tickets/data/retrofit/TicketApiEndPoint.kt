@@ -11,7 +11,7 @@ interface TicketApiEndPoint {
     // == SELLER FLOW ==
 
     @FormUrlEncoded
-    @POST("api_v1/payouts_verify.php")
+    @POST("users/verify_payout_method")
     suspend fun verifyPayout(
         @Field("method_type") methodType: String,
         // For complex objects, we send the individual fields
@@ -21,11 +21,11 @@ interface TicketApiEndPoint {
         @Field("account_number") accountNumber: String? = null
     ): Response<PayoutVerificationResponse>
 
-    @POST("api_v1/tickets_parse_text.php")
+    @POST("tickets/parse_text")
     suspend fun parseOcrText(@Body body: Map<String, String>): Response<ParseTextResponse>
 
     @Multipart
-    @POST("api_v1/tickets_create.php")
+    @POST("tickets/create_ticket")
     suspend fun createTicket(
         @Part("eventName") eventName: RequestBody,
         @Part("eventDate") eventDate: RequestBody,
@@ -40,20 +40,20 @@ interface TicketApiEndPoint {
     ): Response<GenericApiResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/tickets_update.php")
+    @POST("tickets/update_ticket")
     suspend fun updateTicket(
         @Field("ticket_id") ticketId: Int,
         @Field("selling_price") SellingPrice: String
     ): Response<GenericApiResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/tickets_delist.php")
+    @POST("tickets/delist_ticket")
     suspend fun delistTicket(
         @Field("ticket_id") ticketId: Int
     ): Response<GenericApiResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/tickets_relist.php")
+    @POST("tickets/relist")
     suspend fun relistTicket(
         @Field("transaction_id") transactionId: Int,
         @Field("new_selling_price") newSellingPrice: String
@@ -63,33 +63,34 @@ interface TicketApiEndPoint {
 
     // == BUYER FLOW ==
 
-    @GET("api_v1/tickets_browse.php")
+    @GET("tickets/browse_ticket")
     suspend fun browseTickets(): Response<BrowseTicketsResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/orders_create.php")
+    @POST("tickets/create_ticket_payment_order")
     suspend fun createOrder(
         @Field("ticket_id") ticketId: Int
     ): Response<CreateOrderResponse>
 
 
-    @POST("api_v1/tickets_my_activity.php") // Using POST with form-data
+    @GET("tickets/my_activity")
     suspend fun getMyActivity(): Response<MyActivityResponse>
 
+
     @FormUrlEncoded
-    @POST("api_v1/tickets_reveal.php")
+    @POST("tickets/reveal_ticket")
     suspend fun revealTicket(
         @Field("transaction_id") transactionId: Int,
     ): Response<GenericApiResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/transactions_complete.php")
+    @POST("tickets/complete_ticket_purchase")
     suspend fun completeTransaction(
         @Field("transaction_id") transactionId: Int,
     ): Response<GenericApiResponse>
 
     @FormUrlEncoded
-    @POST("api_v1/disputes_create.php")
+    @POST("tickets/create_ticket_dispute")
     suspend fun createDispute(
         @Field("transaction_id") transactionId: Int,
         @Field("reason") reason: String

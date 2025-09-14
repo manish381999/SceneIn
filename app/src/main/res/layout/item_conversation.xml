@@ -4,80 +4,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp"
+    android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:background="?attr/selectableItemBackground">
+    android:paddingHorizontal="@dimen/_8sdp"
+    android:paddingVertical="@dimen/_8sdp">
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/iv_profile_pic"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="@dimen/_48sdp"
+        android:layout_height="@dimen/_48sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:src="@drawable/ic_profile_placeholder" />
 
     <TextView
         android:id="@+id/tv_user_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_16_dsa"
+        android:layout_marginStart="@dimen/_12sdp"
         android:ellipsize="end"
+        android:fontFamily="@font/poppins_semibold"
         android:maxLines="1"
-        android:textStyle="bold"
         android:textColor="@color/textPrimary"
-        android:fontFamily="@font/poppins_bold"
-        app:layout_constraintStart_toEndOf="@id/iv_profile_pic"
+        android:textSize="@dimen/_11ssp"
         app:layout_constraintEnd_toStartOf="@id/tv_timestamp"
+        app:layout_constraintStart_toEndOf="@id/iv_profile_pic"
         app:layout_constraintTop_toTopOf="@id/iv_profile_pic"
-        tools:text="Gunjan Jain"
-        android:textSize="@dimen/_12ssp"
-        />
+        tools:text="Gunjan Jain" />
 
     <TextView
         android:id="@+id/tv_last_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_16_dsa"
-        android:layout_marginTop="@dimen/dp_4_dsa"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_2sdp"
         android:ellipsize="end"
+        android:fontFamily="@font/poppins"
         android:maxLines="1"
         android:textColor="@color/textSecondary"
-        android:fontFamily="@font/poppins_semibold"
-        app:layout_constraintTop_toBottomOf="@id/tv_user_name"
-        app:layout_constraintStart_toEndOf="@id/iv_profile_pic"
-        app:layout_constraintEnd_toStartOf="@id/tv_unread_count"
-        tools:text="📷 Photo"
         android:textSize="@dimen/_10ssp"
-         /> <!-- FIX: Using a concrete style -->
+        app:layout_constraintEnd_toStartOf="@id/tv_unread_count"
+        app:layout_constraintStart_toEndOf="@id/iv_profile_pic"
+        app:layout_constraintTop_toBottomOf="@id/tv_user_name"
+        tools:text="📷 Photo" />
 
     <TextView
         android:id="@+id/tv_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_8_dsa"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:fontFamily="@font/poppins"
         android:textColor="@color/textSecondary"
-        android:fontFamily="@font/poppins_medium"
+        android:textSize="@dimen/_9ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_user_name"
-        tools:text="10:45 AM"
-        android:textSize="@dimen/_10ssp"
-         /> <!-- FIX: Using a concrete style -->
+        tools:text="10:45 AM" />
 
     <TextView
         android:id="@+id/tv_unread_count"
-        android:layout_width="@dimen/dp_24_dsa"
-        android:layout_height="@dimen/dp_24_dsa"
-        android:layout_marginStart="@dimen/dp_8_dsa"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_8sdp"
         android:background="@drawable/bg_unread_count"
+        android:fontFamily="@font/poppins_semibold"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="@dimen/_10ssp"
-        android:textStyle="bold"
+        android:textSize="@dimen/_9ssp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/tv_last_message"
         app:layout_constraintEnd_toEndOf="parent"
@@ -85,4 +79,12 @@
         tools:text="2"
         tools:visibility="visible" />
 
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/divider_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

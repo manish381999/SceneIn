@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorSurface"
-    tools:context=".tickets.persentation.screens.TicketDetailActivity">
+    tools:context=".tickets.presentation.screens.TicketDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -19,12 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back_ios"
-            app:title="Confirm Purchase" />
+            app:title="Confirm Purchase"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.App.ToolbarTitle.Compact" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray100"/>
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/gray100" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -32,112 +34,116 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="200dp"
+        android:paddingBottom="@dimen/_150sdp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/_12sdp">
 
             <TextView
                 android:id="@+id/tvEventCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                android:fontFamily="@font/poppins_semibold"
                 android:textColor="?attr/colorPrimary"
-                android:textStyle="bold"
+                android:textSize="@dimen/_10ssp"
                 tools:text="IPL CRICKET MATCH" />
 
             <TextView
                 android:id="@+id/tvEventName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                android:textStyle="bold"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_15ssp"
                 tools:text="Chennai Super Kings VS Royal Challengers Bangalore" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="@dimen/_16sdp"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        app:tint="@color/textSecondary"
-                        android:src="@drawable/ic_calendar"/>
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:src="@drawable/ic_calendar"
+                        app:tint="@color/textSecondary" />
 
                     <TextView
                         android:id="@+id/tvEventDateTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:fontFamily="@font/poppins"
                         android:textColor="@color/textSecondary"
+                        android:textSize="@dimen/_10ssp"
                         tools:text="Thu, 31 Jul 2025 • 08:00 PM" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="12dp"
-                    android:gravity="center_vertical">
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        app:tint="@color/textSecondary"
-                        android:src="@drawable/ic_location"/>
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:src="@drawable/ic_location"
+                        app:tint="@color/textSecondary" />
 
                     <TextView
                         android:id="@+id/tvEventVenue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:fontFamily="@font/poppins"
                         android:textColor="@color/textSecondary"
+                        android:textSize="@dimen/_10ssp"
                         tools:text="MA Chidambaram Stadium, Chennai" />
                 </LinearLayout>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="24dp"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginVertical="@dimen/_20sdp"
                 android:background="@color/gray100" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
                 android:text="TICKET LISTED BY"
-                android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
-                android:textColor="@color/textSecondary" />
+                android:textColor="@color/textSecondary"
+                android:textSize="@dimen/_9ssp" />
 
             <LinearLayout
                 android:id="@+id/sellerInfoContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/_12sdp"
                 android:background="@drawable/bg_input"
-                android:padding="12dp"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/_12sdp">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/ivSellerProfilePic"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                     tools:src="@tools:sample/avatars" />
 
@@ -145,10 +151,10 @@
                     android:id="@+id/tvSellerName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:fontFamily="@font/poppins_semibold"
                     android:textColor="@color/textPrimary"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                    android:textStyle="bold"
+                    android:textSize="@dimen/_11ssp"
                     tools:text="Manish Kumar Singh" />
             </LinearLayout>
 
@@ -160,30 +166,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:cardElevation="16dp"
+        app:cardElevation="@dimen/_8sdp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.None">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorSurface"
-            android:padding="16dp">
+            android:padding="@dimen/_12sdp">
 
             <TextView
                 android:id="@+id/tvPriceLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
                 android:text="Ticket Price"
                 android:textColor="@color/textSecondary"
+                android:textSize="@dimen/_10ssp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvSellingPrice"
-                style="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:fontFamily="@font/poppins"
+                android:textSize="@dimen/_10ssp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="₹1.00" />
@@ -192,68 +200,72 @@
                 android:id="@+id/tvFeeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:fontFamily="@font/poppins"
                 android:text="Buyer Protection Fee (5%)"
                 android:textColor="@color/textSecondary"
-                android:layout_marginTop="4dp"
+                android:textSize="@dimen/_10ssp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvPriceLabel"/>
+                app:layout_constraintTop_toBottomOf="@id/tvPriceLabel" />
 
             <TextView
                 android:id="@+id/tvFeePrice"
-                style="@style/TextAppearance.Material3.BodyMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="₹0.05"
+                android:fontFamily="@font/poppins"
+                android:textSize="@dimen/_10ssp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvFeeLabel"/>
+                app:layout_constraintTop_toTopOf="@id/tvFeeLabel"
+                tools:text="₹0.05" />
 
             <View
                 android:id="@+id/bottom_divider"
                 android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="12dp"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_12sdp"
                 android:background="@color/gray100"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvFeeLabel"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvFeeLabel" />
 
             <TextView
                 android:id="@+id/tvTotalLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:fontFamily="@font/poppins_semibold"
                 android:text="Total Amount"
-                android:layout_marginTop="12dp"
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                android:textStyle="bold"
+                android:textSize="@dimen/_11ssp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bottom_divider"/>
+                app:layout_constraintTop_toBottomOf="@id/bottom_divider" />
 
             <TextView
                 android:id="@+id/tvTotalPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="₹1.05"
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                android:textStyle="bold"
+                android:fontFamily="@font/poppins_semibold"
                 android:textColor="?attr/colorPrimary"
+                android:textSize="@dimen/_11ssp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvTotalLabel"/>
+                app:layout_constraintTop_toTopOf="@id/tvTotalLabel"
+                tools:text="₹1.05" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnBuyTicket"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:paddingVertical="14dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:fontFamily="@font/poppins_semibold"
                 android:text="Proceed to Pay"
+                android:textSize="@dimen/_11ssp"
                 app:layout_constraintTop_toBottomOf="@id/tvTotalLabel" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
-                android:elevation="4dp"
+                android:elevation="@dimen/_4sdp"
                 android:indeterminateTint="@color/white"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/btnBuyTicket"

@@ -17,8 +17,8 @@ import com.scenein.notification.data.models.HeaderData
 import com.scenein.notification.presentation.view_model.NotificationViewModel
 import com.scenein.notification.data.models.Notification
 import com.scenein.notification.presentation.adapter.NotificationsAdapter
-import com.scenein.profile.persentation.screen.UserProfileActivity
-import com.scenein.profile.persentation.view_model.ProfileViewModel
+import com.scenein.profile.presentation.screen.UserProfileActivity
+import com.scenein.profile.presentation.view_model.ProfileViewModel
 
 import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState

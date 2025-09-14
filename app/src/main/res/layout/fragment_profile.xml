@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fragment_profile"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
@@ -9,8 +9,9 @@
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/mToolBar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,43 +22,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/dp_15_dsa">
-
-            <!-- Repeat a few placeholder views -->
+            android:padding="@dimen/_16sdp">
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
                 android:background="@drawable/shimmer_placeholder"/>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
                 android:background="@drawable/shimmer_placeholder"/>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
-                android:background="@drawable/shimmer_placeholder"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
-                android:background="@drawable/shimmer_placeholder"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
-                android:background="@drawable/shimmer_placeholder"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
-                android:background="@drawable/shimmer_placeholder"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100_dsa"
-                android:layout_marginBottom="@dimen/dp_10_dsa"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
                 android:background="@drawable/shimmer_placeholder"/>
         </LinearLayout>
     </com.facebook.shimmer.ShimmerFrameLayout>
@@ -67,80 +46,74 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorBackground"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:elevation="@dimen/_2sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:elevation="@dimen/_2sdp" >
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:fontFamily="@font/poppins_semibold"
             android:text="User name"
             android:textColor="@color/textPrimary"
-            android:fontFamily="@font/poppins_medium"
-            android:layout_gravity="start"
-            android:textSize="@dimen/_14ssp"/>
+            android:textSize="@dimen/_13ssp" />
 
         <ImageView
             android:id="@+id/iv_setting"
             android:layout_width="@dimen/_22sdp"
             android:layout_height="@dimen/_22sdp"
-            android:src="@drawable/ic_setting"
             android:layout_gravity="end"
-            app:tint="@color/textPrimary"
-            android:layout_marginEnd="@dimen/_8sdp"/>
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:src="@drawable/ic_setting"
+            app:tint="@color/textPrimary" />
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/mToolBar"
-        android:layout_gravity="center_horizontal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginTop="?attr/actionBarSize">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            >
+            android:layout_height="wrap_content">
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/ivProfile"
-                android:layout_width="@dimen/_90sdp"
-                android:layout_height="@dimen/_90sdp"
-                android:src="@drawable/ic_profile_placeholder"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_16sdp"
                 android:scaleType="centerCrop"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:civ_border_width="2dp"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/ic_profile_placeholder"
                 app:civ_border_color="#D1B3FF"
-                />
-
+                app:civ_border_width="@dimen/_2sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditProfile"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_42_dsa"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
+                android:layout_height="@dimen/_36sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
                 android:background="@drawable/bg_edit_profile"
-                app:backgroundTint="@null"
-                android:textAllCaps="false"
-                android:fontFamily="@font/poppins_medium"
+                android:fontFamily="@font/poppins_semibold"
                 android:gravity="center"
                 android:text="Edit Profile"
+                android:textAllCaps="false"
                 android:textColor="@color/textPrimary"
-                android:textSize="@dimen/_12ssp"
+                android:textSize="@dimen/_11ssp"
+                app:backgroundTint="@null"
                 app:icon="@drawable/ic_edit"
                 app:iconGravity="textStart"
-                app:iconPadding="@dimen/dp_5_dsa"
+                app:iconPadding="@dimen/_4sdp"
                 app:iconTint="@color/textPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -149,95 +122,90 @@
                 android:id="@+id/tvFullName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:paddingStart="@dimen/_15sdp"
-                android:paddingEnd="@dimen/_15sdp"
-                android:text="Manish"
-                android:textColor="@color/textPrimary"
-                android:fontFamily="@font/poppins_medium"
-                android:textSize="@dimen/_14ssp"
-                android:maxLines="1"
+                android:layout_marginTop="@dimen/_16sdp"
                 android:ellipsize="end"
-                app:layout_constraintTop_toBottomOf="@id/ivProfile"
+                android:fontFamily="@font/poppins_bold"
+                android:maxLines="1"
+                android:paddingHorizontal="@dimen/_16sdp"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/_15ssp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/ivProfile"
+                tools:text="Manish Kumar" />
 
 
             <TextView
                 android:id="@+id/tvAboutYou"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="I'm passionate about connecting people through memorable experiences."
-                android:textColor="@color/textPrimary"
+                android:layout_marginTop="@dimen/_4sdp"
                 android:fontFamily="@font/poppins"
+                android:lineSpacingExtra="@dimen/_2sdp"
+                android:paddingHorizontal="@dimen/_16sdp"
+                android:textColor="@color/textPrimary"
                 android:textSize="@dimen/_10ssp"
-                android:lineSpacingExtra="2dp"
-                android:paddingEnd="@dimen/_15sdp"
-                android:paddingStart="@dimen/_15sdp"
-                app:layout_constraintTop_toBottomOf="@id/tvFullName"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="@dimen/dp_5_dsa"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvFullName"
+                tools:text="I'm passionate about connecting people through memorable experiences." />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvInterested"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tvAboutYou"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:paddingEnd="@dimen/_15sdp"
-                android:paddingStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:clipToPadding="false"
-                android:overScrollMode="never"
                 android:nestedScrollingEnabled="false"
-                android:layout_marginTop="@dimen/dp_5_dsa"/>
+                android:overScrollMode="never"
+                android:paddingHorizontal="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAboutYou" />
 
             <View
                 android:id="@+id/view1"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_1_dsa"
-                app:layout_constraintTop_toBottomOf="@id/rvInterested"
-                android:layout_marginTop="@dimen/dp_10_dsa"
-                android:background="@color/gray300"/>
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:background="@color/gray300"
+                app:layout_constraintTop_toBottomOf="@id/rvInterested" />
 
             <LinearLayout
                 android:id="@+id/llStatsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:paddingVertical="@dimen/_12sdp"
                 android:weightSum="3"
-                app:layout_constraintTop_toBottomOf="@id/view1"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:padding="@dimen/dp_10_dsa">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view1">
 
                 <LinearLayout
                     android:id="@+id/llEventCount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvEventCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_14ssp"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="5"
-                        android:layout_gravity="center"
-                        android:textColor="@color/textPrimary"/>
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_13ssp"
+                        tools:text="5" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Events"
-                        android:layout_gravity="center"
                         android:fontFamily="@font/poppins"
-                        android:textSize="@dimen/_12ssp"
-                        android:textColor="@color/textPrimary"/>
+                        android:text="Events"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -245,26 +213,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvConnectionsCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_14ssp"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="43"
-                        android:layout_gravity="center"
-                        android:textColor="@color/textPrimary"/>
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_13ssp"
+                        tools:text="43" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Connections"
-                        android:layout_gravity="center"
                         android:fontFamily="@font/poppins"
-                        android:textSize="@dimen/_12ssp"
-                        android:textColor="@color/textPrimary"/>
+                        android:text="Connections"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -272,49 +239,46 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvTicketCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_14ssp"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="2"
-                        android:layout_gravity="center"
-                        android:textColor="@color/textPrimary"/>
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_13ssp"
+                        tools:text="2" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tickets"
-                        android:layout_gravity="center"
                         android:fontFamily="@font/poppins"
-                        android:textSize="@dimen/_12ssp"
-                        android:textColor="@color/textPrimary"/>
+                        android:text="Tickets"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
             </LinearLayout>
 
             <View
                 android:id="@+id/view2"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_1_dsa"
-                app:layout_constraintTop_toBottomOf="@id/llStatsContainer"
-                android:layout_marginTop="@dimen/dp_5_dsa"
-                android:background="@color/gray300"/>
+                android:layout_height="@dimen/_1sdp"
+                android:background="@color/gray300"
+                app:layout_constraintTop_toBottomOf="@id/llStatsContainer" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:tabIndicatorColor="@color/colorPrimary"
-                app:tabIndicatorHeight="2dp"
-                app:tabTextAppearance="@style/TabTextStyle"
-                app:layout_constraintTop_toBottomOf="@id/view2"
-                app:layout_constraintStart_toStartOf="parent"
+                android:background="@color/colorBackground"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:background="@color/colorBackground" />
-
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view2"
+                app:tabIndicatorColor="@color/colorPrimary"
+                app:tabIndicatorHeight="@dimen/_2sdp"
+                app:tabTextAppearance="@style/TabTextStyle" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"
@@ -325,16 +289,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-
-
-
-
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

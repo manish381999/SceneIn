@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorSurface"
-    tools:context=".chat.persentation.screens.ChatFragment">
+    tools:context=".chat.presentation.screens.ChatFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -19,71 +19,60 @@
             android:layout_height="?attr/actionBarSize"
             app:title="Messages"
             app:titleCentered="true"
-            app:titleTextColor="?attr/colorOnSurface">
+            app:titleTextAppearance="@style/TextAppearance.App.ToolbarTitle.Compact" />
 
-            <ImageView
-                android:id="@+id/iv_notifications"
-                android:layout_width="@dimen/dp_40_dsa"
-                android:layout_height="@dimen/dp_40_dsa"
-                android:src="@drawable/ic_notification_bell"
-                android:layout_gravity="end"
-                android:padding="8dp"
-                android:layout_marginEnd="8dp"
-                app:tint="@color/gray500"
-                android:visibility="gone"
-               />
-        </com.google.android.material.appbar.MaterialToolbar>
-
-        <!-- Search Bar -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="12dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_12sdp"
             android:clickable="true"
             android:focusable="true"
             app:cardBackgroundColor="@color/colorSurfaceVariant"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="@dimen/_24sdp"
             app:cardElevation="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:gravity="center_vertical">
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/_12sdp">
+
                 <ImageView
-                    android:layout_width="@dimen/dp_24_dsa"
-                    android:layout_height="@dimen/dp_24_dsa"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:src="@drawable/ic_search"
-                    app:tint="@color/gray500"/>
+                    app:tint="@color/gray500" />
+
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Search messages"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:layout_marginStart="16dp"
-                    android:textColor="@color/gray500"/>
+                    android:fontFamily="@font/poppins"
+                    android:text="Search messages"
+                    android:textColor="@color/gray500"
+                    android:textSize="@dimen/_11ssp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Category Tabs -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp">
+            android:paddingStart="@dimen/_12sdp"
+            android:paddingEnd="@dimen/_12sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            android:scrollbars="none">
+
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chip_group_categories"
+                style="@style/Widget.App.ChipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:singleSelection="true"
-                style="@style/Widget.App.ChipGroup"
-                >
+                app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_all"
@@ -92,8 +81,9 @@
                     android:layout_height="wrap_content"
                     android:checkable="true"
                     android:checked="true"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="@dimen/_10ssp"
                     android:text="All Chats" />
-
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_requests"
@@ -101,6 +91,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="@dimen/_10ssp"
                     android:text="Requests" />
 
                 <com.google.android.material.chip.Chip
@@ -109,14 +101,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="@dimen/_10ssp"
                     android:text="Unread" />
-
 
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
-        <View android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray200"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/gray200" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
@@ -136,10 +131,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:drawablePadding="16dp"
-            android:textSize="@dimen/_15ssp"
+            android:drawablePadding="@dimen/_16sdp"
+            android:fontFamily="@font/poppins_semibold"
             android:text="No conversations yet"
-            android:textAppearance="@color/textPrimary"
+            android:textColor="@color/textPrimary"
+            android:textSize="@dimen/_14ssp"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -151,7 +147,5 @@
             android:visibility="gone" />
 
     </FrameLayout>
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -27,7 +27,7 @@
         android:usesCleartextTraffic="false"
         tools:targetApi="31">
         <activity
-            android:name=".settings.persentation.screen.BookmarksActivity"
+            android:name=".settings.presentation.screen.BookmarksActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
@@ -35,28 +35,28 @@
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".createEvent.persentation.screens.CreateEventActivity"
+            android:name=".createEvent.presentation.screens.CreateEventActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".settings.persentation.screen.TicketTransactionDetailActivity"
+            android:name=".settings.presentation.screen.TicketTransactionDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".settings.persentation.screen.TicketTransactionHistoryActivity"
+            android:name=".settings.presentation.screen.TicketTransactionHistoryActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".settings.persentation.screen.SettingsActivity"
+            android:name=".settings.presentation.screen.SettingsActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".profile.persentation.screen.ProfilePicturePreviewActivity"
+            android:name=".profile.presentation.screen.ProfilePicturePreviewActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".profile.persentation.screen.EditProfileActivity"
+            android:name=".profile.presentation.screen.EditProfileActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
@@ -72,41 +72,41 @@
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".tickets.persentation.screens.ManageListingActivity"
+            android:name=".tickets.presentation.screens.ManageListingActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".tickets.persentation.screens.PurchasedTicketDetailActivity"
+            android:name=".tickets.presentation.screens.PurchasedTicketDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".tickets.persentation.screens.PayoutSetupActivity"
+            android:name=".tickets.presentation.screens.PayoutSetupActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".tickets.persentation.screens.CheckoutActivity"
+            android:name=".tickets.presentation.screens.CheckoutActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="false"
             android:theme="@style/Theme.Razorpay" />
         <activity
-            android:name=".tickets.persentation.screens.TicketDetailActivity"
+            android:name=".tickets.presentation.screens.TicketDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".tickets.persentation.screens.SellTicketActivity"
+            android:name=".tickets.presentation.screens.SellTicketActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".chat.persentation.screens.MediaViewerActivity"
+            android:name=".chat.presentation.screens.MediaViewerActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity
-            android:name=".chat.persentation.screens.ChatActivity"
+            android:name=".chat.presentation.screens.ChatActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".profile.persentation.screen.UserProfileActivity"
+            android:name=".profile.presentation.screen.UserProfileActivity"
             android:exported="false"
             android:theme="@style/Theme.VibeIn" />
         <activity

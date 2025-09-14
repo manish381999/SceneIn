@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorSurface"
     android:fitsSystemWindows="true"
-    tools:context=".settings.persentation.screen.TicketTransactionDetailActivity">
+    android:orientation="vertical"
+    tools:context=".settings.presentation.screen.TicketTransactionDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -21,7 +21,9 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back_ios"
-            app:title="Transaction Details" />
+            app:title="Transaction Details"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.App.ToolbarTitle.Compact" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -40,20 +42,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="24dp">
+                android:paddingBottom="@dimen/_24sdp">
 
-                <!-- Header Section -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:padding="24dp">
+                    android:padding="@dimen/_20sdp">
 
                     <ImageView
                         android:id="@+id/ivStatusIcon"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="@dimen/_48sdp"
+                        android:layout_height="@dimen/_48sdp"
                         app:tint="@color/colorSuccess"
                         tools:src="@drawable/ic_check_circle" />
 
@@ -61,154 +62,174 @@
                         android:id="@+id/tvStatusTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textSize="@dimen/_14ssp"
                         tools:text="Payment Received" />
 
                     <TextView
                         android:id="@+id/tvStatusAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:textSize="@dimen/_24ssp"
                         tools:text="+ ₹9.00" />
 
                     <TextView
                         android:id="@+id/tvStatusSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:fontFamily="@font/poppins"
                         android:textColor="@color/textSecondary"
+                        android:textSize="@dimen/_10ssp"
                         tools:text="This amount has been added to your payout queue." />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="@dimen/_8sdp"
                     android:background="@color/gray100" />
 
-                <!-- 'With' Section -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="@dimen/_12sdp">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/ivOtherUserPic"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
                         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                         tools:src="@tools:sample/avatars" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="@dimen/_12sdp"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/tvOtherUserLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+                            android:fontFamily="@font/poppins"
                             android:textColor="@color/textSecondary"
+                            android:textSize="@dimen/_9ssp"
                             tools:text="RECEIVED FROM" />
 
                         <TextView
                             android:id="@+id/tvOtherUserName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                            android:textStyle="bold"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:textColor="@color/textPrimary"
+                            android:textSize="@dimen/_11ssp"
                             tools:text="Manish Kumar Singh" />
                     </LinearLayout>
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="@dimen/_1sdp"
                     android:background="@color/gray100" />
 
-                <!-- Details Section -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/_12sdp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
                         android:text="Date &amp; Time"
-                        android:textColor="@color/textSecondary" />
+                        android:textColor="@color/textSecondary"
+                        android:textSize="@dimen/_10ssp" />
+
                     <TextView
                         android:id="@+id/tvDateTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_11ssp"
                         tools:text="11 Jul 2025, 06:34 PM" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:fontFamily="@font/poppins"
                         android:text="Transaction ID"
-                        android:textColor="@color/textSecondary" />
+                        android:textColor="@color/textSecondary"
+                        android:textSize="@dimen/_10ssp" />
+
                     <TextView
                         android:id="@+id/tvTransactionId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_11ssp"
                         tools:text="SCENEIN-TXN-00000001" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:fontFamily="@font/poppins"
                         android:text="For Event"
-                        android:textColor="@color/textSecondary" />
+                        android:textColor="@color/textSecondary"
+                        android:textSize="@dimen/_10ssp" />
+
                     <TextView
                         android:id="@+id/tvEventNameDetail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_11ssp"
                         tools:text="Chennai Super Kings VS Royal Challengers Bangalore" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="@dimen/_8sdp"
                     android:background="@color/gray100" />
 
-                <!-- Bill Summary -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/_12sdp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_bold"
                         android:text="Bill Summary"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                        android:textStyle="bold" />
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/_12ssp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp">
+                        android:layout_marginTop="@dimen/_12sdp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
                             android:text="Ticket Amount"
+                            android:textSize="@dimen/_11ssp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -216,36 +237,42 @@
                             android:id="@+id/tvTicketAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="parent"
+                            android:fontFamily="@font/poppins"
+                            android:textSize="@dimen/_11ssp"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
                             tools:text="₹1.00" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp">
+                        android:layout_marginTop="@dimen/_8sdp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
                             android:text="SceneIn Fee"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            android:textSize="@dimen/_11ssp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/tvFeeAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="parent"
+                            android:fontFamily="@font/poppins"
+                            android:textSize="@dimen/_11ssp"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
                             tools:text="₹0.05" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginVertical="12dp"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_marginVertical="@dimen/_12sdp"
                         android:background="@color/gray100" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -256,20 +283,20 @@
                             android:id="@+id/tvTotalLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                            android:textStyle="bold"
-                            app:layout_constraintTop_toTopOf="parent"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:textSize="@dimen/_12ssp"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
                             tools:text="You Paid" />
 
                         <TextView
                             android:id="@+id/tvTotalAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                            android:textStyle="bold"
-                            app:layout_constraintTop_toTopOf="parent"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:textSize="@dimen/_12ssp"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
                             tools:text="₹1.05" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
@@ -278,10 +305,12 @@
                     android:id="@+id/btnNeedHelp"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:text="Need help? Chat with support" />
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginHorizontal="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Need help? Chat with support"
+                    android:textSize="@dimen/_11ssp" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
@@ -292,6 +321,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="visible"
-            tools:visibility="gone"/>
+            tools:visibility="gone" />
     </FrameLayout>
 </LinearLayout>

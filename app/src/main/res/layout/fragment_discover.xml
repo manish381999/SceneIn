@@ -8,13 +8,12 @@
     android:background="@color/colorSurface"
     tools:context=".discover.presentation.screens.DiscoverFragment">
 
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorSurface"
-        app:elevation="0dp">
+        app:elevation="@dimen/dp_0_dsa">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbar"
@@ -38,8 +37,8 @@
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <ImageView
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
                     android:src="@drawable/ic_location_pin"
                     app:tint="@color/textPrimary" />
 
@@ -50,8 +49,9 @@
                     android:layout_marginStart="@dimen/_8sdp"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/textPrimary"
-                    android:textSize="@dimen/_10ssp"
+                    android:textSize="@dimen/_12ssp"
                     tools:text="Chennai, India" />
+
                 <ImageView
                     android:layout_width="@dimen/_16sdp"
                     android:layout_height="@dimen/_16sdp"
@@ -82,16 +82,16 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/search_bar_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_38sdp"
                 android:layout_marginHorizontal="@dimen/_16sdp"
-                app:cardBackgroundColor="@color/colorBackground"
+                app:cardBackgroundColor="@color/gray100"
                 app:cardCornerRadius="@dimen/_8sdp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp">
+                app:cardElevation="@dimen/dp_0_dsa"
+                app:strokeWidth="@dimen/dp_0_dsa">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingHorizontal="@dimen/_12sdp">
@@ -107,6 +107,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginHorizontal="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins"
                         android:text="Explore events, groups..."
                         android:textColor="@color/textSecondary"
                         android:textSize="@dimen/_12ssp"/>
@@ -142,31 +143,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            app:shimmer_auto_start="true"
-            tools:visibility="visible">
-            <include layout="@layout/shimmer_placeholder_discover_feed"/>
-        </com.facebook.shimmer.ShimmerFrameLayout>
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:shimmer_auto_start="true"
+                tools:visibility="visible">
+                <include layout="@layout/shimmer_placeholder_discover_feed"/>
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvFeed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingBottom="@dimen/_5sdp"
-            tools:listitem="@layout/item_discover_event"/>
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFeed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/_8sdp"
+                tools:listitem="@layout/item_discover_event"/>
 
             <TextView
                 android:id="@+id/tvEmptyState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/poppins"
                 android:text="No events found in this area."
+                android:textSize="@dimen/_13ssp"
                 android:visibility="gone" />
 
         </FrameLayout>

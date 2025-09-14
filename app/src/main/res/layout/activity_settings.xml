@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="?attr/colorSurface"
-    >
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".settings.presentation.screen.SettingsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -20,22 +21,23 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back_ios"
-            app:title="Settings" />
+            app:title="Settings"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.App.ToolbarTitle.Compact" />
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?attr/colorOutlineVariant"/>
+            android:layout_height="@dimen/_1sdp"
+            android:background="?attr/colorOutlineVariant" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- We will use a RecyclerView to build our dynamic settings list -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSettings"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="16dp"
+        android:paddingBottom="@dimen/_16sdp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_setting" />
 

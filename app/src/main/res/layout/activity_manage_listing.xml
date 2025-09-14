@@ -4,22 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
-    tools:context=".tickets.persentation.screens.ManageListingActivity">
+    android:background="@color/colorSurface"
+    tools:context=".tickets.presentation.screens.ManageListingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
         app:elevation="0dp">
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             style="@style/Widget.Material3.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back_ios"
-            app:title="Edit Your Listing" />
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray100" />
+            app:title="Edit Your Listing"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.App.ToolbarTitle.Compact" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/gray100" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
@@ -31,115 +38,145 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="96dp">
+            android:paddingBottom="@dimen/_80sdp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="@dimen/_12sdp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
                     android:text="EVENT INFORMATION (READ-ONLY)"
-                    android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-                    android:textColor="@color/textSecondary"/>
+                    android:textColor="@color/textSecondary"
+                    android:textSize="@dimen/_9ssp" />
 
                 <TextView
                     android:id="@+id/tvEventName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:padding="16dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:background="@drawable/bg_input_disabled"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/_11ssp"
                     tools:text="Chennai Super Kings VS Royal Challengers Bangalore" />
 
                 <TextView
                     android:id="@+id/tvEventVenue"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:padding="16dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:background="@drawable/bg_input_disabled"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                    android:fontFamily="@font/poppins"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:textColor="@color/textSecondary"
+                    android:textSize="@dimen/_10ssp"
                     tools:text="MA Chidambaram Stadium, Chennai" />
 
-                <!-- THIS IS THE MISSING TEXTVIEW BLOCK -->
                 <TextView
                     android:id="@+id/tvEventDateTime"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:padding="16dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:background="@drawable/bg_input_disabled"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                    android:fontFamily="@font/poppins"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:textColor="@color/textSecondary"
+                    android:textSize="@dimen/_10ssp"
                     tools:text="Thu, 31 Jul 2025 • 08:00 PM" />
-                <!-- END OF MISSING BLOCK -->
 
                 <TextView
                     android:id="@+id/etNumberOfTickets"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:background="@drawable/bg_input_disabled"
-                    android:padding="16dp"
                     android:enabled="false"
+                    android:fontFamily="@font/poppins"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="@dimen/_12sdp"
                     android:textColor="@color/textSecondary"
-                    tools:text="3 Ticket(s)"/>
+                    android:textSize="@dimen/_10ssp"
+                    tools:text="3 Ticket(s)" />
 
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="24dp" android:background="@color/gray100" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginVertical="@dimen/_20sdp"
+                    android:background="@color/gray100" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
                     android:text="UPDATE YOUR SELLING PRICE"
-                    android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
-                    android:textColor="@color/textSecondary"/>
+                    android:textColor="@color/textSecondary"
+                    android:textSize="@dimen/_9ssp" />
 
                 <TextView
                     android:id="@+id/tvOriginalPriceInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    tools:text="Original price was ₹1. You cannot list for higher."/>
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/poppins"
+                    android:textSize="@dimen/_10ssp"
+                    tools:text="Original price was ₹1. You cannot list for higher." />
 
                 <EditText
                     android:id="@+id/etSellingPrice"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:background="@drawable/bg_input"
-                    android:padding="16dp"
-                    android:inputType="numberDecimal"
+                    android:fontFamily="@font/poppins"
                     android:hint="Enter new price (₹)"
-                    tools:text="1.00"/>
+                    android:inputType="numberDecimal"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:textSize="@dimen/_11ssp"
+                    tools:text="1.00" />
 
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="24dp" android:background="@color/gray100"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginVertical="@dimen/_20sdp"
+                    android:background="@color/gray100" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Remove Listing"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/_14ssp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:fontFamily="@font/poppins"
+                    android:text="This will remove your ticket from the marketplace. It will not be deleted from your history."
                     android:textColor="@color/textSecondary"
-                    android:text="This will remove your ticket from the marketplace. It will not be deleted from your history."/>
+                    android:textSize="@dimen/_10ssp" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnDelistTicket"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:strokeColor="@color/colorError"
+                    android:layout_height="@dimen/_36sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Delist This Ticket"
                     android:textColor="@color/colorError"
-                    android:layout_marginTop="12dp"
-                    android:text="Delist This Ticket" />
+                    android:textSize="@dimen/_10ssp"
+                    app:strokeColor="@color/colorError" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
@@ -148,21 +185,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:padding="16dp"
             android:background="?attr/colorSurface"
-            android:elevation="8dp">
+            android:elevation="@dimen/_8sdp"
+            android:padding="@dimen/_12sdp">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSaveChanges"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="14dp"
-                android:text="Save Price Changes" />
+                android:layout_height="@dimen/_40sdp"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Save Price Changes"
+                android:textSize="@dimen/_11ssp" />
+
             <ProgressBar
                 android:id="@+id/progressBar"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
-                android:elevation="4dp"
+                android:elevation="@dimen/_4sdp"
                 android:indeterminateTint="@color/white"
                 android:visibility="gone" />
         </FrameLayout>

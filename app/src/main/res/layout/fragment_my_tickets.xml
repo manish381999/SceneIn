@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipeRefreshLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".tickets.persentation.screens.MyTicketsFragment">
+    android:background="@color/colorBackground"
+    tools:context=".tickets.presentation.screens.MyTicketsFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -16,17 +17,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:padding="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_my_ticket_card"
-            tools:itemCount="4"/>
+            tools:itemCount="4"
+            tools:listitem="@layout/item_my_ticket_card" />
 
         <TextView
             android:id="@+id/tvEmptyMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:padding="@dimen/_16sdp"
             android:text="Your purchased and listed tickets will appear here."
+            android:textColor="@color/textSecondary"
+            android:textSize="@dimen/_11ssp"
             android:visibility="gone" />
 
         <ProgressBar
@@ -34,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </FrameLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

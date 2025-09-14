@@ -49,7 +49,7 @@
     <!-- Button Colors -->
     <color name="joinButtonColor">@color/colorPrimary</color>
     <color name="unjoinButtonColor">#30D158</color>  <!-- Brighter green for dark mode -->
-    <color name="fullButtonColor">@color/gray300</color>
+    <color name="fullButtonColor">@color/gray200</color>
 
     <!-- Chat System (Following WhatsApp's established, proven model) -->
     <color name="chat_toolbar_color">@color/colorSurface</color>      <!-- Dark grey toolbar. -->

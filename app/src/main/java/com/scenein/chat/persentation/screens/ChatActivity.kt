@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,8 +31,15 @@ import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
 import com.scenein.utils.SP
 import com.scenein.chat.persentation.view_model.ChatViewModel
+import com.scenein.profile.persentation.screen.UserProfileActivity
 
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 class ChatActivity : AppCompatActivity() {
@@ -190,8 +198,25 @@ class ChatActivity : AppCompatActivity() {
         binding.toolbar.title = ""
         setSupportActionBar(binding.toolbar)
         binding.tvToolbarName.text = name
-        Glide.with(this).load(profilePicUrl).placeholder(R.drawable.ic_profile_placeholder).into(binding.ivToolbarProfilePic)
+        Glide.with(this)
+            .load(profilePicUrl)
+            .placeholder(R.drawable.ic_profile_placeholder)
+            .into(binding.ivToolbarProfilePic)
+
         binding.ivBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+
+        // --- ADD THIS BLOCK ---
+        // Make the profile picture and name clickable
+        val profileClickListener = View.OnClickListener {
+            // Ensure we have a valid receiverId before navigating
+            if (!receiverId.isNullOrEmpty()) {
+                navigateToUserProfile(receiverId!!)
+            }
+        }
+
+        binding.ivToolbarProfilePic.setOnClickListener(profileClickListener)
+        binding.tvToolbarName.setOnClickListener(profileClickListener)
+        // --- END OF ADDED BLOCK ---
     }
 
     private fun setupRecyclerView() {
@@ -337,42 +362,56 @@ class ChatActivity : AppCompatActivity() {
 
     private fun processMessagesWithDates(messages: List<Message>): List<ChatItem> {
         if (messages.isEmpty()) return emptyList()
+
         val itemsWithDates = mutableListOf<ChatItem>()
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).apply { timeZone = TimeZone.getTimeZone("UTC") }
-        var lastDate: Date? = null
+        var lastDate: LocalDate? = null
+        val userZoneId = ZoneId.systemDefault() // Get the user's time zone once
+
         for (message in messages) {
             val messageTimestamp = message.timestamp
             if (messageTimestamp.isBlank()) {
                 itemsWithDates.add(ChatItem.MessageItem(message))
                 continue
             }
-            val currentDate = try { inputFormat.parse(messageTimestamp) } catch (e: Exception) { null } ?: continue
-            if (lastDate == null || !isSameDay(lastDate, currentDate)) {
-                itemsWithDates.add(ChatItem.DateItem(formatDateSeparator(currentDate)))
+
+            try {
+                // Convert timestamp to user's local date
+                val currentZonedDateTime = Instant.parse(messageTimestamp).atZone(userZoneId)
+                val currentDate = currentZonedDateTime.toLocalDate()
+
+                if (lastDate == null || !lastDate.isEqual(currentDate)) {
+                    itemsWithDates.add(ChatItem.DateItem(formatDateSeparator(currentZonedDateTime)))
+                }
+                itemsWithDates.add(ChatItem.MessageItem(message))
+                lastDate = currentDate
+            } catch (e: Exception) {
+                // If timestamp is invalid, just add the message
+                itemsWithDates.add(ChatItem.MessageItem(message))
             }
-            itemsWithDates.add(ChatItem.MessageItem(message))
-            lastDate = currentDate
         }
         return itemsWithDates
     }
 
-    private fun isSameDay(date1: Date?, date2: Date?): Boolean {
-        if (date1 == null || date2 == null) return false
-        val cal1 = Calendar.getInstance().apply { time = date1 }
-        val cal2 = Calendar.getInstance().apply { time = date2 }
-        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
+
+    private fun formatDateSeparator(messageDate: ZonedDateTime): String {
+        val today = ZonedDateTime.now(messageDate.zone)
+        val yesterday = today.minusDays(1)
+
+        return when {
+            messageDate.toLocalDate().isEqual(today.toLocalDate()) -> "Today"
+            messageDate.toLocalDate().isEqual(yesterday.toLocalDate()) -> "Yesterday"
+            // Use ChronoUnit to see if the date was within the last 7 days
+            ChronoUnit.DAYS.between(messageDate, today) < 7 ->
+                messageDate.format(DateTimeFormatter.ofPattern("EEEE", Locale.getDefault()))
+            else ->
+                messageDate.format(DateTimeFormatter.ofPattern("E, d MMM yyyy", Locale.getDefault()))
+        }
     }
 
-    private fun formatDateSeparator(date: Date): String {
-        val today = Calendar.getInstance()
-        val yesterday = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
-        val lastWeek = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -7) }
-        val messageDate = Calendar.getInstance().apply { time = date }
-        return when {
-            isSameDay(messageDate.time, today.time) -> "Today"
-            isSameDay(messageDate.time, yesterday.time) -> "Yesterday"
-            messageDate.after(lastWeek) -> SimpleDateFormat("EEEE", Locale.getDefault()).format(date)
-            else -> SimpleDateFormat("E, d MMM yyyy", Locale.getDefault()).format(date)
+    private fun navigateToUserProfile(userIdToView: String) {
+        val intent = Intent(this, UserProfileActivity::class.java).apply {
+            putExtra("user_id", userIdToView)
         }
+        startActivity(intent)
     }
 }

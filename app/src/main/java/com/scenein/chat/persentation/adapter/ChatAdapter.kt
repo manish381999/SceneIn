@@ -15,6 +15,9 @@ import com.scenein.databinding.ItemChatMessageReceivedBinding
 import com.scenein.databinding.ItemChatMessageSentBinding
 
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ChatAdapter(
@@ -163,12 +166,21 @@ class ChatAdapter(
     private fun formatTimestamp(message: Message): String {
         if (message.status == MessageStatus.SENDING) return "Sending..."
         if (message.timestamp.isNullOrEmpty()) return ""
+
         return try {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            val date = inputFormat.parse(message.timestamp)
-            val outputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
-            outputFormat.format(date ?: Date())
+            // 1. Define the output format we want (e.g., "11:40 PM")
+            val outputFormat = DateTimeFormatter.ofPattern("h:mm a", Locale.getDefault())
+
+            // 2. Parse the UTC timestamp string directly into an Instant
+            val instant = Instant.parse(message.timestamp)
+
+            // 3. Convert the Instant to the user's default time zone
+            val localDateTime = instant.atZone(ZoneId.systemDefault())
+
+            // 4. Format it for display
+            localDateTime.format(outputFormat)
         } catch (e: Exception) {
+            // Fallback in case of a parsing error
             ""
         }
     }

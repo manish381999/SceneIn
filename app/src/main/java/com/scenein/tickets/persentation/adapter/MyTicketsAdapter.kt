@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.scenein.R
 import com.scenein.databinding.ItemMyTicketCardBinding
+import com.scenein.notification.presentation.adapter.NotificationsAdapter.Companion.DiffCallback
 import com.scenein.tickets.data.models.Ticket
+import com.scenein.utils.DateTimeUtils
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -26,24 +28,17 @@ class MyTicketsAdapter(
             binding.tvEventCategory.text = ticket.category_name?.uppercase(Locale.ROOT) ?: "EVENT"
             binding.tvPrice.text = "₹${ticket.sellingPrice.toDoubleOrNull()?.toInt() ?: 0}"
 
-            // --- 2. Format Date and Time ---
-            try {
-                val date = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).parse(ticket.eventDate)
-                val time = SimpleDateFormat("HH:mm:ss", Locale.ROOT).parse(ticket.eventTime)
-                val formattedDate = date?.let { SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault()).format(it) } ?: ""
-                val formattedTime = time?.let { SimpleDateFormat("hh:mm a", Locale.getDefault()).format(it) } ?: ""
-                binding.tvEventDateTime.text = "$formattedDate  •  $formattedTime"
-            } catch (e: Exception) {
-                binding.tvEventDateTime.text = "Date & Time not specified"
-            }
+            // --- 2. Format Date & Time using DateTimeUtils ---
+            val formattedDate = DateTimeUtils.formatEventDate(ticket.eventDate)
+            val formattedTime = DateTimeUtils.formatEventTimeRange(ticket.eventTime, null)
 
-            // --- 3. Determine UI state based on ticket type (purchased vs. listed) ---
+            binding.tvEventDateTime.text = "$formattedDate, $formattedTime"
+
+            // --- 3. Determine UI state (purchased vs. listed) ---
             val isPurchased = ticket.transactionId != null
 
             if (isPurchased) {
-                // --- UI LOGIC FOR PURCHASED TICKETS ---
                 binding.tvTicketTypeHeader.text = "PURCHASED TICKET"
-
                 val (statusText, statusColorRes) = when {
                     ticket.completionType == "resold" -> "RESOLD BY YOU" to R.color.gray600
                     ticket.transactionStatus in listOf("refunded", "refund_processed") -> "REFUNDED" to R.color.textSecondary
@@ -53,13 +48,11 @@ class MyTicketsAdapter(
                     ticket.transactionStatus in listOf("completed_by_user", "completed_auto", "payout_queued", "payout_processed") -> "USED" to R.color.textSecondary
                     else -> "PROCESSING" to R.color.gray400
                 }
-
                 binding.chipStatus.text = statusText
                 binding.chipStatus.setChipBackgroundColorResource(statusColorRes)
                 binding.chipStatus.setTextColor(ContextCompat.getColor(context, R.color.white))
 
             } else {
-                // --- UI LOGIC FOR LISTED (FOR SALE) TICKETS ---
                 binding.tvTicketTypeHeader.text = "TICKET FOR SALE"
                 binding.chipStatus.text = ticket.listingStatus.uppercase(Locale.ROOT)
 

@@ -12,17 +12,17 @@ import retrofit2.http.*
 interface ChatApiEndPoint {
 
 
-    @GET("api_v1/get_conversations.php")
+    @GET("chat/get_conversations")
     suspend fun getConversations(): Response<GetConversationsResponse>
 
-    @GET("api_v1/get_chat_history.php")
+    @GET("chat/get_history/{id}")
     suspend fun getChatHistory(
-        @Query("chat_partner_id") chatPartnerId: String
+        @Path("id") chatPartnerId: String
     ): Response<GetChatHistoryResponse>
 
 
     @FormUrlEncoded
-    @POST("api_v1/send_message.php")
+    @POST("chat/send_chat")
     suspend fun sendMessage(
         @Field("receiver_id") receiverId: String,
         @Field("message_type") messageType: String,
@@ -30,13 +30,13 @@ interface ChatApiEndPoint {
     ): Response<SendMessageResponse>
 
     @Multipart
-    @POST("api_v1/handle_chat_upload.php")
+    @POST("chat/upload_media")
     suspend fun uploadMedia(@Part file: MultipartBody.Part): Response<MediaUploadResponse>
 
-    @POST("api_v1/mark_delivered.php")
+    @POST("chat/mark_delivered")
     suspend fun markMessagesAsDelivered(@Body body: MarkAsDeliveredRequest): Response<Unit>
 
-    @POST("api_v1/mark_read.php")
+    @POST("chat/mark_read")
     suspend fun markMessagesAsRead(@Body body: MarkAsDeliveredRequest): Response<Unit>
 
 

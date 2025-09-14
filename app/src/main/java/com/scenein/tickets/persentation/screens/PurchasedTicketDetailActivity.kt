@@ -18,6 +18,7 @@ import com.scenein.R
 import com.scenein.databinding.ActivityPurchasedTicketDetailBinding
 import com.scenein.tickets.data.models.Ticket
 import com.scenein.tickets.persentation.view_model.TicketViewModel
+import com.scenein.utils.DateTimeUtils
 import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
 import org.json.JSONObject
@@ -67,20 +68,18 @@ class PurchasedTicketDetailActivity : AppCompatActivity() {
 
     private fun formatDateTime(dateStr: String?, timeStr: String?) {
         if (dateStr.isNullOrBlank() || timeStr.isNullOrBlank()) {
-            binding.tvEventDateTime.text = "Date & Time not specified"
+            binding.tvEventDateTime.text = "Date/Time not specified"
             return
         }
         try {
-            val date = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).parse(dateStr)
-            val time = SimpleDateFormat("HH:mm:ss", Locale.ROOT).parse(timeStr)
-            val formattedDate = date?.let { SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault()).format(it) } ?: ""
-            val formattedTime = time?.let { SimpleDateFormat("hh:mm a", Locale.getDefault()).format(it) } ?: ""
-            binding.tvEventDateTime.text = "$formattedDate  •  $formattedTime"
+            val formattedDate = DateTimeUtils.formatEventDate(dateStr)
+            val formattedTime = DateTimeUtils.formatEventTimeRange(timeStr, null)
+            binding.tvEventDateTime.text = "$formattedDate • $formattedTime"
         } catch (e: Exception) {
-            Log.e("DateTimeFormatError", "Failed to format date/time", e)
-            binding.tvEventDateTime.text = "$dateStr at $timeStr"
+            binding.tvEventDateTime.text = "$dateStr • $timeStr"
         }
     }
+
 
     private fun loadRealTicketImage(secureFilePath: String?) {
         if (secureFilePath.isNullOrBlank()) {

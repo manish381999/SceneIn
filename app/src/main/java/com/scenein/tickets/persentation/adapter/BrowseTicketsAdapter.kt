@@ -9,8 +9,7 @@ import com.bumptech.glide.Glide
 import com.scenein.R
 import com.scenein.databinding.ItemTicketCardBinding
 import com.scenein.tickets.data.models.Ticket
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.scenein.utils.DateTimeUtils
 
 class BrowseTicketsAdapter(private val onTicketClick: (Ticket) -> Unit) :
     ListAdapter<Ticket, BrowseTicketsAdapter.TicketViewHolder>(TicketDiffCallback()) {
@@ -27,7 +26,9 @@ class BrowseTicketsAdapter(private val onTicketClick: (Ticket) -> Unit) :
     inner class TicketViewHolder(private val binding: ItemTicketCardBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) onTicketClick(getItem(adapterPosition))
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onTicketClick(getItem(adapterPosition))
+                }
             }
         }
 
@@ -38,22 +39,11 @@ class BrowseTicketsAdapter(private val onTicketClick: (Ticket) -> Unit) :
             binding.tvSellingPrice.text = "₹${ticket.sellingPrice.substringBefore(".")}"
             binding.tvEventCategory.text = ticket.category_name?.uppercase() ?: "EVENT"
 
-            try {
-                val inputDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)
-                val outputDateFormat = SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault())
-                val date = inputDateFormat.parse(ticket.eventDate)
-                val formattedDate = date?.let { outputDateFormat.format(it) } ?: ticket.eventDate
+            // ✅ Format event date & time using DateTimeUtils
 
-                val inputTimeFormat = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
-                val outputTimeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
-                val time = inputTimeFormat.parse(ticket.eventTime)
-                val formattedTime = time?.let { outputTimeFormat.format(it) } ?: ""
-
-                binding.tvEventDate.text = "$formattedDate  •  $formattedTime"
-            } catch (e: Exception) {
-                binding.tvEventDate.text = ticket.eventDate
-            }
-
+            binding.tvEventDate.text =
+                DateTimeUtils.combineDateAndTime(ticket.eventDate, ticket.eventTime)
+            // ✅ Load profile picture
             Glide.with(itemView.context)
                 .load(ticket.sellerProfilePic)
                 .placeholder(R.drawable.ic_profile_placeholder)

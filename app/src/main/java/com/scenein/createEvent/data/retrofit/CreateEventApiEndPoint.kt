@@ -15,15 +15,15 @@ import retrofit2.http.PartMap
 
 interface CreateEventApiEndPoint {
 
-    @GET("api_v1/getCategories.php")
+    @GET("common/get_categories")
     suspend fun getCategories(): Response<GetCategoryResponse>
 
 
-    @GET("api_v1/get_age_restriction.php")
+    @GET("common/get_age_restrictions")
     suspend fun getAgeRestriction(): Response<AgeRestrictionResponse>
 
     @Multipart
-    @POST("api_v1/create_event.php")
+    @POST("events/create_event")
     suspend fun createEvent(
         // This is the change: Accept the whole map of text data
         @PartMap params: Map<String, @JvmSuppressWildcards RequestBody>,

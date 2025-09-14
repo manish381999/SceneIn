@@ -13,6 +13,7 @@ import com.scenein.tickets.persentation.view_model.TicketViewModel
 import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
 import com.scenein.utils.CustomAlertDialog
+import com.scenein.utils.DateTimeUtils
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -73,10 +74,8 @@ class ManageListingActivity : AppCompatActivity() {
             return
         }
         try {
-            val date = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).parse(dateStr)
-            val time = SimpleDateFormat("HH:mm:ss", Locale.ROOT).parse(timeStr)
-            val formattedDate = date?.let { d -> SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault()).format(d) } ?: ""
-            val formattedTime = time?.let { t -> SimpleDateFormat("hh:mm a", Locale.getDefault()).format(t) } ?: ""
+            val formattedDate = DateTimeUtils.formatEventDate(dateStr)
+            val formattedTime = DateTimeUtils.formatEventTimeRange(timeStr, null)
             binding.tvEventDateTime.text = "$formattedDate • $formattedTime"
         } catch (e: Exception) {
             binding.tvEventDateTime.text = "$dateStr • $timeStr"

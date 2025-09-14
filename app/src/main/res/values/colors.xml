@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--
-    VibeIn "Foundation" Palette - Light Theme
-    Strategy: Consistency, Clarity, and Familiarity. Inspired by proven UI principles.
-    -->
+
 
     <!-- I. PRIMARY BRAND COLOR -->
     <color name="colorPrimary">#007BFF</color>          <!-- A clean, modern, trustworthy VibeIn Blue. -->

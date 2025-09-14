@@ -16,6 +16,7 @@ import com.scenein.R
 import com.scenein.databinding.ActivityTicketDetailBinding
 import com.scenein.tickets.data.models.Ticket
 import com.scenein.tickets.persentation.view_model.TicketViewModel
+import com.scenein.utils.DateTimeUtils
 import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
 import org.json.JSONObject
@@ -72,29 +73,16 @@ class TicketDetailActivity : AppCompatActivity() {
                 .placeholder(R.drawable.ic_profile_placeholder)
                 .into(binding.ivSellerProfilePic)
 
-            formatDateTime(it.eventDate, it.eventTime)
+            // ✅ Use DateTimeUtils here
+            val formattedDate = DateTimeUtils.formatEventDate(it.eventDate)
+            val formattedTime = DateTimeUtils.formatEventTimeRange(it.eventTime, null) // no end time
+
+            binding.tvEventDateTime.text = "$formattedDate • $formattedTime"
+
             calculateAndDisplayPrice(it.sellingPrice)
         }
     }
 
-    private fun formatDateTime(dateStr: String?, timeStr: String?) {
-        if (dateStr.isNullOrBlank() || timeStr.isNullOrBlank()) {
-            binding.tvEventDateTime.text = "Date & Time not specified"
-            return
-        }
-        try {
-            val date = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).parse(dateStr)
-            val time = SimpleDateFormat("HH:mm:ss", Locale.ROOT).parse(timeStr)
-
-            val formattedDate = date?.let { SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault()).format(it) } ?: ""
-            val formattedTime = time?.let { SimpleDateFormat("hh:mm a", Locale.getDefault()).format(it) } ?: ""
-
-            binding.tvEventDateTime.text = "$formattedDate  •  $formattedTime"
-        } catch (e: Exception) {
-            Log.e("DateTimeFormatError", "Failed to format date/time", e)
-            binding.tvEventDateTime.text = "$dateStr"
-        }
-    }
 
     private fun calculateAndDisplayPrice(price: String?) {
         val sellingPrice = price?.toDoubleOrNull() ?: 0.0

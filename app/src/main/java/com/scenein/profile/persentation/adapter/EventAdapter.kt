@@ -11,6 +11,10 @@ import com.scenein.databinding.ItemEventBinding
 import com.scenein.discover.presentation.screens.EventDetailActivity
 import com.scenein.profile.data.models.Event
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class EventAdapter(private val context: Context) : // The list is no longer in the constructor
@@ -61,22 +65,40 @@ class EventAdapter(private val context: Context) : // The list is no longer in t
         notifyDataSetChanged() // Tell the RecyclerView to redraw itself
     }
 
-    private fun formatEventDateTime(dateStr: String?, timeStr: String?): String {
-        if (dateStr.isNullOrBlank() || timeStr.isNullOrBlank()) return "Date not specified"
+    private fun formatEventDateTime(dateUtc: String?, startTimeUtc: String?): String {
+        if (dateUtc.isNullOrBlank() || startTimeUtc.isNullOrBlank()) return "Date not specified"
+
         return try {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-            val dateTime = inputFormat.parse("$dateStr $timeStr") ?: return "$dateStr, $timeStr"
-            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-            val eventCalendar = Calendar.getInstance().apply { time = dateTime }
-            val eventYear = eventCalendar.get(Calendar.YEAR)
-            val outputFormat = if (eventYear == currentYear) {
-                SimpleDateFormat("MMM dd, hh:mm a", Locale.getDefault())
+            // 1. Parse the UTC timestamp strings into Instant objects
+            val eventDateInstant = Instant.parse(dateUtc)
+            val startTimeInstant = Instant.parse(startTimeUtc)
+
+            // 2. Convert the UTC Instants to the user's local time zone
+            val userZoneId = ZoneId.systemDefault()
+            val localEventDate = eventDateInstant.atZone(userZoneId)
+            val localStartTime = startTimeInstant.atZone(userZoneId)
+
+            // 3. Determine the correct date format (with or without year)
+            val currentYear = ZonedDateTime.now(userZoneId).year
+            val datePattern = if (localEventDate.year == currentYear) {
+                "MMM dd" // e.g., "Sep 14"
             } else {
-                SimpleDateFormat("MMM dd yyyy, hh:mm a", Locale.getDefault())
+                "MMM dd, yyyy" // e.g., "Sep 14, 2026"
             }
-            outputFormat.format(dateTime)
+
+            // 4. Format the date and time parts separately
+            val dateFormatter = DateTimeFormatter.ofPattern(datePattern, Locale.getDefault())
+            val timeFormatter = DateTimeFormatter.ofPattern("h:mm a", Locale.getDefault())
+
+            val formattedDate = localEventDate.format(dateFormatter)
+            val formattedTime = localStartTime.format(timeFormatter)
+
+            // 5. Combine them for the final output
+            "$formattedDate, $formattedTime"
+
         } catch (e: Exception) {
-            "$dateStr, $timeStr"
+            // Fallback if parsing fails
+            "Invalid date"
         }
     }
 }

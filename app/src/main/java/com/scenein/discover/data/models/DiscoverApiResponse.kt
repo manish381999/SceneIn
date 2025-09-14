@@ -5,29 +5,29 @@ import com.google.gson.annotations.SerializedName
 // Main response for get_events_by_city.php
 data class DiscoverApiResponse(
     @SerializedName("status") val status: String,
-    @SerializedName("message") val message: String?,
+    @SerializedName("message") val message: String? = null,
     @SerializedName("events") val events: List<EventSummary>
 )
 
 data class EventSummary(
     @SerializedName("id") val id: String,
     @SerializedName("host_id") val hostId: String,
-    @SerializedName("event_name") val eventName: String,
-    @SerializedName("event_description") val eventDescription: String?,
-    @SerializedName("event_date") val eventDate: String,
-    @SerializedName("start_time") val startTime: String,
+    @SerializedName("eventName") val eventName: String,
+    @SerializedName("eventDescription") val eventDescription: String? = null,
+    @SerializedName("eventDate") val eventDate: String,
+    @SerializedName("startTime") val startTime: String,
     @SerializedName("venueLocation") val venueLocation: String,
     @SerializedName("city") val city: String,
-    @SerializedName("cover_image") val coverImage: String?,
-    @SerializedName("maximum_participants") val maximumParticipants: String,
-    @SerializedName("latitude") val latitude: String?,
-    @SerializedName("longitude") val longitude: String?,
-    @SerializedName("category_name") val categoryName: String,
-    @SerializedName("host_details") val hostDetails: HostDetails?,
-    @SerializedName("participants_preview") val participantsPreview: List<ParticipantPreview>,
-    @SerializedName("joined_participants") val joinedParticipants: Int,
-    @SerializedName("has_joined") val hasJoined: Boolean,
-    @SerializedName("is_full") val isFull: Boolean,
-    @SerializedName("has_bookmarked") var hasBookmarked: Boolean
-
+    @SerializedName("coverImage") val coverImage: String? = null,
+    @SerializedName("maximumParticipants") val maximumParticipants: String,
+    @SerializedName("latitude") val latitude: String? = null,
+    @SerializedName("longitude") val longitude: String? = null,
+    @SerializedName("categoryName") val categoryName: String,
+    @SerializedName("hostDetails") val hostDetails: HostDetails?,
+    @SerializedName("participantsPreview")
+    val participantsPreview: List<ParticipantPreview> = emptyList(),
+    @SerializedName("joinedParticipants") val joinedParticipants: Int,
+    @SerializedName("hasJoined") val hasJoined: Boolean,
+    @SerializedName("isFull") val isFull: Boolean,
+    @SerializedName("hasBookmarked") var hasBookmarked: Boolean
 )

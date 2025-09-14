@@ -11,6 +11,11 @@ import com.scenein.R
 import com.scenein.chat.data.model.Conversation
 import com.scenein.databinding.ItemConversationBinding
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -46,53 +51,45 @@ class ConversationAdapter(
         }
     }
 
-    // ======================================================================
-    // == NEW, ADVANCED TIMESTAMP FORMATTING LOGIC ==
-    // ======================================================================
-
     private fun formatTimestamp(timestamp: String): String {
-        if (timestamp.isBlank()) return " "
+        if (timestamp.isBlank()) return ""
 
         return try {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            val messageDate = inputFormat.parse(timestamp) ?: return " "
+            // 1. Parse the UTC timestamp string into an Instant object.
+            val instant = Instant.parse(timestamp)
 
-            val calendar = Calendar.getInstance().apply { time = messageDate }
-            val today = Calendar.getInstance()
-            val yesterday = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
-            val aWeekAgo = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -7) }
+            // 2. Convert the UTC Instant to the user's local time zone.
+            val userZonedDateTime = instant.atZone(ZoneId.systemDefault())
 
+            // 3. Get the current time in the same time zone for comparison.
+            val now = ZonedDateTime.now(ZoneId.systemDefault())
+
+            // 4. Compare and format based on the date.
             when {
-                isSameDay(calendar.time, today.time) -> {
-                    SimpleDateFormat("h:mm a", Locale.getDefault()).format(calendar.time)
+                // Is the message from today?
+                userZonedDateTime.toLocalDate().isEqual(now.toLocalDate()) -> {
+                    userZonedDateTime.format(DateTimeFormatter.ofPattern("h:mm a", Locale.getDefault()))
                 }
-                isSameDay(calendar.time, yesterday.time) -> {
+                // Is the message from yesterday?
+                userZonedDateTime.toLocalDate().isEqual(now.toLocalDate().minusDays(1)) -> {
                     "Yesterday"
                 }
-                calendar.after(aWeekAgo) -> {
-                    SimpleDateFormat("EEEE", Locale.getDefault()).format(calendar.time) // like "Monday"
+                // Is the message from within the last week?
+                ChronoUnit.DAYS.between(userZonedDateTime, now) < 7 -> {
+                    userZonedDateTime.format(DateTimeFormatter.ofPattern("EEEE", Locale.getDefault())) // e.g., "Monday"
                 }
+                // Otherwise, show the date.
                 else -> {
-                    SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(calendar.time)
+                    userZonedDateTime.format(DateTimeFormatter.ofPattern("dd/MM/yy", Locale.getDefault()))
                 }
             }
         } catch (e: Exception) {
-            " "
+            // In case of a parsing error, return a blank space.
+            ""
         }
     }
 
 
-
-    // NEW: Helper function to compare dates accurately
-    private fun isSameDay(date1: Date?, date2: Date?): Boolean {
-        if (date1 == null || date2 == null) return false
-        val cal1 = Calendar.getInstance().apply { time = date1 }
-        val cal2 = Calendar.getInstance().apply { time = date2 }
-        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
-    }
-
-    // --- (The rest of the adapter code is unchanged) ---
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemConversationBinding.inflate(

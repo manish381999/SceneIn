@@ -13,6 +13,7 @@ import com.scenein.utils.SP
 import com.scenein.databinding.FragmentTicketsBinding
 import com.scenein.profile.presentation.view_model.ProfileViewModel
 import com.scenein.tickets.presentation.adapter.MyTicketsAdapter // We reuse this great adapter
+import com.scenein.tickets.presentation.screens.ManageListingActivity
 import com.scenein.tickets.presentation.screens.PurchasedTicketDetailActivity
 import com.scenein.utils.NetworkState
 
@@ -41,18 +42,31 @@ class TicketsFragment : Fragment() {
 
     private fun setupRecyclerView() {
         myTicketsAdapter = MyTicketsAdapter { clickedTicket ->
-            if (clickedTicket.transactionId != null) { // This is a purchased ticket
+            if (clickedTicket.transactionId != null) {
+                // Purchased ticket
                 val intent = Intent(requireContext(), PurchasedTicketDetailActivity::class.java).apply {
                     putExtra("TICKET_DATA", clickedTicket)
                 }
                 startActivity(intent)
-            } else { // This is a listed ticket
-                // TODO: Navigate to ManageListingActivity
-                Toast.makeText(requireContext(), "Tapped your ${clickedTicket.listingStatus} ticket", Toast.LENGTH_SHORT).show()
+            } else {
+                // Listed ticket
+                if (clickedTicket.listingStatus.lowercase() == "live") {
+                    val intent = Intent(requireContext(), ManageListingActivity::class.java).apply {
+                        putExtra("TICKET_DATA", clickedTicket)
+                    }
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "This listing is currently ${clickedTicket.listingStatus} and cannot be modified.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
         binding.rvTickets.adapter = myTicketsAdapter
     }
+
 
     private fun setupObservers() {
         viewModel.myTicketsState.observe(viewLifecycleOwner) { state ->

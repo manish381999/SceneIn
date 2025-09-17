@@ -27,7 +27,7 @@ import com.scenein.createEvent.data.models.Category
 import com.scenein.createEvent.presentation.view_model.CreateEventViewModel
 import com.scenein.credentials.presentation.adapter.CategoryAdapter
 import com.scenein.credentials.presentation.screens.CropActivity
-import com.scenein.credentials.presentation.view_model.AuthViewModel
+import com.scenein.credentials.presentation.view_model.CredentialViewModel
 import com.scenein.databinding.ActivityEditProfileBinding
 import com.scenein.profile.data.models.MyProfileData
 import com.scenein.profile.presentation.view_model.ProfileViewModel
@@ -49,7 +49,7 @@ class EditProfileActivity : AppCompatActivity() {
     private val eventViewModel: CreateEventViewModel by viewModels()
 
     // --- UPDATED: ViewModel initialization is now consistent and factory-less ---
-    private val authViewModel: AuthViewModel by viewModels()
+    private val credentialViewModel: CredentialViewModel by viewModels()
 
     private var selectedImageUri: Uri? = null
     private var cameraImageUri: Uri? = null
@@ -117,10 +117,10 @@ class EditProfileActivity : AppCompatActivity() {
                 usernameCheckRunnable = Runnable {
                     val username = s.toString().trim()
                     if (username.isNotEmpty() && username.lowercase() != originalUsername?.lowercase() && username.length >= 3) {
-                        authViewModel.checkUsername(username)
+                        credentialViewModel.checkUsername(username)
                     } else {
                         isUsernameAvailable = (username.lowercase() == originalUsername?.lowercase())
-                        authViewModel.clearUsernameCheckState()
+                        credentialViewModel.clearUsernameCheckState()
                     }
                 }
                 handler.postDelayed(usernameCheckRunnable!!, 500)
@@ -152,7 +152,7 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
 
-        authViewModel.usernameCheckState.observe(this) { state ->
+        credentialViewModel.usernameCheckState.observe(this) { state ->
             if (state == null) {
                 binding.usernameStatusIcon.isVisible = false
                 binding.usernameStatusProgress.isVisible = false
@@ -179,7 +179,7 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
 
-        authViewModel.updateUserState.observe(this) { state ->
+        credentialViewModel.updateUserState.observe(this) { state ->
             val isLoading = state is NetworkState.Loading
             binding.progressBar.isVisible = isLoading
             binding.btnSaveChanges.text = if (isLoading) "" else "Save Changes"
@@ -193,7 +193,7 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
 
-        authViewModel.removePicState.observe(this) { state ->
+        credentialViewModel.removePicState.observe(this) { state ->
             if (state is NetworkState.Success) {
                 SP.saveString(this, SP.USER_PROFILE_PIC, null)
                 binding.ivProfile.setImageResource(R.drawable.ic_profile_placeholder)
@@ -246,7 +246,7 @@ class EditProfileActivity : AppCompatActivity() {
             FileUtils.getMultipartBodyPartFromUri(this, it, "profile_pic")
         }
 
-        authViewModel.updateUser(
+        credentialViewModel.updateUser(
             name = fullName.toRequestBody("text/plain".toMediaType()),
             userName = userName.toRequestBody("text/plain".toMediaType()),
             emailId = email.toRequestBody("text/plain".toMediaType()),
@@ -267,7 +267,7 @@ class EditProfileActivity : AppCompatActivity() {
                 message = "Are you sure you want to remove your profile photo?",
                 positiveButtonText = "Remove",
                 onPositiveClick = {
-                    authViewModel.removeProfilePic()
+                    credentialViewModel.removeProfilePic()
                 }
             )
         }

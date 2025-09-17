@@ -12,7 +12,7 @@ import com.scenein.BaseActivity
 import com.scenein.credentials.data.models.VerifyOtpResponse
 import com.scenein.credentials.presentation.adapter.NUM_STEPS
 import com.scenein.credentials.presentation.adapter.OnboardingPagerAdapter
-import com.scenein.credentials.presentation.view_model.AuthViewModel
+import com.scenein.credentials.presentation.view_model.CredentialViewModel
 import com.scenein.credentials.presentation.view_model.OnboardingViewModel
 import com.scenein.databinding.ActivityOnboardingBinding
 import com.scenein.utils.EdgeToEdgeUtils
@@ -27,7 +27,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOnboardingBinding
     private val onboardingViewModel: OnboardingViewModel by viewModels()
-    private val authViewModel: AuthViewModel by viewModels()
+    private val credentialViewModel: CredentialViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +50,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        authViewModel.updateUserState.observe(this) { state ->
+        credentialViewModel.updateUserState.observe(this) { state ->
             val isLoading = state is NetworkState.Loading
             // Now control the progress bar inside the button
             binding.finalProgressBar.isVisible = isLoading
@@ -98,7 +98,7 @@ class OnboardingActivity : AppCompatActivity() {
             var canProceed = false
 
             when (currentItem) {
-                0 -> canProceed = onboardingViewModel.validateStep1(authViewModel.isUsernameAvailable)
+                0 -> canProceed = onboardingViewModel.validateStep1(credentialViewModel.isUsernameAvailable)
                 1 -> canProceed = onboardingViewModel.validateStep2()
                 2 -> canProceed = onboardingViewModel.validateStep3()
             }
@@ -124,7 +124,7 @@ class OnboardingActivity : AppCompatActivity() {
             FileUtils.getMultipartBodyPartFromUri(this, uri, "profile_pic")
         }
 
-        authViewModel.updateUser(
+        credentialViewModel.updateUser(
             name = onboardingViewModel.fullName.value!!.toRequestBody("text/plain".toMediaType()),
             userName = onboardingViewModel.userName.value!!.toRequestBody("text/plain".toMediaType()),
             emailId = onboardingViewModel.email.value!!.toRequestBody("text/plain".toMediaType()),

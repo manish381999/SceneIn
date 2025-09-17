@@ -84,7 +84,7 @@ class TicketViewModel : ViewModel() {
 
 
 
-    fun updateTicket(ticketId: Int, newPrice: String) {
+    fun updateTicket(ticketId: String, newPrice: String) {
         _listingActionState.value = NetworkState.Loading
         viewModelScope.launch {
             try {
@@ -105,7 +105,7 @@ class TicketViewModel : ViewModel() {
 
 
     // --- NEW: Function to trigger delisting ---
-    fun delistTicket(ticketId: Int) {
+    fun delistTicket(ticketId: String) {
         _listingActionState.value = NetworkState.Loading
         viewModelScope.launch {
             try {
@@ -170,7 +170,7 @@ class TicketViewModel : ViewModel() {
         }
     }
 
-    fun createOrder(ticketId: Int) {
+    fun createOrder(ticketId: String) {
         _createOrderState.value = NetworkState.Loading
         viewModelScope.launch {
             _createOrderState.value = try {

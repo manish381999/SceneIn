@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.scenein.R
 // AuthRepository and AuthViewModelFactory imports are no longer needed here
-import com.scenein.credentials.presentation.view_model.AuthViewModel
+import com.scenein.credentials.presentation.view_model.CredentialViewModel
 import com.scenein.databinding.ActivityLoginBinding
 import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
@@ -24,8 +24,8 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
-    // --- UPDATED: ViewModel initialization no longer needs the factory ---
-    private val viewModel: AuthViewModel by viewModels()
+
+    private val viewModel: CredentialViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

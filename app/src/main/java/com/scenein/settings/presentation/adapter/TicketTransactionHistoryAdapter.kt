@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scenein.R
 import com.scenein.databinding.ItemTransactionHistoryBinding
 import com.scenein.settings.data.models.TransactionHistoryItem
+import com.scenein.utils.DateTimeUtils
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -32,14 +33,7 @@ class TicketTransactionHistoryAdapter(
 
             // Populate common text fields
             binding.tvEventName.text = "For: ${item.eventName}"
-            try {
-                val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT)
-                val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-                val date = inputFormat.parse(item.createdAt)
-                binding.tvTransactionDate.text = date?.let { outputFormat.format(it) } ?: item.createdAt
-            } catch (e: Exception) {
-                binding.tvTransactionDate.text = item.createdAt
-            }
+            binding.tvTransactionDate.text = DateTimeUtils.formatEventDate(item.createdAt, "dd MMM yyyy 'at' hh:mm a")
 
 
             // Determine UI style based on user's role (BOUGHT vs. SOLD)

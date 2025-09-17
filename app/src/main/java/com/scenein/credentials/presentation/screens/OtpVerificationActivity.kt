@@ -24,7 +24,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.scenein.BaseActivity
 import com.scenein.R
 import com.scenein.credentials.data.models.UserData
-import com.scenein.credentials.presentation.view_model.AuthViewModel
+import com.scenein.credentials.presentation.view_model.CredentialViewModel
 import com.scenein.databinding.ActivityOtpVerificationBinding
 import com.scenein.utils.DeviceUtils
 import com.scenein.utils.EdgeToEdgeUtils
@@ -42,7 +42,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     private var countDownTimer: CountDownTimer? = null
 
     // --- UPDATED: ViewModel initialization is now simpler and uses the KTX delegate ---
-    private val viewModel: AuthViewModel by viewModels()
+    private val viewModel: CredentialViewModel by viewModels()
 
     private val smsConsentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK && result.data != null) {

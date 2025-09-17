@@ -5,28 +5,28 @@ import java.io.Serializable
 
 // Model for the LIST screen
 data class TransactionHistoryItem(
-    @SerializedName("id")
-    val transactionId: Int,
+    @SerializedName("transactionId")
+    val transactionId: String,
 
-    @SerializedName("transaction_status")
+    @SerializedName("transactionStatus")
     val transactionStatus: String, // e.g., "escrow", "payout_processed"
 
-    @SerializedName("final_amount")
+    @SerializedName("finalAmount")
     val finalAmount: String, // The total amount the buyer paid (e.g., "1050.00")
 
-    @SerializedName("seller_payout_amount")
+    @SerializedName("sellerPayoutAmount")
     val sellerPayoutAmount: String, // The amount the seller received (e.g., "900.00")
 
-    @SerializedName("created_at")
+    @SerializedName("createdAt")
     val createdAt: String, // The timestamp when the transaction was created
 
-    @SerializedName("event_name")
+    @SerializedName("eventName")
     val eventName: String,
 
-    @SerializedName("user_role")
+    @SerializedName("userRole")
     val userRole: String,
 
-    @SerializedName("other_user_name")
+    @SerializedName("otherUserName")
     val otherUserName: String
 
 ) : Serializable
@@ -38,20 +38,20 @@ data class TransactionHistoryResponse(
 
 // --- NEW, DETAILED MODEL for the DETAIL screen ---
 data class TransactionDetail(
-    @SerializedName("transaction_id") val transactionId: Int,
-    @SerializedName("final_amount") val finalAmount: String,
-    @SerializedName("seller_payout_amount") val sellerPayoutAmount: String,
-    @SerializedName("platform_fee") val platformFee: String,
-    @SerializedName("transaction_status") val transactionStatus: String,
-    @SerializedName("created_at") val createdAt: String,
-    @SerializedName("event_name") val eventName: String,
-    @SerializedName("event_venue") val eventVenue: String,
-    @SerializedName("event_date") val eventDate: String,
-    @SerializedName("event_time") val eventTime: String,
-    @SerializedName("user_role") val userRole: String, // "BOUGHT" or "SOLD"
-    @SerializedName("other_user_name") val otherUserName: String,
-    @SerializedName("other_user_profile_pic") val otherUserProfilePic: String?,
-    @SerializedName("receipt_id") val receiptId: String
+    @SerializedName("transactionId") val transactionId: String,
+    @SerializedName("finalAmount") val finalAmount: String,
+    @SerializedName("sellerPayoutAmount") val sellerPayoutAmount: String,
+    @SerializedName("platformFee") val platformFee: String,
+    @SerializedName("transactionStatus") val transactionStatus: String,
+    @SerializedName("createdAt") val createdAt: String,
+    @SerializedName("eventName") val eventName: String,
+    @SerializedName("eventVenue") val eventVenue: String,
+    @SerializedName("eventDate") val eventDate: String,
+    @SerializedName("eventTime") val eventTime: String,
+    @SerializedName("userRole") val userRole: String, // "BOUGHT" or "SOLD"
+    @SerializedName("otherUserName") val otherUserName: String,
+    @SerializedName("otherUserProfilePic") val otherUserProfilePic: String?,
+    @SerializedName("receiptId") val receiptId: String
 ) : Serializable
 
 // Wrapper for the DETAIL API response

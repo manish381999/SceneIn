@@ -11,7 +11,7 @@ data class DiscoverApiResponse(
 
 data class EventSummary(
     @SerializedName("id") val id: String,
-    @SerializedName("host_id") val hostId: String,
+    @SerializedName("hostId") val hostId: String,
     @SerializedName("eventName") val eventName: String,
     @SerializedName("eventDescription") val eventDescription: String? = null,
     @SerializedName("eventDate") val eventDate: String,

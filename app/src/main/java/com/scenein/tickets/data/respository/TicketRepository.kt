@@ -62,11 +62,11 @@ class TicketRepository {
         }
     }
 
-    suspend fun updateTicket(ticketId: Int, newPrice: String): Response<GenericApiResponse> {
+    suspend fun updateTicket(ticketId: String, newPrice: String): Response<GenericApiResponse> {
         return api.updateTicket(ticketId, newPrice)
     }
 
-    suspend fun delistTicket(ticketId: Int): Response<GenericApiResponse> {
+    suspend fun delistTicket(ticketId: String): Response<GenericApiResponse> {
         return api.delistTicket(ticketId)
     }
 
@@ -81,7 +81,7 @@ class TicketRepository {
     // --- BUYER ---
     suspend fun browseTickets() = api.browseTickets()
 
-    suspend fun createOrder(ticketId: Int) =
+    suspend fun createOrder(ticketId: String) =
         api.createOrder(ticketId)
 
     suspend fun getMyActivity() = api.getMyActivity()

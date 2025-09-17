@@ -67,7 +67,7 @@ class SettingsViewModel : ViewModel() {
         }
     }
 
-    fun fetchTransactionDetails(transactionId: Int) {
+    fun fetchTransactionDetails(transactionId: String?) {
         _transactionDetailState.value = NetworkState.Loading
         viewModelScope.launch {
             _transactionDetailState.value = try {

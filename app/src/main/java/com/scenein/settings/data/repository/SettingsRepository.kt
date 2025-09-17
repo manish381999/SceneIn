@@ -12,7 +12,7 @@ class SettingsRepository {
 
     suspend fun getTicketTransactionHistory() = api.getTicketTransactionHistory()
 
-    suspend fun getTransactionDetails(transactionId: Int): Response<TransactionDetailResponse> {
+    suspend fun getTransactionDetails(transactionId: String?): Response<TransactionDetailResponse> {
         return api.getTransactionDetails(transactionId)
     }
 

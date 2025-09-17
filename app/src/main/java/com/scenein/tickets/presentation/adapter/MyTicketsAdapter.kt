@@ -80,11 +80,13 @@ class MyTicketsAdapter(
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<Ticket>() {
             override fun areItemsTheSame(oldItem: Ticket, newItem: Ticket): Boolean {
-                return oldItem.id == newItem.id && oldItem.transactionId == newItem.transactionId
+                return oldItem.id == newItem.id
             }
+
             override fun areContentsTheSame(oldItem: Ticket, newItem: Ticket): Boolean {
                 return oldItem == newItem
             }
+
         }
     }
 }

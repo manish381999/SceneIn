@@ -29,7 +29,7 @@ data class EventDetail(
     @SerializedName("ticketPrice") val ticketPrice: String?,
     @SerializedName("coverImage") val coverImage: String?,
     @SerializedName("createdDate") val createdDate: String?,
-    @SerializedName("status") val status: Int,
+    @SerializedName("status") val status: String,
     @SerializedName("pincode") val pincode: String?,
     @SerializedName("city") val city: String?,
     @SerializedName("fullAddress") val fullAddress: String?,

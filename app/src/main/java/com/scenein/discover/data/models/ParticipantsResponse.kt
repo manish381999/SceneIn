@@ -7,11 +7,11 @@ import kotlinx.android.parcel.Parcelize
 // In your models package, e.g., discover/data/models
 @Parcelize
 data class Participant(
-    @SerializedName("user_id") val userId: String,
+    @SerializedName("userId") val userId: String,
     @SerializedName("name") val name: String?,
-    @SerializedName("user_name") val userName: String?,
-    @SerializedName("profile_pic") val profilePic: String?,
-    @SerializedName("connection_status") var connectionStatus: String
+    @SerializedName("userName") val userName: String?,
+    @SerializedName("profilePic") val profilePic: String?,
+    @SerializedName("connectionStatus") var connectionStatus: String
 ) : Parcelable
 
 data class ParticipantsResponse(

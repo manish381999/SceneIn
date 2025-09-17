@@ -18,36 +18,37 @@ data class PayoutVerificationResponse(
 
 data class MyActivityResponse(
     @SerializedName("status") val status: String,
-    @SerializedName("listed_tickets") val listedTickets: List<Ticket>,
-    @SerializedName("purchased_tickets") val purchasedTickets: List<Ticket>
+    @SerializedName("listedTickets") val listedTickets: List<Ticket>,
+    @SerializedName("purchasedTickets") val purchasedTickets: List<Ticket>
 )
 
 // Represents a ticket in a list view (e.g., for browsing)
 
 
 data class Ticket(
-    @SerializedName("id") val id: Int,
-    @SerializedName("seller_id") val sellerId: String,
-    @SerializedName("event_name") val eventName: String,
-    @SerializedName("event_date") val eventDate: String,
-    @SerializedName("event_time") val eventTime: String,
-    @SerializedName("event_venue") val eventVenue: String,
-    @SerializedName("event_city") val event_city: String,
-    @SerializedName("selling_price") val sellingPrice: String,
-    @SerializedName("seller_name") val sellerName: String?,
-    @SerializedName("original_price") val originalPrice: String,
-    @SerializedName("seller_profile_pic") val sellerProfilePic: String?,
-    @SerializedName("category_name") val category_name: String?,
+    @SerializedName("id") val id: String,
+    @SerializedName("sellerId") val sellerId: String,
+    @SerializedName("eventName") val eventName: String,
+    @SerializedName("eventDate") val eventDate: String,
+    @SerializedName("eventTime") val eventTime: String,
+    @SerializedName("eventVenue") val eventVenue: String,
+    @SerializedName("eventCity") val eventCity: String,
+    @SerializedName("sellingPrice") val sellingPrice: String,
+    @SerializedName("sellerName") val sellerName: String? = null,
+    @SerializedName("originalPrice") val originalPrice: String,
+    @SerializedName("sellerProfilePic") val sellerProfilePic: String? = null,
+    @SerializedName("category_name") val category_name: String? = null,
     @SerializedName("status") val listingStatus: String, // 'live', 'sold', 'expired'
-    @SerializedName("number_of_tickets") val numberOfTickets: Int,
+    @SerializedName("numberOfTickets") val numberOfTickets: Int,
 
-    // Fields that only exist for PURCHASED tickets
-    @SerializedName("transaction_id") val transactionId: String? = null,
-    @SerializedName("transaction_status") val transactionStatus: String? = null, // 'escrow', 'completed_by_user', etc.
-    @SerializedName("completion_type") val completionType: String? = null,
-    @SerializedName("reveal_time") val revealTime: String? = null,
-    @SerializedName("secure_file_path") val secureFilePath: String? = null // For showing the real ticket
+    // Purchased tickets only
+    @SerializedName("transactionId") val transactionId: String? = null,
+    @SerializedName("transactionStatus") val transactionStatus: String? = null,
+    @SerializedName("completionType") val completionType: String? = null,
+    @SerializedName("revealTime") val revealTime: String? = null,
+    @SerializedName("secureFilePath") val secureFilePath: String? = null
 ) : Serializable
+
 
 // Wrapper for the browse tickets API response
 data class BrowseTicketsResponse(

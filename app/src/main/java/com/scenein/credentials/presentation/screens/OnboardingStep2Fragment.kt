@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.scenein.R
-import com.scenein.credentials.presentation.view_model.AuthViewModel
+import com.scenein.credentials.presentation.view_model.CredentialViewModel
 import com.scenein.credentials.presentation.view_model.OnboardingViewModel
 import com.scenein.databinding.FragmentOnboardingStep2Binding
 import com.scenein.utils.CustomAlertDialog
@@ -31,7 +31,7 @@ class OnboardingStep2Fragment : Fragment(R.layout.fragment_onboarding_step2) {
     private val binding get() = _binding!!
 
     private val onboardingViewModel: OnboardingViewModel by activityViewModels()
-    private val authViewModel: AuthViewModel by activityViewModels()
+    private val credentialViewModel: CredentialViewModel by activityViewModels()
 
     private var cameraImageUri: Uri? = null
 
@@ -89,7 +89,7 @@ class OnboardingStep2Fragment : Fragment(R.layout.fragment_onboarding_step2) {
             binding.tilAboutYou.error = error
         }
 
-        authViewModel.removePicState.observe(viewLifecycleOwner) { state ->
+        credentialViewModel.removePicState.observe(viewLifecycleOwner) { state ->
             // You can also handle loading/error states for pic removal
         }
     }

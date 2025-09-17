@@ -56,12 +56,12 @@ class NotificationsAdapter(
 
             // --- THIS IS THE FINAL LOGIC for the notification body ---
             binding.tvBody.text = formatNotificationBody(notification)
-            binding.tvTimestamp.text = toRelativeTime(notification.created_at)
+            binding.tvTimestamp.text = toRelativeTime(notification.createdAt)
 
-            val bgColorRes = if (notification.is_read) R.color.colorSurface else R.color.unread_background_color
+            val bgColorRes = if (notification.isRead) R.color.colorSurface else R.color.unread_background_color
             binding.rootLayout.setBackgroundColor(ContextCompat.getColor(context, bgColorRes))
 
-            var imageUrl = notification.related_user_profile_pic
+            var imageUrl = notification.relatedUserProfilePic
             var placeholder = R.drawable.ic_profile_placeholder
 
             if (imageUrl.isNullOrBlank() && !notification.eventImageUrl.isNullOrBlank()) {
@@ -70,7 +70,7 @@ class NotificationsAdapter(
             }
             Glide.with(context).load(imageUrl).placeholder(placeholder).error(R.drawable.ic_notification_icon).into(binding.ivIcon)
 
-            binding.ivContentImage.isVisible = !notification.eventImageUrl.isNullOrBlank() && !notification.related_user_profile_pic.isNullOrBlank()
+            binding.ivContentImage.isVisible = !notification.eventImageUrl.isNullOrBlank() && !notification.relatedUserProfilePic.isNullOrBlank()
             if(binding.ivContentImage.isVisible){
                 Glide.with(context).load(notification.eventImageUrl).centerCrop().into(binding.ivContentImage)
             }
@@ -111,8 +111,8 @@ class NotificationsAdapter(
         private fun formatNotificationBody(notification: Notification): SpannableStringBuilder {
             val builder = SpannableStringBuilder()
 
-            val actorName = notification.related_user_name ?: "Someone"
-            val actorUsername = notification.related_user_username?.let { "@$it" } ?: ""
+            val actorName = notification.relatedUserName ?: "Someone"
+            val actorUsername = notification.relatedUserUsername?.let { "@$it" } ?: ""
             val bodyText = notification.body
 
             // Build the string: "Manish Kumar Singh (@manish_singh) sent you a connection request."
@@ -161,7 +161,7 @@ class NotificationsAdapter(
     companion object {
         val DiffCallback = object : DiffUtil.ItemCallback<Any>() {
             override fun areItemsTheSame(old: Any, new: Any): Boolean {
-                return if (old is Notification && new is Notification) old.notification_id == new.notification_id
+                return if (old is Notification && new is Notification) old.notificationId == new.notificationId
                 else old is HeaderData && new is HeaderData
             }
             @SuppressLint("DiffUtilEquals")

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- VibeIn "Foundation" Palette - Dark Theme -->
+    <!-- SceneIn "Foundation" Palette - Dark Theme -->
 
     <!-- I. PRIMARY BRAND COLOR -->
     <color name="colorPrimary">#0A84FF</color>          <!-- A brighter, accessible blue that pops on a dark background. -->

@@ -5,19 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.scenein.createEvent.data.models.ApiResponse
 import com.scenein.credentials.data.models.LoginOtpResponse
 import com.scenein.credentials.data.models.UsernameCheckResponse
 import com.scenein.credentials.data.models.VerifyOtpResponse
-import com.scenein.credentials.data.repository.AuthRepository
-import com.scenein.tickets.data.models.GenericApiResponse
+import com.scenein.credentials.data.repository.CredentialRepository
 import com.scenein.utils.NetworkState
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
-class AuthViewModel : ViewModel() {
+class CredentialViewModel : ViewModel() {
 
-    private val repository = AuthRepository()
+    private val repository = CredentialRepository()
 
     var isUsernameAvailable: Boolean = false
         private set
@@ -34,10 +34,9 @@ class AuthViewModel : ViewModel() {
     private val _usernameCheckState = MutableLiveData<NetworkState<UsernameCheckResponse>?>()
     val usernameCheckState: LiveData<NetworkState<UsernameCheckResponse>?> get() = _usernameCheckState
 
-    // --- FIX IS HERE ---
-    // Changed the LiveData type from NetworkState<ApiResponse> to NetworkState<GenericApiResponse>
-    private val _removePicState = MutableLiveData<NetworkState<GenericApiResponse>>()
-    val removePicState: LiveData<NetworkState<GenericApiResponse>> get() = _removePicState
+
+    private val _removePicState = MutableLiveData<NetworkState<ApiResponse>>()
+    val removePicState: LiveData<NetworkState<ApiResponse>> get() = _removePicState
 
 
     fun loginWithOtp(mobile: String, countryCode: String, countryShortName: String) {

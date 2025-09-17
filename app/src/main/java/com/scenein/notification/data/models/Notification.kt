@@ -8,8 +8,8 @@ import kotlinx.parcelize.Parcelize
 // This class itself is not passed between screens, so it doesn't need to be Parcelable.
 data class ActivityFeedResponse(
     @SerializedName("status") val status: String,
-    @SerializedName("connection_requests") val connectionRequests: List<ConnectionRequest>,
-    @SerializedName("activity_feed") val activityFeed: List<Notification>
+    @SerializedName("connectionRequests") val connectionRequests: List<ConnectionRequest>,
+    @SerializedName("activityFeed") val activityFeed: List<Notification>
 )
 
 /**
@@ -18,12 +18,12 @@ data class ActivityFeedResponse(
  */
 @Parcelize
 data class ConnectionRequest(
-    @SerializedName("connection_id") val connectionId: String,
-    @SerializedName("user_id") val userId: String,
+    @SerializedName("connectionId") val connectionId: String,
+    @SerializedName("userId") val userId: String,
     @SerializedName("name") val name: String,
-    @SerializedName("user_name") val userName: String?,
-    @SerializedName("profile_pic") val profilePic: String?,
-    @SerializedName("created_at") val createdAt: String
+    @SerializedName("userName") val userName: String?,
+    @SerializedName("profilePic") val profilePic: String?,
+    @SerializedName("createdAt") val createdAt: String
 ) : Parcelable
 
 /**
@@ -32,28 +32,28 @@ data class ConnectionRequest(
  */
 @Parcelize
 data class Notification(
-    @SerializedName("notification_id") val notification_id: Int,
-    @SerializedName("user_id") val user_id: String?,
+    @SerializedName("notificationId") val notificationId: Int,
+    @SerializedName("userId") val userId: String?,
     @SerializedName("title") val title: String,
     @SerializedName("body") val body: String,
-    @SerializedName("notification_type") val notification_type: String,
-    @SerializedName("related_id") val related_id: String?,
-    @SerializedName("actor_id") val actorId: String?,
-    @SerializedName("is_read") val is_read: Boolean,
-    @SerializedName("created_at") val created_at: String?,
+    @SerializedName("notificationType") val notificationType: String,
+    @SerializedName("relatedId") val relatedId: String?,
+    @SerializedName("actorId") val actorId: String?,
+    @SerializedName("isRead") val isRead: Boolean,
+    @SerializedName("createdAt") val createdAt: String?,
 
     // --- All fields related to the "actor" (the person who caused the notification) ---
-    @SerializedName("related_user_id") val related_user_id: String?,
-    @SerializedName("related_user_name") val related_user_name: String?,
+    @SerializedName("relatedUserId") val relatedUserId: String?,
+    @SerializedName("relatedUserName") val relatedUserName: String?,
 
     // --- THIS IS THE NEWLY ADDED FIELD ---
-    @SerializedName("related_user_username") val related_user_username: String?,
+    @SerializedName("relatedUserUsername") val relatedUserUsername: String?,
 
-    @SerializedName("related_user_profile_pic") val related_user_profile_pic: String?,
+    @SerializedName("relatedUserProfilePic") val relatedUserProfilePic: String?,
 
     // --- Fields related to the event/ticket context ---
-    @SerializedName("event_name") val event_name: String?,
-    @SerializedName("event_image_url") val eventImageUrl: String?
+    @SerializedName("eventName") val eventName: String?,
+    @SerializedName("eventImageUrl") val eventImageUrl: String?
 ) : Parcelable
 
 /**

@@ -30,6 +30,6 @@ data class Event(
     val age_restriction: String?, // Nullable if not present
     val role: String,
     val participants_user_id: List<String>,
-    val joined_participants: Int
+    val joined_participants: String
 )
 

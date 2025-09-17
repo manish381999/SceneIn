@@ -1,10 +1,10 @@
 package com.scenein.credentials.data.repository
 
+import com.scenein.createEvent.data.models.ApiResponse
 import com.scenein.credentials.data.models.LoginOtpResponse
 import com.scenein.credentials.data.models.UsernameCheckResponse
 import com.scenein.credentials.data.models.VerifyOtpResponse
 import com.scenein.credentials.data.retrofit.RetrofitClient
-import com.scenein.tickets.data.models.GenericApiResponse
 import com.scenein.utils.NetworkState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,8 +12,8 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONObject
 
-class AuthRepository {
-    private val api = RetrofitClient.apiService
+class CredentialRepository {
+    private val api = RetrofitClient.credentialApiEndPoint
 
     suspend fun loginWithOtp(mobile: String, countryCode: String, countryShortName: String): NetworkState<LoginOtpResponse> {
         return withContext(Dispatchers.IO) {
@@ -83,9 +83,8 @@ class AuthRepository {
         }
     }
 
-    // --- FIX IS HERE ---
-    // Changed the return type from NetworkState<ApiResponse> to NetworkState<GenericApiResponse>
-    suspend fun removeProfilePicture(): NetworkState<GenericApiResponse> {
+
+    suspend fun removeProfilePicture(): NetworkState<ApiResponse> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = api.removeProfilePicture()

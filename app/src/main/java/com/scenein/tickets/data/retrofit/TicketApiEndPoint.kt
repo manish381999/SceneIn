@@ -42,14 +42,14 @@ interface TicketApiEndPoint {
     @FormUrlEncoded
     @POST("tickets/update_ticket")
     suspend fun updateTicket(
-        @Field("ticket_id") ticketId: Int,
+        @Field("ticket_id") ticketId: String,
         @Field("selling_price") SellingPrice: String
     ): Response<GenericApiResponse>
 
     @FormUrlEncoded
     @POST("tickets/delist_ticket")
     suspend fun delistTicket(
-        @Field("ticket_id") ticketId: Int
+        @Field("ticket_id") ticketId: String
     ): Response<GenericApiResponse>
 
     @FormUrlEncoded
@@ -69,7 +69,7 @@ interface TicketApiEndPoint {
     @FormUrlEncoded
     @POST("tickets/create_ticket_payment_order")
     suspend fun createOrder(
-        @Field("ticket_id") ticketId: Int
+        @Field("ticket_id") ticketId: String
     ): Response<CreateOrderResponse>
 
 

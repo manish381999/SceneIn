@@ -54,7 +54,7 @@ object RetrofitClient {
     }
 
     // All your lazy properties will now work with the new logging client
-    val apiService: ApiService by lazy { retrofitInstance.create(ApiService::class.java) }
+    val credentialApiEndPoint: CredentialApiEndPoint by lazy { retrofitInstance.create(CredentialApiEndPoint::class.java) }
     val createEventApiEndPoint: CreateEventApiEndPoint by lazy { retrofitInstance.create(CreateEventApiEndPoint::class.java) }
     val profileApiEndPoint: ProfileApiEndPoint by lazy { retrofitInstance.create(ProfileApiEndPoint::class.java) }
     val discoverApiEndPoint: DiscoverApiEndPoint by lazy { retrofitInstance.create(DiscoverApiEndPoint::class.java) }

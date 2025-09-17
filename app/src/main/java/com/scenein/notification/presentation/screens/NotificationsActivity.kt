@@ -110,11 +110,11 @@ class NotificationsActivity : AppCompatActivity() {
     }
 
     private fun handleItemClick(notification: Notification) {
-        when (notification.notification_type) {
+        when (notification.notificationType) {
 
             // --- Navigation to User Profile ---
             "connection_accepted" -> {
-                val userId = notification.related_user_id
+                val userId = notification.relatedUserId
                 if (!userId.isNullOrBlank()) {
                     val intent = Intent(this, UserProfileActivity::class.java).apply {
                         putExtra("user_id", userId)
@@ -125,7 +125,7 @@ class NotificationsActivity : AppCompatActivity() {
 
             // --- Navigation to Event Detail Screen ---
             "event_join", "event_unjoin" -> {
-                val eventId = notification.related_id
+                val eventId = notification.relatedId
                 if (!eventId.isNullOrBlank()) {
                     val intent = Intent(this, EventDetailActivity::class.java).apply {
                         // Your EventDetailActivity expects an Int or a String? Let's assume String
@@ -154,7 +154,7 @@ class NotificationsActivity : AppCompatActivity() {
             // For a connection request, the main action is the buttons.
             // The item click can navigate to the user's profile.
             "connection_request" -> {
-                val userId = notification.related_user_id
+                val userId = notification.relatedUserId
                 if (!userId.isNullOrBlank()) {
                     val intent = Intent(this, UserProfileActivity::class.java).apply {
                         putExtra("user_id", userId)

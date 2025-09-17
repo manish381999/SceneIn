@@ -21,7 +21,7 @@ interface SettingsApiEndPoint {
     @FormUrlEncoded
     @POST("transactions/ticket_details")
     suspend fun getTransactionDetails(
-        @Field("transaction_id") transactionId: Int
+        @Field("transaction_id") transactionId: String?
     ): Response<TransactionDetailResponse>
 
 

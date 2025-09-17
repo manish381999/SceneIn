@@ -12,15 +12,15 @@ data class GetUserResponse(
 
 // Data class representing public profile fields
 data class PublicProfileData(
-    @SerializedName("user_id") val userId: Int,
+    @SerializedName("user_id") val userId: String,
     @SerializedName("name") val name: String?,
     @SerializedName("user_name") val userName: String?,
     @SerializedName("profile_pic") val profilePic: String?,
     @SerializedName("about_you") val aboutYou: String?,
-    @SerializedName("total_events_hosting") val totalEventsHosting: Int,
-    @SerializedName("total_events_attending") val totalEventsAttending: Int,
-    @SerializedName("total_tickets_sold") val totalTicketsSold: Int,
-    @SerializedName("total_tickets_bought") val totalTicketsBought: Int,
-    @SerializedName("total_connections") val totalConnections: Int,
+    @SerializedName("total_events_hosting") val totalEventsHosting: String,
+    @SerializedName("total_events_attending") val totalEventsAttending: String,
+    @SerializedName("total_tickets_sold") val totalTicketsSold: String,
+    @SerializedName("total_tickets_bought") val totalTicketsBought: String,
+    @SerializedName("total_connections") val totalConnections: String,
     @SerializedName("interest_names") val interestNames: List<String>
 ) : Serializable

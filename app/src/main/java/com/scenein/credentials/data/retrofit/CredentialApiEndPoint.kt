@@ -1,6 +1,7 @@
 package com.scenein.credentials.data.retrofit
 
 
+import com.scenein.createEvent.data.models.ApiResponse
 import com.scenein.credentials.data.models.LoginOtpResponse
 import com.scenein.credentials.data.models.UsernameCheckResponse
 import com.scenein.credentials.data.models.VerifyOtpResponse
@@ -9,13 +10,12 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Field
-import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
-interface ApiService {
+interface CredentialApiEndPoint {
     @FormUrlEncoded
     @POST("auth/login_with_otp")
     suspend fun loginWithOtp(
@@ -49,7 +49,7 @@ interface ApiService {
     ): Response<VerifyOtpResponse>
 
     @POST("users/remove_profile_picture")
-    suspend fun removeProfilePicture(): Response<GenericApiResponse>
+    suspend fun removeProfilePicture(): Response<ApiResponse>
 
     @FormUrlEncoded
     @POST("users/check_username")

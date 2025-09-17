@@ -14,8 +14,7 @@ import com.scenein.utils.SP
 import com.scenein.credentials.presentation.screens.LoginActivity
 import com.scenein.utils.EdgeToEdgeUtils
 
-// Assuming BaseActivity is in this package, otherwise add the correct import
-// import com.tie.vibein.main.BaseActivity
+
 
 class SplashActivity : AppCompatActivity() {
 

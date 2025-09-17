@@ -12,6 +12,7 @@ import com.scenein.R
 import com.scenein.databinding.ActivityTicketTransactionDetailBinding
 import com.scenein.settings.data.models.TransactionDetail
 import com.scenein.settings.presentation.view_model.SettingsViewModel
+import com.scenein.utils.DateTimeUtils
 import com.scenein.utils.EdgeToEdgeUtils
 import com.scenein.utils.NetworkState
 import java.text.SimpleDateFormat
@@ -21,7 +22,8 @@ class TicketTransactionDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTicketTransactionDetailBinding
     private val viewModel: SettingsViewModel by viewModels()
-    private var transactionId: Int = 0
+    private var transactionId: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +31,8 @@ class TicketTransactionDetailActivity : AppCompatActivity() {
         binding = ActivityTicketTransactionDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        transactionId = intent.getIntExtra("TRANSACTION_ID", 0)
-        if (transactionId == 0) {
+        transactionId = intent.getStringExtra("TRANSACTION_ID")
+        if (transactionId.isNullOrEmpty()) {
             Toast.makeText(this, "Error: Transaction ID is missing.", Toast.LENGTH_SHORT).show()
             finish(); return
         }
@@ -63,7 +65,10 @@ class TicketTransactionDetailActivity : AppCompatActivity() {
         binding.tvTransactionId.text =
             details.receiptId // Assuming receiptId is your payment_gateway_order_id
         binding.tvEventNameDetail.text = details.eventName
-        formatDateTime(details.createdAt)
+        binding.tvDateTime.text = DateTimeUtils.formatEventDate(
+            details.createdAt,
+            "dd MMM yyyy 'at' hh:mm a"
+        )
 
         binding.tvOtherUserName.text = details.otherUserName
         Glide.with(this)
@@ -261,22 +266,5 @@ class TicketTransactionDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun formatDateTime(createdAt: String?) {
-        if (createdAt.isNullOrBlank()) {
-            binding.tvDateTime.text = "Date not available"
-            return
-        }
-        try {
-            val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT).parse(createdAt)
-            binding.tvDateTime.text = date?.let {
-                SimpleDateFormat(
-                    "dd MMM yyyy 'at' hh:mm a",
-                    Locale.getDefault()
-                ).format(it)
-            } ?: createdAt
-        } catch (e: Exception) {
-            Log.e("DateTimeFormatError", "Failed to format transaction detail date", e)
-            binding.tvDateTime.text = createdAt
-        }
-    }
+
 }

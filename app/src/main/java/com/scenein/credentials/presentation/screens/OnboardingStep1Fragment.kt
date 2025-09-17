@@ -10,7 +10,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.scenein.R
-import com.scenein.credentials.presentation.view_model.AuthViewModel
+import com.scenein.credentials.presentation.view_model.CredentialViewModel
 import com.scenein.credentials.presentation.view_model.OnboardingViewModel
 import com.scenein.databinding.FragmentOnboardingStep1Binding
 import com.scenein.utils.NetworkState
@@ -21,7 +21,7 @@ class OnboardingStep1Fragment : Fragment(R.layout.fragment_onboarding_step1) {
     private val binding get() = _binding!!
 
     private val onboardingViewModel: OnboardingViewModel by activityViewModels()
-    private val authViewModel: AuthViewModel by activityViewModels()
+    private val credentialViewModel: CredentialViewModel by activityViewModels()
 
     private val handler = Handler(Looper.getMainLooper())
     private var usernameCheckRunnable: Runnable? = null
@@ -51,11 +51,11 @@ class OnboardingStep1Fragment : Fragment(R.layout.fragment_onboarding_step1) {
                 val username = s.toString().trim()
                 onboardingViewModel.userName.value = username
                 if (username.isNotEmpty()) {
-                    authViewModel.checkUsername(username)
+                    credentialViewModel.checkUsername(username)
                 } else {
                     binding.usernameStatusIcon.isVisible = false
                     binding.usernameStatusProgress.isVisible = false
-                    authViewModel.clearUsernameCheckState()
+                    credentialViewModel.clearUsernameCheckState()
                 }
             }
             handler.postDelayed(usernameCheckRunnable!!, 500)
@@ -76,7 +76,7 @@ class OnboardingStep1Fragment : Fragment(R.layout.fragment_onboarding_step1) {
             binding.tvUsernameStatusMessage.isVisible = error != null
         }
 
-        authViewModel.usernameCheckState.observe(viewLifecycleOwner) { state ->
+        credentialViewModel.usernameCheckState.observe(viewLifecycleOwner) { state ->
             binding.usernameStatusProgress.isVisible = state is NetworkState.Loading
             binding.usernameStatusIcon.isVisible = state !is NetworkState.Loading && !binding.etUserName.text.isNullOrBlank()
             binding.tvUsernameStatusMessage.isVisible = state !is NetworkState.Loading
